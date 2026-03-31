@@ -74,7 +74,7 @@ export default function Hero() {
               <img 
                 src="/hero-frame.png" 
                 alt="Quadro Muzzicycles Azul" 
-                className="w-full h-[420px] sm:h-[520px] object-contain p-8"
+                className="w-full h-[420px] sm:h-[520px] object-cover"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent pointer-events-none"></div>
