@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import NumberTicker from './magicui/NumberTicker';
 
 export default function Sustainability() {
   const benefits = [
@@ -7,7 +8,7 @@ export default function Sustainability() {
     { title: "Imune à Ferrugem", desc: "O polímero de alta tecnologia não oxida, sendo ideal para regiões litorâneas." },
     { title: "Reciclável", desc: "Ao final de sua longa vida útil, o quadro pode ser novamente reciclado." },
     { title: "Produção Rápida", desc: "Um quadro pronto a cada 3,4 minutos, com eficiência energética máxima." },
-    { title: "Durabilidade", desc: "Projetada para durar mais de 100 anos com garantia estrutural vitalícia." }
+    { title: "Durabilidade", desc: "Projetada para durar muito tempo com garantia estrutural vitalícia." }
   ];
 
   return (
@@ -22,15 +23,41 @@ export default function Sustainability() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
         {[
-          { val: "90%", label: "Redução de Energia" },
-          { val: "100%", label: "Materiais Reciclados" },
-          { val: "Zero", label: "Extração de Minério" }
+          { val: 90, label: "Redução de Energia", suffix: "%" },
+          { val: 100, label: "Materiais Reciclados", suffix: "%" },
+          { val: 0, label: "Extração de Minério", prefix: "Zero" }
         ].map((stat, i) => (
           <div key={i} className="p-8 rounded-3xl border border-black/5 bg-white text-center">
-            <span className="block text-5xl font-medium text-brand-blue tracking-tighter font-geist mb-2">{stat.val}</span>
+            <div className="flex items-center justify-center gap-1 mb-2">
+              {stat.prefix && <span className="text-5xl font-medium text-brand-blue tracking-tighter font-geist">{stat.prefix}</span>}
+              {stat.val !== 0 && <NumberTicker value={stat.val} className="text-5xl font-medium text-brand-blue tracking-tighter font-geist" />}
+              {stat.suffix && <span className="text-5xl font-medium text-brand-blue tracking-tighter font-geist">{stat.suffix}</span>}
+            </div>
             <span className="text-black/50 font-geist uppercase tracking-wider text-xs">{stat.label}</span>
           </div>
         ))}
+      </div>
+
+      <div className="mb-20 bg-brand-blue/5 rounded-[3rem] p-8 sm:p-16 border border-brand-blue/10">
+        <h3 className="text-3xl font-medium font-geist mb-12 tracking-tight">Impacto Global Acumulado</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="space-y-2">
+            <NumberTicker value={15840600} className="text-4xl font-black italic text-black" />
+            <p className="text-xs text-brand-blue font-bold uppercase tracking-widest leading-tight">Kg de plástico reciclados</p>
+          </div>
+          <div className="space-y-2">
+            <NumberTicker value={130000} className="text-4xl font-black italic text-black" />
+            <p className="text-xs text-brand-blue font-bold uppercase tracking-widest leading-tight">Muzzicycles criadas</p>
+          </div>
+          <div className="space-y-2">
+            <NumberTicker value={980732} className="text-4xl font-black italic text-black" />
+            <p className="text-xs text-brand-blue font-bold uppercase tracking-widest leading-tight">Kg de petróleo economizados</p>
+          </div>
+          <div className="space-y-2">
+            <NumberTicker value={5738267} className="text-4xl font-black italic text-black" />
+            <p className="text-xs text-brand-blue font-bold uppercase tracking-widest leading-tight">Kg de CO2 evitados</p>
+          </div>
+        </div>
       </div>
 
       <div className="mb-20">

@@ -6,9 +6,17 @@ import { motion } from 'motion/react';
 
 interface ProductGridProps {
   onAddToCart: (product: Product) => void;
+  onProductClick: (product: Product) => void;
+  favorites: Product[];
+  onToggleFavorite: (product: Product) => void;
 }
 
-export default function ProductGrid({ onAddToCart }: ProductGridProps) {
+export default function ProductGrid({ 
+  onAddToCart, 
+  onProductClick,
+  favorites,
+  onToggleFavorite
+}: ProductGridProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
 
@@ -28,19 +36,19 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
               className="inline-flex items-center gap-2 h-9 px-3 rounded-xl border border-black/5 bg-white text-sm text-black/70 hover:bg-black/5 transition font-geist"
             >
               <Filter className="w-4 h-4" />
-              Filters
+              Filtros
             </button>
             {/* Popover */}
             {isFilterOpen && (
               <div className="absolute right-0 mt-2 w-[320px] rounded-2xl border border-black/5 bg-white shadow-xl p-4 z-20">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm text-black/70 font-geist">Refine</h3>
-                  <button className="text-xs text-black/60 hover:text-black underline decoration-dotted font-geist">Clear all</button>
+                  <h3 className="text-sm text-black/70 font-geist">Refinar</h3>
+                  <button className="text-xs text-black/60 hover:text-black underline decoration-dotted font-geist">Limpar tudo</button>
                 </div>
                 <div className="mt-4 space-y-4">
                   {/* Sizes */}
                   <div>
-                    <p className="text-xs text-black/60 mb-2 font-geist">Size</p>
+                    <p className="text-xs text-black/60 mb-2 font-geist">Tamanho</p>
                     <div className="flex flex-wrap gap-2">
                       {[7, 8, 9, 10, 11].map(size => (
                         <label key={size} className="inline-flex items-center gap-2 px-3 h-8 rounded-lg border border-black/5 bg-black/5 text-xs text-black/70 cursor-pointer select-none">
@@ -50,29 +58,20 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
                       ))}
                     </div>
                   </div>
-                  {/* Color */}
-                  <div>
-                    <p className="text-xs text-black/60 mb-2 font-geist">Color</p>
-                    <div className="flex items-center gap-2">
-                      {['bg-black', 'bg-white border border-black/5', 'bg-red-500', 'bg-blue-500', 'bg-emerald-500'].map((color, i) => (
-                        <button key={i} className={`h-6 w-6 rounded-full ring-2 ring-black/5 ${color}`}></button>
-                      ))}
-                    </div>
-                  </div>
                   {/* Sort */}
                   <div>
-                    <p className="text-xs text-black/60 mb-2 font-geist">Sort</p>
+                    <p className="text-xs text-black/60 mb-2 font-geist">Ordenar</p>
                     <div className="relative">
                       <button 
                         onClick={() => setIsSortOpen(!isSortOpen)}
                         className="w-full h-9 px-3 rounded-lg border border-black/5 bg-white text-sm text-black/70 hover:bg-black/5 transition inline-flex items-center justify-between"
                       >
-                        <span className="font-geist">Featured</span>
+                        <span className="font-geist">Destaques</span>
                         <ChevronDown className="w-4 h-4" />
                       </button>
                       {isSortOpen && (
                         <div className="absolute z-10 mt-2 w-full rounded-xl border border-black/5 bg-white shadow-lg overflow-hidden">
-                          {['Featured', 'Price: Low to High', 'Price: High to Low', 'Newest', 'Best Rated'].map(opt => (
+                          {['Destaques', 'Novidades', 'Melhores avaliados'].map(opt => (
                             <button key={opt} className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 font-geist">{opt}</button>
                           ))}
                         </div>
@@ -80,7 +79,7 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
                     </div>
                   </div>
                   <div className="pt-2">
-                    <button className="w-full h-9 rounded-xl bg-black text-white text-sm hover:opacity-90 transition font-geist">Apply filters</button>
+                    <button className="w-full h-9 rounded-xl bg-black text-white text-sm hover:opacity-90 transition font-geist">Aplicar filtros</button>
                   </div>
                 </div>
               </div>
@@ -89,7 +88,7 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
 
           {/* Compact "chip" filters */}
           <div className="hidden sm:flex items-center gap-2">
-            {['Running', 'Lifestyle', 'Skate'].map(cat => (
+            {['Urbana', 'Aventura', 'Performance'].map(cat => (
               <span key={cat} className="inline-flex items-center gap-2 px-3 h-9 rounded-xl border border-black/5 bg-white text-sm text-black/70 font-geist">{cat}</span>
             ))}
           </div>
@@ -108,7 +107,7 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group block rounded-3xl overflow-hidden bg-white/40 backdrop-blur border border-black/5 hover:bg-white hover:shadow-2xl hover:shadow-black/5 transition-all duration-300"
             >
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div className="relative aspect-[4/5] overflow-hidden cursor-pointer" onClick={() => onProductClick(product)}>
                 <img 
                   src={product.image} 
                   alt={product.name} 
@@ -120,13 +119,19 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
                     {product.tag}
                   </div>
                 )}
-                <button className="absolute top-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/60 border border-black/5 text-black/70 hover:text-black hover:bg-white/80 transition">
-                  <Heart className="w-4 h-4" />
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(product);
+                  }}
+                  className="absolute top-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/60 border border-black/5 text-black/70 hover:text-black hover:bg-white/80 transition z-10"
+                >
+                  <Heart className={`w-4 h-4 ${favorites.some(f => f.id === product.id) ? 'fill-brand-blue text-brand-blue' : ''}`} />
                 </button>
               </div>
               <div className="p-5">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
+                  <div className="flex-1 cursor-pointer" onClick={() => onProductClick(product)}>
                     <h3 className="text-base font-medium text-black tracking-tight font-geist">{product.name}</h3>
                     <p className="text-sm text-black/60 font-geist">{product.description}</p>
                     <div className="mt-2 flex items-center gap-1 text-amber-500">
@@ -140,23 +145,14 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
                     </div>
                   </div>
                   <div className="shrink-0 text-right">
-                    {product.originalPrice && (
-                      <p className="text-sm text-black/50 line-through font-geist">${product.originalPrice}</p>
-                    )}
-                    <p className="text-sm text-black/80 font-geist">${product.price}</p>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex -space-x-1">
-                    {product.colors.map((color, i) => (
-                      <span key={i} className={`h-5 w-5 rounded-full ring-2 ring-white border border-black/5 ${color}`}></span>
-                    ))}
-                  </div>
+                <div className="mt-4 flex items-center justify-end">
                   <button 
                     onClick={() => onAddToCart(product)}
-                    className="inline-flex items-center gap-2 h-9 px-3 rounded-xl border border-black/5 bg-white text-sm text-black/70 hover:bg-black/5 transition font-geist"
+                    className="inline-flex items-center gap-2 h-9 px-3 rounded-xl bg-brand-blue text-white text-sm hover:bg-brand-blue-dark transition font-geist"
                   >
-                    Add to cart
+                    Adicionar ao carrinho
                     <Plus className="w-3 h-3" />
                   </button>
                 </div>
@@ -170,7 +166,7 @@ export default function ProductGrid({ onAddToCart }: ProductGridProps) {
           <button className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-black/5 bg-white text-black/70 hover:bg-black/5 transition" aria-label="Prev">
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <button className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-black/5 bg-black text-white transition font-geist">1</button>
+          <button className="inline-flex items-center justify-center h-9 w-9 rounded-lg bg-brand-blue text-white transition font-geist">1</button>
           <button className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-black/5 bg-white text-black/70 hover:bg-black/5 transition font-geist">2</button>
           <button className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-black/5 bg-white text-black/70 hover:bg-black/5 transition font-geist">3</button>
           <button className="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-black/5 bg-white text-black/70 hover:bg-black/5 transition" aria-label="Next">

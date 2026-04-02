@@ -8,11 +8,10 @@ interface CartDrawerProps {
   items: CartItem[];
   onUpdateQuantity: (id: string, delta: number) => void;
   onRemove: (id: string) => void;
+  onCheckout: () => void;
 }
 
-export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, onRemove }: CartDrawerProps) {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
+export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, onRemove, onCheckout }: CartDrawerProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -37,7 +36,7 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
             <header className="flex items-center justify-between px-5 h-14 border-b border-black/5">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4" />
-                <h3 className="text-sm font-medium tracking-tight font-geist">Your cart</h3>
+                <h3 className="text-sm font-medium tracking-tight font-geist">Seu carrinho</h3>
               </div>
               <button 
                 onClick={onClose}
@@ -54,8 +53,8 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                   <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-black/5 text-black/60">
                     <PackageOpen className="w-5 h-5" />
                   </div>
-                  <p className="text-sm font-geist">Your cart is empty.</p>
-                  <p className="text-xs text-black/50 mt-1 font-geist">Add a pair to get started.</p>
+                  <p className="text-sm font-geist">Seu carrinho está vazio.</p>
+                  <p className="text-xs text-black/50 mt-1 font-geist">Adicione uma bike para começar.</p>
                 </div>
               ) : (
                 <ul className="divide-y divide-black/5">
@@ -66,7 +65,7 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-black">{item.name}</p>
-                        <p className="text-xs text-black/60">${item.price} · Size — Select at checkout</p>
+                        <p className="text-xs text-black/60">Tamanho — Informe ao vendedor</p>
                         <div className="mt-2 inline-flex items-center gap-2">
                           <button 
                             onClick={() => onUpdateQuantity(item.id, -1)}
@@ -88,11 +87,11 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                             className="ml-2 inline-flex items-center gap-1 h-8 px-2 rounded-lg border border-black/5 hover:bg-black/5 text-xs text-black/70"
                           >
                             <Trash2 className="w-3 h-3" />
-                            Remove
+                            Remover
                           </button>
                         </div>
                       </div>
-                      <div className="text-sm font-medium">${item.price * item.quantity}</div>
+                      <div className="text-sm font-medium"></div>
                     </li>
                   ))}
                 </ul>
@@ -100,20 +99,19 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
             </div>
 
             <footer className="border-t border-black/5 p-5">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-black/60 font-geist">Subtotal</span>
-                <span className="font-medium tracking-tight font-geist">${subtotal}</span>
-              </div>
-              <p className="mt-1 text-xs text-black/50 font-geist">Taxes and shipping calculated at checkout.</p>
-              <div className="mt-4 flex gap-2">
+              <div className="flex gap-2">
                 <button 
                   onClick={onClose}
                   className="flex-1 h-10 rounded-xl border border-black/5 bg-white text-sm text-black/70 hover:bg-black/5 transition font-geist"
                 >
-                  Continue shopping
+                  Continuar comprando
                 </button>
-                <button className="flex-1 h-10 rounded-xl bg-black text-white text-sm hover:opacity-90 transition font-geist">
-                  Checkout
+                <button 
+                  onClick={onCheckout}
+                  disabled={items.length === 0}
+                  className="flex-1 h-10 rounded-xl bg-brand-blue text-white text-sm hover:bg-brand-blue-dark transition font-geist disabled:opacity-50"
+                >
+                  Finalizar Compra
                 </button>
               </div>
             </footer>

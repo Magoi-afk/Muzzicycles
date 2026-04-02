@@ -17,7 +17,7 @@ export default function Contact() {
               </div>
               <div>
                 <span className="block text-sm font-bold uppercase tracking-wider text-black/30 font-geist mb-1">E-mail</span>
-                <a href="mailto:contato@muzzicycles.com.br" className="text-lg font-medium font-geist hover:text-brand-blue transition-colors">contato@muzzicycles.com.br</a>
+                <a href="mailto:muzzicycles@muzzicycles.com.br" className="text-lg font-medium font-geist hover:text-brand-blue transition-colors">muzzicycles@muzzicycles.com.br</a>
               </div>
             </div>
             
@@ -26,8 +26,8 @@ export default function Contact() {
                 <Phone className="w-5 h-5" />
               </div>
               <div>
-                <span className="block text-sm font-bold uppercase tracking-wider text-black/30 font-geist mb-1">WhatsApp</span>
-                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="text-lg font-medium font-geist hover:text-brand-blue transition-colors">+55 (11) 99999-9999</a>
+                <span className="block text-sm font-bold uppercase tracking-wider text-black/30 font-geist mb-1">Telefone</span>
+                <a href="tel:+5511995997454" className="text-lg font-medium font-geist hover:text-brand-blue transition-colors">(11) 99599-7454</a>
               </div>
             </div>
             
