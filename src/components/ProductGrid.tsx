@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Product } from '../types';
 import { PRODUCTS } from '../constants';
 import { motion } from 'motion/react';
-import LogoCloud from './LogoCloud';
 
 interface ProductGridProps {
   onAddToCart: (product: Product) => void;
@@ -39,10 +38,8 @@ export default function ProductGrid({
 
   return (
     <section id="models" className="max-w-7xl mx-auto px-6 sm:px-8">
-      <LogoCloud />
-      
       {/* Filters / Category Toolbar */}
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-black/5">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-black/5 pt-20">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <h2 className="text-2xl sm:text-3xl text-black tracking-tighter font-geist">Nossos Modelos</h2>

@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import LogoCloud from './components/LogoCloud';
 import ProductGrid from './components/ProductGrid';
 import Doctrine from './components/Doctrine';
 import Innovation from './components/Innovation';
@@ -21,7 +22,6 @@ import Checkout from './components/Checkout';
 import PurchaseModal from './components/PurchaseModal';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
-import LogoCloud from './components/LogoCloud';
 import { Product, CartItem } from './types';
 
 type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'models' | 'history' | 'sustainability' | 'faq' | 'contact' | 'innovation' | 'acervo';
@@ -142,8 +142,8 @@ export default function App() {
       <main className="pb-20">
         {view === 'home' && (
           <div className="space-y-20">
-            <LogoCloud />
             <Hero />
+            <LogoCloud />
             <ProductGrid 
               onAddToCart={addToCart} 
               onProductClick={handleProductClick} 
