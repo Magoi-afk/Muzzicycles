@@ -14,6 +14,7 @@ export const PRODUCTS: Product[] = [
     reviews: 42,
     tag: 'Pioneira',
     tagColor: 'bg-brand-blue/10 text-brand-blue border-brand-blue/20',
+    category: 'Urbana',
     additionalImages: [
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/nilo1.png',
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/nilo2.png',
@@ -37,6 +38,7 @@ export const PRODUCTS: Product[] = [
     reviews: 56,
     tag: 'Versátil',
     tagColor: 'bg-brand-blue/10 text-brand-blue border-brand-blue/20',
+    category: 'Urbana',
     additionalImages: [
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/amazonas2.png',
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/amazonas3.png',
@@ -60,6 +62,7 @@ export const PRODUCTS: Product[] = [
     reviews: 38,
     tag: 'Aventura',
     tagColor: 'bg-brand-blue/10 text-brand-blue border-brand-blue/20',
+    category: 'Aventura',
     additionalImages: [
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/reno1.png',
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/reno2.png',
@@ -83,6 +86,7 @@ export const PRODUCTS: Product[] = [
     reviews: 24,
     tag: 'Conforto',
     tagColor: 'bg-brand-blue/10 text-brand-blue border-brand-blue/20',
+    category: 'Urbana',
     additionalImages: [
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/mississipi2.png',
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/mississipi6.png',
@@ -106,6 +110,7 @@ export const PRODUCTS: Product[] = [
     reviews: 15,
     tag: 'Performance',
     tagColor: 'bg-brand-blue text-white',
+    category: 'Performance',
     additionalImages: [
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/turri1.png',
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/turri2.png',
@@ -129,6 +134,7 @@ export const PRODUCTS: Product[] = [
     reviews: 112,
     tag: 'Base',
     tagColor: 'bg-brand-blue/10 text-brand-blue border-brand-blue/20',
+    category: 'Componentes',
     additionalImages: [
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/quadro4.png',
       'https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/quadro2.png',

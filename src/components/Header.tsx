@@ -9,6 +9,8 @@ interface HeaderProps {
   onFavoritesOpen: () => void;
   onViewChange: (view: any) => void;
   currentView: string;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
 export default function Header({ 
@@ -17,7 +19,9 @@ export default function Header({
   onCartOpen, 
   onFavoritesOpen,
   onViewChange, 
-  currentView 
+  currentView,
+  searchQuery,
+  onSearchChange
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -63,6 +67,8 @@ export default function Header({
                 </div>
                 <input
                   type="text"
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-black/5 rounded-full bg-black/[0.02] text-sm placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
                   placeholder="Pesquisar..."
                 />

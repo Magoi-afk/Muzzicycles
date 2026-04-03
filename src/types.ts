@@ -11,6 +11,7 @@ export interface Product {
   reviews: number;
   tag?: string;
   tagColor?: string;
+  category: 'Urbana' | 'Aventura' | 'Performance' | 'Componentes';
   specs?: {
     frame: string;
     transmission: string;

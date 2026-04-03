@@ -1,9 +1,13 @@
 import { ArrowRight, ArrowUpRight, Truck, RotateCcw, Headphones, Eye } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import WordRotate from './magicui/WordRotate';
 import NumberTicker from './magicui/NumberTicker';
+import FrameModal from './FrameModal';
 
 export default function Hero() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section className="max-w-7xl sm:px-8 mx-auto px-6">
       <div className="pt-10 pb-12 sm:pt-16 sm:pb-20 lg:pt-24 lg:pb-28">
@@ -83,9 +87,9 @@ export default function Hero() {
           >
             <div className="relative rounded-3xl overflow-hidden border border-black/5 bg-white/30 backdrop-blur">
               <img 
-                src="https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/hero-frame.png.png" 
+                src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/hero-frame.png" 
                 alt="Quadro Muzzicycles Azul" 
-                className="w-full h-[420px] sm:h-[520px] object-cover"
+                className="w-full h-[420px] sm:h-[520px] object-cover object-top"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent pointer-events-none"></div>
@@ -94,7 +98,10 @@ export default function Hero() {
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
                   <span className="text-xs text-black/70 font-geist">Destaque: Quadro Muzzi Azul</span>
                 </div>
-                <button className="inline-flex items-center gap-2 text-xs rounded-lg bg-white/40 backdrop-blur px-3 h-8 border border-black/5 text-black/70 hover:bg-white/60 transition font-geist">
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="inline-flex items-center gap-2 text-xs rounded-lg bg-white/40 backdrop-blur px-3 h-8 border border-black/5 text-black/70 hover:bg-white/60 transition font-geist"
+                >
                   Ver Detalhes
                   <Eye className="w-3 h-3" />
                 </button>
@@ -103,6 +110,8 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
+
+      <FrameModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 }

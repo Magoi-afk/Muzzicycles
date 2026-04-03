@@ -13,9 +13,6 @@ export default function Checkout({ product, onBack, onComplete }: CheckoutProps)
   const [step, setStep] = useState(1);
   const [shippingMethod, setShippingMethod] = useState('standard');
 
-  const shippingCost = shippingMethod === 'standard' ? 0 : 45;
-  const total = product.price + shippingCost;
-
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12">

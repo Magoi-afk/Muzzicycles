@@ -21,6 +21,7 @@ import Checkout from './components/Checkout';
 import PurchaseModal from './components/PurchaseModal';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import LogoCloud from './components/LogoCloud';
 import { Product, CartItem } from './types';
 
 type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'models' | 'history' | 'sustainability' | 'faq' | 'contact' | 'innovation' | 'acervo';
@@ -33,6 +34,7 @@ export default function App() {
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [view, setView] = useState<View>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleFavorite = (product: Product) => {
     setFavorites((prev) => {
@@ -133,17 +135,21 @@ export default function App() {
         onFavoritesOpen={() => setIsFavoritesOpen(true)}
         onViewChange={handleViewChange}
         currentView={view}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
       
       <main className="pb-20">
         {view === 'home' && (
           <div className="space-y-20">
+            <LogoCloud />
             <Hero />
             <ProductGrid 
               onAddToCart={addToCart} 
               onProductClick={handleProductClick} 
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
+              searchQuery={searchQuery}
             />
             <Doctrine />
             <Innovation />
@@ -165,6 +171,7 @@ export default function App() {
               onProductClick={handleProductClick} 
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
+              searchQuery={searchQuery}
             />
           </div>
         )}
@@ -210,6 +217,7 @@ export default function App() {
               onProductClick={handleProductClick} 
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
+              searchQuery={searchQuery}
             />
           </div>
         )}
