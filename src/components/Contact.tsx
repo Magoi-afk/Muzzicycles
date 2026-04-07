@@ -68,9 +68,12 @@ export default function Contact() {
               <div className="h-10 w-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue">
                 <Phone className="w-5 h-5" />
               </div>
-              <div>
-                <span className="block text-sm font-bold uppercase tracking-wider text-black/30 font-geist mb-1">Telefone</span>
-                <a href="tel:+5511995997454" className="text-lg font-medium font-geist hover:text-brand-blue transition-colors">(11) 99599-7454</a>
+              <div className="space-y-2">
+                <span className="block text-sm font-bold uppercase tracking-wider text-black/30 font-geist mb-1">WhatsApp Fábrica</span>
+                <div className="flex flex-col gap-2">
+                  <a href="https://wa.me/551139666533" target="_blank" rel="noopener noreferrer" className="text-lg font-medium font-geist hover:text-brand-blue transition-colors">(11) 3966-6533</a>
+                  <a href="https://wa.me/5511973868371" target="_blank" rel="noopener noreferrer" className="text-lg font-medium font-geist hover:text-brand-blue transition-colors">(11) 97386-8371</a>
+                </div>
               </div>
             </div>
             

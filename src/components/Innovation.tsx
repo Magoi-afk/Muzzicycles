@@ -14,9 +14,9 @@ export default function Innovation() {
       desc: "Nossa confiança no material é absoluta. O quadro Muzzi é feito para durar gerações, sem corrosão ou fadiga."
     },
     {
-      icon: <Leaf className="w-5 h-5" />,
-      title: "Zero Emissão",
-      desc: "Processo de fabricação limpo, sem emissão de gases tóxicos e com 90% menos energia que o alumínio."
+      icon: <ShieldCheck className="w-5 h-5" />,
+      title: "Certificação CE",
+      desc: "Conformidade total com os padrões de segurança da Comunidade Europeia, garantindo qualidade internacional."
     },
     {
       icon: <Box className="w-5 h-5" />,
@@ -26,10 +26,10 @@ export default function Innovation() {
   ];
 
   return (
-    <section id="innovation" className="max-w-7xl mx-auto px-6 sm:px-8 py-20 bg-black text-white rounded-[3rem] my-20">
+    <section id="innovation" className="max-w-7xl mx-auto px-6 sm:px-8 py-20 bg-white text-black border border-black/5 rounded-[3rem] my-20 shadow-sm">
       <div className="text-center max-w-3xl mx-auto mb-16">
         <h2 className="text-3xl sm:text-4xl font-medium tracking-tighter font-geist mb-6">Construída para o Futuro</h2>
-        <p className="text-white/60 font-geist">
+        <p className="text-black/60 font-geist">
           A Muzzicycles redefine a engenharia ciclística através da sustentabilidade radical. Nossa tecnologia de injeção de polímeros é a resposta para um mundo que precisa de soluções, não de mais resíduos.
         </p>
       </div>
@@ -41,13 +41,13 @@ export default function Innovation() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="p-6 rounded-2xl bg-white/5 border border-white/10"
+            className="p-6 rounded-2xl bg-black/5 border border-black/10"
           >
-            <div className="h-10 w-10 rounded-xl bg-brand-blue flex items-center justify-center mb-4">
+            <div className="h-10 w-10 rounded-xl bg-brand-blue flex items-center justify-center mb-4 text-white">
               {p.icon}
             </div>
             <h3 className="text-lg font-medium font-geist mb-2">{p.title}</h3>
-            <p className="text-sm text-white/50 font-geist leading-relaxed">{p.desc}</p>
+            <p className="text-sm text-black/50 font-geist leading-relaxed">{p.desc}</p>
           </motion.div>
         ))}
       </div>

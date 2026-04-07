@@ -1,4 +1,4 @@
-import { Filter, ChevronDown, Heart, Star, Plus, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { Filter, ChevronDown, Heart, Plus, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useState } from 'react';
 import { Product } from '../types';
 import { PRODUCTS } from '../constants';
@@ -10,6 +10,8 @@ interface ProductGridProps {
   favorites: Product[];
   onToggleFavorite: (product: Product) => void;
   searchQuery?: string;
+  title?: string;
+  subtitle?: string;
 }
 
 export default function ProductGrid({ 
@@ -17,7 +19,9 @@ export default function ProductGrid({
   onProductClick,
   favorites,
   onToggleFavorite,
-  searchQuery = ''
+  searchQuery = '',
+  title = 'Nossos Modelos',
+  subtitle = 'Coleção 2026'
 }: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
   const [sortBy, setSortBy] = useState<string>('Destaques');
@@ -27,6 +31,7 @@ export default function ProductGrid({
   const sortOptions = ['Destaques', 'Avaliação'];
 
   const filteredProducts = PRODUCTS.filter(product => {
+    if (product.isAcervo) return false;
     const matchesCategory = selectedCategory === 'Todos' || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -42,8 +47,8 @@ export default function ProductGrid({
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-black/5 pt-20">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl sm:text-3xl text-black tracking-tighter font-geist">Nossos Modelos</h2>
-            <span className="text-sm text-black/50 font-geist">Coleção 2026</span>
+            <h2 className="text-2xl sm:text-3xl text-black tracking-tighter font-geist">{title}</h2>
+            <span className="text-sm text-black/50 font-geist">{subtitle}</span>
           </div>
           <p className="text-sm text-black/40 font-geist">
             {filteredProducts.length} {filteredProducts.length === 1 ? 'modelo encontrado' : 'modelos encontrados'}
@@ -139,15 +144,11 @@ export default function ProductGrid({
                     <div className="flex-1 cursor-pointer" onClick={() => onProductClick(product)}>
                       <h3 className="text-base font-medium text-black tracking-tight font-geist">{product.name}</h3>
                       <p className="text-sm text-black/60 font-geist">{product.description}</p>
-                      <div className="mt-2 flex items-center gap-1 text-amber-500">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'fill-current' : ''}`} 
-                          />
-                        ))}
-                        <span className="text-xs text-black/50 ml-1 font-geist">({product.reviews})</span>
-                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-base font-bold text-black font-geist">
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
+                      </p>
                     </div>
                   </div>
                   <div className="mt-4 flex items-center justify-end">

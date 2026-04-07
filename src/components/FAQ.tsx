@@ -6,7 +6,7 @@ export default function FAQ() {
   const faqs = [
     { q: "O que é o quadro Muzzicycles?", a: "É o primeiro quadro de bicicleta do mundo fabricado por injeção de polímeros reciclados (plástico pós-consumo), sem soldas e com garantia vitalícia." },
     { q: "Qual a durabilidade do quadro?", a: "O quadro é projetado para durar muito tempo. O material não sofre fadiga como o metal e é imune à oxidação." },
-    { q: "Os quadros são certificados pelo INMETRO?", a: "Sim, todos os nossos modelos passaram por testes rigorosos e possuem certificação total do INMETRO." },
+    { q: "Os quadros possuem certificação?", a: "Sim, todos os nossos modelos possuem certificação da Comunidade Europeia (CE), garantindo os mais altos padrões de segurança e qualidade internacional." },
     { q: "Quais aros estão disponíveis?", a: "Trabalhamos com modelos para aros 24, 26 e 29, atendendo desde o público juvenil até adultos em trilhas ou cidade." },
     { q: "Como funciona a garantia vitalícia?", a: "A garantia cobre qualquer defeito estrutural no quadro para o primeiro proprietário. É a nossa promessa de um produto eterno." },
     { q: "A bike aguenta impactos e trilhas?", a: "Sim. O polímero possui uma flexibilidade natural que absorve impactos melhor que o alumínio, tornando-a excelente para uso urbano e trilhas leves." },

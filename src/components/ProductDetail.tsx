@@ -1,13 +1,13 @@
 import { motion } from 'motion/react';
-import { Star, Shield, Zap, ChevronRight, ArrowLeft, Plus, Minus, Info, Heart } from 'lucide-react';
+import { Shield, Zap, ChevronRight, ArrowLeft, Plus, Minus, Info, Heart, History } from 'lucide-react';
 import { Product } from '../types';
 import { useState } from 'react';
 
 interface ProductDetailProps {
   product: Product;
   onBack: () => void;
-  onAddToCart: (product: Product) => void;
-  onCheckout: (product: Product) => void;
+  onAddToCart: (product: Product, selectedAro?: string) => void;
+  onCheckout: (product: Product, selectedAro?: string) => void;
   isFavorite: boolean;
   onToggleFavorite: () => void;
 }
@@ -22,9 +22,10 @@ export default function ProductDetail({
 }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState('19"');
+  const [selectedAro, setSelectedAro] = useState('29');
 
   const allImages = [product.image, ...(product.additionalImages || [])];
+  const isBike = product.category !== 'Componentes';
 
   return (
     <div className="min-h-screen bg-white">
@@ -78,13 +79,20 @@ export default function ProductDetail({
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-4">
                 <span className="px-2.5 py-1 rounded-full bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-black/50 font-geist">Eco-Inovação</span>
-                <div className="flex items-center gap-0.5 text-brand-blue">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-200'}`} />
-                  ))}
-                </div>
               </div>
-              <h1 className="text-5xl font-medium tracking-tighter font-geist mb-4">{product.name}</h1>
+              <h1 className="text-5xl font-medium tracking-tighter font-geist mb-2">{product.name}</h1>
+              <div className="mb-6">
+                {product.isAcervo ? (
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-widest border border-amber-200">
+                    <History className="w-3 h-3" />
+                    Item de Exposição
+                  </div>
+                ) : (
+                  <p className="text-3xl font-bold text-brand-blue font-geist">
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
+                  </p>
+                )}
+              </div>
               <p className="text-lg text-black/60 font-geist leading-relaxed">
                 {product.description}. Desenvolvida com polímeros reciclados de alta performance, a {product.name} oferece leveza estrutural e absorção de impacto superior para o ambiente urbano.
               </p>
@@ -92,47 +100,59 @@ export default function ProductDetail({
 
             {/* Options */}
             <div className="space-y-8 mb-10">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist block mb-4">Tamanho do Quadro</span>
-                <div className="flex items-center gap-2">
-                  {['17"', '19"', '21"'].map((size) => (
-                    <button 
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`h-10 px-6 rounded-xl border text-sm font-medium font-geist transition ${selectedSize === size ? 'bg-brand-blue text-white border-brand-blue' : 'bg-white text-black/60 border-black/5 hover:border-black/20'}`}
-                    >
-                      {size}
-                    </button>
-                  ))}
+              {isBike && (
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist block mb-4">Tamanho do Aro</span>
+                  <div className="flex items-center gap-2">
+                    {['24', '26', '29', '32'].map((aro) => (
+                      <button 
+                        key={aro}
+                        onClick={() => setSelectedAro(aro)}
+                        className={`h-10 px-6 rounded-xl border text-sm font-medium font-geist transition ${selectedAro === aro ? 'bg-brand-blue text-white border-brand-blue' : 'bg-white text-black/60 border-black/5 hover:border-black/20'}`}
+                      >
+                        {aro}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Actions */}
             <div className="flex flex-col gap-3">
-              <button 
-                onClick={() => onCheckout(product)}
-                className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20"
-              >
-                Comprar Agora
-              </button>
-              <div className="flex gap-3">
-                <button 
-                  onClick={() => onAddToCart(product)}
-                  className="flex-1 h-14 rounded-2xl border border-black/5 bg-white text-black/70 font-bold font-geist text-lg hover:bg-black/5 transition"
-                >
-                  Adicionar ao Carrinho
-                </button>
-                <button 
-                  onClick={onToggleFavorite}
-                  className="h-14 w-14 rounded-2xl border border-black/5 bg-white flex items-center justify-center text-black/40 hover:text-brand-blue transition group"
-                >
-                  <Heart className={`w-6 h-6 group-hover:scale-110 transition ${isFavorite ? 'fill-brand-blue text-brand-blue' : ''}`} />
-                </button>
-              </div>
+              {product.isAcervo ? (
+                <div className="p-6 rounded-2xl bg-gray-50 border border-black/5 text-center">
+                  <p className="text-sm text-black/50 font-geist">
+                    Este modelo faz parte do acervo histórico da Muzzicycles e não está disponível para venda.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <button 
+                    onClick={() => onCheckout(product, isBike ? selectedAro : undefined)}
+                    className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20"
+                  >
+                    Comprar Agora
+                  </button>
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={() => onAddToCart(product, isBike ? selectedAro : undefined)}
+                      className="flex-1 h-14 rounded-2xl border border-black/5 bg-white text-black/70 font-bold font-geist text-lg hover:bg-black/5 transition"
+                    >
+                      Adicionar ao Carrinho
+                    </button>
+                    <button 
+                      onClick={onToggleFavorite}
+                      className="h-14 w-14 rounded-2xl border border-black/5 bg-white flex items-center justify-center text-black/40 hover:text-brand-blue transition group"
+                    >
+                      <Heart className={`w-6 h-6 group-hover:scale-110 transition ${isFavorite ? 'fill-brand-blue text-brand-blue' : ''}`} />
+                    </button>
+                  </div>
+                </>
+              )}
               <div className="flex items-center justify-center gap-2 text-xs text-black/40 font-geist mt-2">
                 <Shield className="w-3 h-3" />
-                Entrega em todo o território nacional
+                {product.isAcervo ? 'Preservando a história da sustentabilidade' : 'Entrega em todo o território nacional'}
               </div>
             </div>
           </div>

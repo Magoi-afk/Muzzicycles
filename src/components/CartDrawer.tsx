@@ -65,7 +65,9 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-black">{item.name}</p>
-                        <p className="text-xs text-black/60">Tamanho — Informe ao vendedor</p>
+                        {item.selectedAro && (
+                          <p className="text-xs text-black/60">Aro: {item.selectedAro}</p>
+                        )}
                         <div className="mt-2 inline-flex items-center gap-2">
                           <button 
                             onClick={() => onUpdateQuantity(item.id, -1)}
@@ -91,7 +93,9 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                           </button>
                         </div>
                       </div>
-                      <div className="text-sm font-medium"></div>
+                      <div className="text-sm font-medium">
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price * item.quantity)}
+                      </div>
                     </li>
                   ))}
                 </ul>

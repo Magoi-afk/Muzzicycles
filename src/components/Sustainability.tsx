@@ -3,12 +3,12 @@ import NumberTicker from './magicui/NumberTicker';
 
 export default function Sustainability() {
   const benefits = [
+    { title: "Consumo de Água: ZERO", desc: "Processo de injeção a seco que não utiliza água em nenhuma etapa da produção do quadro." },
+    { title: "Energia: 5,0 KWh", desc: "Eficiência energética extrema com consumo de apenas 5,0 KWh por quadro produzido." },
+    { title: "Certificação CE", desc: "Conformidade total com os padrões de segurança da Comunidade Europeia." },
     { title: "Sem Pintura", desc: "A cor é incorporada diretamente ao material, eliminando solventes e descascamento." },
     { title: "Sem Soldas", desc: "A injeção monobloco elimina processos de soldagem e a emissão de gases tóxicos." },
     { title: "Imune à Ferrugem", desc: "O polímero de alta tecnologia não oxida, sendo ideal para regiões litorâneas." },
-    { title: "Reciclável", desc: "Ao final de sua longa vida útil, o quadro pode ser novamente reciclado." },
-    { title: "Produção Rápida", desc: "Um quadro pronto a cada 3,4 minutos, com eficiência energética máxima." },
-    { title: "Durabilidade", desc: "Projetada para durar muito tempo com garantia estrutural vitalícia." }
   ];
 
   return (
@@ -23,9 +23,9 @@ export default function Sustainability() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
         {[
-          { val: 90, label: "Redução de Energia", suffix: "%" },
-          { val: 100, label: "Materiais Reciclados", suffix: "%" },
-          { val: 0, label: "Extração de Minério", prefix: "Zero" }
+          { val: 5, label: "Energia (KWh)", suffix: "" },
+          { val: 0, label: "Consumo de Água", prefix: "Zero" },
+          { val: 100, label: "Certificação CE", prefix: "Selo" }
         ].map((stat, i) => (
           <div key={i} className="p-8 rounded-3xl border border-black/5 bg-white text-center">
             <div className="flex items-center justify-center gap-1 mb-2">

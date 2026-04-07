@@ -104,13 +104,15 @@ export default function FavoritesDrawer({
                           </button>
                         </div>
                         <div className="mb-3"></div>
-                        <button 
-                          onClick={() => onAddToCart(item)}
-                          className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-blue hover:text-brand-blue-dark transition font-geist"
-                        >
-                          <ShoppingCart className="w-3 h-3" />
-                          Adicionar ao carrinho
-                        </button>
+                        {!item.isAcervo && (
+                          <button 
+                            onClick={() => onAddToCart(item)}
+                            className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-blue hover:text-brand-blue-dark transition font-geist"
+                          >
+                            <ShoppingCart className="w-3 h-3" />
+                            Adicionar ao carrinho
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}

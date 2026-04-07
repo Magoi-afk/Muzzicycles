@@ -13,7 +13,7 @@ export default function PurchaseModal({ isOpen, onClose, items }: PurchaseModalP
   const handleDownload = () => {
     const date = new Date().toLocaleDateString('pt-BR');
     const content = `PEDIDO MUZZICYCLES - ${date}\n\n` + 
-      items.map(item => `- ${item.name} (Quantidade: ${item.quantity})\n  Tamanho: [Informe o tamanho desejado ao vendedor]`).join('\n') +
+      items.map(item => `- ${item.name} (Quantidade: ${item.quantity})${item.selectedAro ? `\n  Aro: ${item.selectedAro}` : ''}`).join('\n') +
       `\n\nInstruções: Envie este arquivo para o vendedor no WhatsApp para finalizar seu pedido.`;
     
     const blob = new Blob([content], { type: 'text/plain' });

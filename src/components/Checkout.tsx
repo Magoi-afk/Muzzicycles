@@ -151,7 +151,27 @@ export default function Checkout({ product, onBack, onComplete }: CheckoutProps)
                 </div>
                 <div>
                   <h4 className="font-medium font-geist mb-1">Muzzicycle Polymer {product.name}</h4>
-                  <p className="text-xs text-black/40 font-geist uppercase tracking-widest mb-2">Azul Industrial / Grande</p>
+                  {product.selectedAro && (
+                    <p className="text-xs text-black/40 font-geist uppercase tracking-widest mb-2">Aro: {product.selectedAro}</p>
+                  )}
+                  <p className="text-sm font-bold text-brand-blue font-geist">
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3 mb-8">
+                <div className="flex justify-between text-sm text-black/60 font-geist">
+                  <span>Subtotal</span>
+                  <span>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}</span>
+                </div>
+                <div className="flex justify-between text-sm text-black/60 font-geist">
+                  <span>Frete</span>
+                  <span>{shippingMethod === 'express' ? 'R$ 150,00' : 'Grátis'}</span>
+                </div>
+                <div className="pt-4 border-t border-black/10 flex justify-between text-lg font-bold text-black font-geist">
+                  <span>Total</span>
+                  <span>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price + (shippingMethod === 'express' ? 150 : 0))}</span>
                 </div>
               </div>
 

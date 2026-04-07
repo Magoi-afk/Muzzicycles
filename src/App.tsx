@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import LogoCloud from './components/LogoCloud';
@@ -18,10 +19,13 @@ import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import FavoritesDrawer from './components/FavoritesDrawer';
 import ProductDetail from './components/ProductDetail';
+import Acervo from './components/Acervo';
 import Checkout from './components/Checkout';
 import PurchaseModal from './components/PurchaseModal';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import { LoginForm } from './components/LoginForm';
+import { auth, onAuthStateChanged, User, signOut } from './firebase';
 import { Product, CartItem } from './types';
 
 type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'models' | 'history' | 'sustainability' | 'faq' | 'contact' | 'innovation' | 'acervo';
@@ -32,6 +36,9 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [view, setView] = useState<View>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,15 +57,15 @@ export default function App() {
     setFavorites((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, selectedAro?: string) => {
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item.id === product.id && item.selectedAro === selectedAro);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          (item.id === product.id && item.selectedAro === selectedAro) ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, { ...product, quantity: 1, selectedAro }];
     });
     setIsCartOpen(true);
   };
@@ -85,8 +92,8 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  const handleCheckout = (product: Product) => {
-    setSelectedProduct(product);
+  const handleCheckout = (product: Product, selectedAro?: string) => {
+    setSelectedProduct({ ...product, selectedAro });
     setIsPurchaseModalOpen(true);
     window.scrollTo(0, 0);
   };
@@ -104,6 +111,11 @@ export default function App() {
 
   // Keyboard shortcut for search
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setIsAuthLoading(false);
+    });
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -115,8 +127,33 @@ export default function App() {
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      unsubscribe();
+    };
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Erro ao sair:", error);
+    }
+  };
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="h-16 w-16 rounded-full border-4 border-brand-blue/20 animate-pulse"></div>
+            <Loader2 className="absolute inset-0 h-16 w-16 text-brand-blue animate-spin" />
+          </div>
+          <p className="text-sm font-medium text-black/60 font-geist animate-pulse">Carregando Muzzicycles...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative">
@@ -133,6 +170,9 @@ export default function App() {
         favoritesCount={favorites.length}
         onCartOpen={() => setIsCartOpen(true)} 
         onFavoritesOpen={() => setIsFavoritesOpen(true)}
+        onLoginOpen={() => setIsLoginOpen(true)}
+        onLogout={handleLogout}
+        user={user}
         onViewChange={handleViewChange}
         currentView={view}
         searchQuery={searchQuery}
@@ -162,10 +202,6 @@ export default function App() {
 
         {view === 'models' && (
           <div className="pt-12">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 mb-12">
-              <h1 className="text-4xl sm:text-6xl font-medium tracking-tighter font-geist mb-4">Nossos Modelos</h1>
-              <p className="text-xl text-black/60 font-geist max-w-2xl">Explore nossa linha completa de bicicletas sustentáveis, projetadas para cada tipo de ciclista.</p>
-            </div>
             <ProductGrid 
               onAddToCart={addToCart} 
               onProductClick={handleProductClick} 
@@ -208,17 +244,7 @@ export default function App() {
 
         {view === 'acervo' && (
           <div className="pt-12">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 mb-12">
-              <h1 className="text-4xl sm:text-6xl font-medium tracking-tighter font-geist mb-4">Acervo Muzzi</h1>
-              <p className="text-xl text-black/60 font-geist max-w-2xl">Conheça nossa coleção histórica e modelos exclusivos que marcaram a trajetória da Muzzicycles.</p>
-            </div>
-            <ProductGrid 
-              onAddToCart={addToCart} 
-              onProductClick={handleProductClick} 
-              favorites={favorites}
-              onToggleFavorite={toggleFavorite}
-              searchQuery={searchQuery}
-            />
+            <Acervo onProductClick={handleProductClick} />
           </div>
         )}
 
@@ -282,6 +308,11 @@ export default function App() {
         isOpen={isPurchaseModalOpen}
         onClose={() => setIsPurchaseModalOpen(false)}
         items={cartItems.length > 0 ? cartItems : (selectedProduct ? [{ ...selectedProduct, quantity: 1 }] : [])}
+      />
+
+      <LoginForm 
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
       />
     </div>
   );

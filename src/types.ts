@@ -18,6 +18,8 @@ export interface Product {
     brakes: string;
     weight: string;
   };
+  selectedAro?: string;
+  isAcervo?: boolean;
 }
 
 export interface CartItem extends Product {

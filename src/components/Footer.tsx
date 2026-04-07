@@ -31,15 +31,15 @@ export default function Footer({ onViewChange }: FooterProps) {
               </div>
               <p className="text-black/70 max-w-3xl font-geist">A primeira bicicleta do mundo com quadro feito de plástico reciclado. Inovação brasileira para um futuro sustentável.</p>
 
-              <div className="mt-6 rounded-2xl border border-black/5 bg-gradient-to-b from-neutral-800 to-black shadow-2xl p-5 sm:p-8 md:p-10">
+              <div className="mt-6 rounded-2xl border border-black/5 bg-white shadow-sm p-5 sm:p-8 md:p-10">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="space-y-4">
                     <div className="inline-flex items-center gap-2 rounded-full bg-brand-blue/10 text-brand-blue ring-1 ring-brand-blue/20 px-2.5 py-1 text-xs font-geist">
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
                       Garantia Vitalícia no Quadro
                     </div>
-                    <h4 className="text-white font-semibold tracking-tight font-geist">Faça parte da mudança</h4>
-                    <ul className="space-y-2 text-sm text-white/70">
+                    <h4 className="text-black font-semibold tracking-tight font-geist">Faça parte da mudança</h4>
+                    <ul className="space-y-2 text-sm text-black/70">
                       <li className="flex items-start gap-2 font-geist">
                         <Check className="w-3 h-3 text-brand-blue mt-0.5 flex-shrink-0" />
                         Novidades sobre novos modelos.
@@ -59,7 +59,7 @@ export default function Footer({ onViewChange }: FooterProps) {
                           type="email" 
                           required 
                           placeholder="seu@email.com" 
-                          className="w-full h-10 px-3 rounded-xl border border-white/20 bg-white/5 text-sm placeholder-white/40 text-white outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue backdrop-blur"
+                          className="w-full h-10 px-3 rounded-xl border border-black/10 bg-black/5 text-sm placeholder-black/40 text-black outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue"
                         />
                         <button className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-brand-blue text-sm text-white hover:bg-brand-blue/80 transition font-geist">
                           Enviar
@@ -70,35 +70,36 @@ export default function Footer({ onViewChange }: FooterProps) {
                   </div>
                   <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-8">
                     <div>
-                      <h5 className="text-white/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Bikes</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-white/70">
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('models')}>Catálogo</button></li>
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('models')}>Comparador</button></li>
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('models')}>Especificações</button></li>
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('models')}>Guia de Tamanhos</button></li>
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Bikes</h5>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70">
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Catálogo</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Comparador</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Especificações</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Guia de Tamanhos</button></li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="text-white/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Ajuda</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-white/70">
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('faq')}>FAQ</button></li>
-                        <li><a className="hover:text-white transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Ajuda</h5>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70">
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('faq')}>FAQ</button></li>
+                        <li><a className="hover:text-black transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
                           Atendimento
                           <MessageCircle className="w-3 h-3" />
                         </a></li>
-                        <li><a className="hover:text-white transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
+                        <li><a className="hover:text-black transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
                           Fale Conosco
                           <MessageCircle className="w-3 h-3" />
                         </a></li>
-                        <li><a className="hover:text-white transition font-geist" href="tel:+5511995997454">(11) 99599-7454</a></li>
+                        <li><a className="hover:text-black transition font-geist" href="tel:+5511995997454">(11) 99599-7454</a></li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="text-white/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Sobre</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-white/70">
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('history')}>Nossa História</button></li>
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('sustainability')}>Sustentabilidade</button></li>
-                        <li><button className="hover:text-white transition font-geist" onClick={() => handleViewChange('innovation')}>Inovação e Patentes</button></li>
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Sobre</h5>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70">
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('acervo')}>Acervo Histórico</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('history')}>Nossa História</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('sustainability')}>Sustentabilidade</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('innovation')}>Inovação e Patentes</button></li>
                       </ul>
                     </div>
                   </div>
