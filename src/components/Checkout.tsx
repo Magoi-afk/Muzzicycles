@@ -39,6 +39,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
     
     setIsCalculatingShipping(true);
     try {
+      console.log('Solicitando cálculo de frete para CEP:', cep);
       // Basic estimates for shipping calculation
       const totalWeight = items.reduce((acc, item) => acc + (item.quantity * 16), 0); // ~16kg per bike
       const totalValue = items.reduce((acc, item) => acc + (item.quantity * item.price), 0);
@@ -57,22 +58,43 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
       });
       
       const data = await response.json();
-      if (response.ok && Array.isArray(data)) {
+      if (response.ok && Array.isArray(data) && data.length > 0) {
         setShippingOptions(data);
         // Default to cheapest or first available
-        if (data.length > 0) {
-          setShippingMethod(data[0].type);
-        }
+        setShippingMethod(data[0].type);
       } else {
-        console.error('Erro ao calcular frete:', data);
-        setShippingOptions([]);
+        console.warn('Backend retornou erro ou lista vazia, usando fallback local:', data);
+        applyLocalFallback(totalWeight);
       }
     } catch (error) {
-      console.error('Erro de rede ao calcular frete:', error);
-      setShippingOptions([]);
+      console.error('Erro de conexão ao calcular frete, usando fallback local:', error);
+      const totalWeight = items.reduce((acc, item) => acc + (item.quantity * 16), 0);
+      applyLocalFallback(totalWeight);
     } finally {
       setIsCalculatingShipping(false);
     }
+  };
+
+  const applyLocalFallback = (weight: number) => {
+    const basePrice = 35.00;
+    const estimatedPrice = basePrice + (weight * 6.50);
+    
+    const fallbackOptions = [
+      { 
+        type: "express", 
+        vlrFrete: estimatedPrice + 15, 
+        prazo: "3 a 5 dias úteis", 
+        simulated: true 
+      },
+      { 
+        type: "standard", 
+        vlrFrete: estimatedPrice, 
+        prazo: "8 a 12 dias úteis", 
+        simulated: true 
+      }
+    ];
+    setShippingOptions(fallbackOptions);
+    setShippingMethod(fallbackOptions[0].type);
   };
 
   const lookupAddress = async (cep: string) => {

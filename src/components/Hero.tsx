@@ -3,8 +3,10 @@ import { motion } from 'motion/react';
 import { useState, Suspense } from 'react';
 import Spline from '@splinetool/react-spline';
 import WordRotate from './magicui/WordRotate';
+import { HexagonPattern } from './magicui/HexagonPattern';
 import FrameModal from './FrameModal';
 import arImage from '../assets/images/regenerated_image_1778029817416.jpg';
+import { cn } from '../lib/utils';
 
 interface HeroProps {
   onHistoryClick?: () => void;
@@ -15,8 +17,25 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section className="max-w-7xl sm:px-8 mx-auto px-6">
-      <div className="pt-10 pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10">
+    <section className="max-w-7xl sm:px-8 mx-auto px-6 relative overflow-hidden">
+      <HexagonPattern
+        hexagons={[
+          [1, 1],
+          [4, 4],
+          [2, 2],
+          [3, 4],
+          [5, 4],
+          [8, 2],
+          [6, 3],
+          [8, 5],
+          [10, 10],
+        ]}
+        className={cn(
+          "mask-[radial-gradient(420px_circle_at_center,white,transparent)]",
+          "inset-0 skew-y-6 opacity-20"
+        )}
+      />
+      <div className="pt-10 pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 relative z-10">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

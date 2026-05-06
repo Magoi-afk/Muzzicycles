@@ -252,10 +252,10 @@ async function startServer() {
       res.json(results);
     } catch (error) {
       console.error("Erro fatal no cálculo de frete:", error);
-      // Even in case of fatal error, return simulated results
-      res.json([
-        { type: "express", vlrFrete: 45.00, prazo: "4 dias úteis", simulated: true },
-        { type: "standard", vlrFrete: 32.00, prazo: "8 dias úteis", simulated: true }
+      // Even in case of fatal error, return simulated results so the user isn't blocked
+      return res.json([
+        { type: "express", vlrFrete: 48.00, prazo: "4 dias úteis", simulated: true },
+        { type: "standard", vlrFrete: 36.00, prazo: "8 dias úteis", simulated: true }
       ]);
     }
   });
