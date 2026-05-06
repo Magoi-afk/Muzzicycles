@@ -1,16 +1,22 @@
-import { ArrowRight, ArrowUpRight, Truck, RotateCcw, Headphones, Eye } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Eye } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import Spline from '@splinetool/react-spline';
 import WordRotate from './magicui/WordRotate';
-import NumberTicker from './magicui/NumberTicker';
 import FrameModal from './FrameModal';
+import arImage from '../assets/images/regenerated_image_1778029817416.jpg';
 
-export default function Hero() {
+interface HeroProps {
+  onHistoryClick?: () => void;
+  onExploreClick?: () => void;
+}
+
+export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="max-w-7xl sm:px-8 mx-auto px-6">
-      <div className="pt-10 pb-12 sm:pt-16 sm:pb-20 lg:pt-24 lg:pb-28">
+      <div className="pt-10 pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -20,21 +26,24 @@ export default function Hero() {
           >
             <h1 className="text-4xl sm:text-6xl lg:text-7xl leading-[1.05] text-black tracking-tighter font-geist">
               A bike que nasce do que o mundo descarta
-              <WordRotate 
-                className="text-brand-blue tracking-tighter font-geist"
-                words={["100% plástico reciclado.", "100% brasileira.", "Garantia vitalícia."]}
-              />
+              <div className="min-h-[1.12em] mt-1 sm:mt-2">
+                <WordRotate 
+                  className="text-brand-blue tracking-tighter font-geist"
+                  words={["plástico reciclado.", "100% brasileira.", "Garantia vitalícia."]}
+                />
+              </div>
             </h1>
             <div className="flex flex-wrap gap-3 mt-8 items-center">
-              <a 
-                href="#models" 
-                className="group relative inline-flex items-center gap-2 text-sm font-medium text-white ring-1 ring-white/10 rounded-2xl font-geist" 
+              <button 
+                onClick={onExploreClick}
+                className="group relative inline-flex items-center gap-2 text-sm font-medium text-white ring-1 ring-white/10 rounded-2xl font-geist cursor-pointer" 
                 style={{ 
                   background: 'linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-brand-blue-dark) 100%)', 
                   boxShadow: '0 0 1.6em -0.6em var(--color-brand-blue) inset', 
                   height: '2.8em', 
                   padding: '0.35em 3.3em 0.35em 1.2em', 
-                  letterSpacing: '0.02em' 
+                  letterSpacing: '0.02em',
+                  border: 'none'
                 }}
               >
                 Explorar Bikes
@@ -44,39 +53,17 @@ export default function Hero() {
                 >
                   <ArrowRight className="w-4 h-4 text-brand-blue transition-transform duration-300 group-hover:translate-x-[0.1em]" />
                 </span>
-              </a>
-              <a href="#history" className="inline-flex items-center gap-2 text-sm text-black/70 hover:text-brand-blue transition font-geist">
+              </button>
+              <button 
+                onClick={onHistoryClick}
+                className="inline-flex items-center gap-2 text-sm text-black/70 hover:text-brand-blue transition font-geist cursor-pointer"
+              >
                 Nossa História
                 <ArrowUpRight className="w-4 h-4" />
-              </a>
+              </button>
             </div>
 
-            <div className="mt-12 grid grid-cols-2 gap-x-10 gap-y-8 border-l-2 border-brand-blue/20 pl-8 py-1">
-              <div className="flex flex-col gap-1.5 group">
-                <NumberTicker value={15840600} className="text-2xl sm:text-3xl font-medium italic text-black group-hover:text-brand-blue transition-colors" />
-                <p className="text-[9px] sm:text-[10px] text-brand-blue font-medium uppercase tracking-[0.15em] leading-tight opacity-70">
-                  Kg de plástico<br />reciclados
-                </p>
-              </div>
-              <div className="flex flex-col gap-1.5 group">
-                <NumberTicker value={130000} className="text-2xl sm:text-3xl font-medium italic text-black group-hover:text-brand-blue transition-colors" />
-                <p className="text-[9px] sm:text-[10px] text-brand-blue font-medium uppercase tracking-[0.15em] leading-tight opacity-70">
-                  Muzzicycles<br />produzidas
-                </p>
-              </div>
-              <div className="flex flex-col gap-1.5 group">
-                <NumberTicker value={980732} className="text-2xl sm:text-3xl font-medium italic text-black group-hover:text-brand-blue transition-colors" />
-                <p className="text-[9px] sm:text-[10px] text-brand-blue font-medium uppercase tracking-[0.15em] leading-tight opacity-70">
-                  Kg de petróleo<br />economizados
-                </p>
-              </div>
-              <div className="flex flex-col gap-1.5 group">
-                <NumberTicker value={5738267} className="text-2xl sm:text-3xl font-medium italic text-black group-hover:text-brand-blue transition-colors" />
-                <p className="text-[9px] sm:text-[10px] text-brand-blue font-medium uppercase tracking-[0.15em] leading-tight opacity-70">
-                  Kg de CO2<br />evitados
-                </p>
-              </div>
-            </div>
+            {/* Statistics grid removed per user request */}
           </motion.div>
 
           <motion.div 
@@ -85,24 +72,60 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="lg:col-span-6"
           >
-            <div className="relative rounded-3xl overflow-hidden border border-black/5 bg-white/30 backdrop-blur">
-              <img 
-                src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/hero-frame.png" 
-                alt="Quadro Muzzicycles Azul" 
-                className="w-full h-[420px] sm:h-[520px] object-cover object-top"
-                referrerPolicy="no-referrer"
-              />
+            <div className="relative rounded-3xl overflow-hidden border border-black/5 bg-white/30 backdrop-blur h-[420px] sm:h-[520px]">
+              <Suspense fallback={
+                <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                  <div className="w-8 h-8 border-4 border-brand-blue border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              }>
+                <Spline 
+                  scene="https://prod.spline.design/VFBlxkxYx5mKQ3L1/scene.splinecode"
+                  className="w-full h-full"
+                />
+              </Suspense>
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/40 backdrop-blur px-3 py-1.5 border border-black/5">
+              
+              {/* QR Code AR Section */}
+              <div className="absolute top-4 right-4 pointer-events-auto">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1 }}
+                  className="bg-white/90 backdrop-blur p-2 rounded-2xl border border-black/5 shadow-lg group/qr transition-all hover:scale-110"
+                >
+                  <div className="relative group/qr-container flex items-center justify-center">
+                    <img 
+                      src={arImage} 
+                      alt="AR Experience" 
+                      className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-xl transition-all duration-300 group-hover:scale-105 border-none"
+                      referrerPolicy="no-referrer"
+                    />
+                    {/* AR Center Overlay from user reference image */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="w-5 h-5 sm:w-8 sm:h-8 bg-[#60a5fa] rounded-full border-2 border-white flex items-center justify-center shadow-sm">
+                        <span className="text-[6px] sm:text-[10px] font-bold text-black tracking-tighter uppercase">AR</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2 text-center">
+                    <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-brand-blue flex items-center justify-center gap-1">
+                      <span className="h-1 w-1 rounded-full bg-brand-blue animate-pulse"></span>
+                      Scan for AR
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/40 backdrop-blur px-3 py-1.5 border border-black/5 pointer-events-auto">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
-                  <span className="text-xs text-black/70 font-geist">Destaque: Quadro Muzzi Azul</span>
+                  <span className="text-xs text-black/70 font-geist">Interativo: Gire para ver em 3D</span>
                 </div>
                 <button 
                   onClick={() => setIsModalOpen(true)}
-                  className="inline-flex items-center gap-2 text-xs rounded-lg bg-white/40 backdrop-blur px-3 h-8 border border-black/5 text-black/70 hover:bg-white/60 transition font-geist"
+                  className="inline-flex items-center gap-2 text-xs rounded-lg bg-white/40 backdrop-blur px-3 h-8 border border-black/5 text-black/70 hover:bg-white/60 transition font-geist pointer-events-auto"
                 >
-                  Ver Detalhes
+                  Ficha Técnica
                   <Eye className="w-3 h-3" />
                 </button>
               </div>

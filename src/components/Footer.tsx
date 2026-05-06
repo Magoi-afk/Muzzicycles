@@ -22,7 +22,7 @@ export default function Footer({ onViewChange }: FooterProps) {
               <div className="flex items-center gap-2 mb-4">
                 <BadgeCheck className="w-5 h-5 text-black/80" />
                 <img 
-                  src="https://raw.githubusercontent.com/Magoi-afk/Muzzicycles/main/LogoMuzzi.png" 
+                  src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/LogoMuzzi.png" 
                   alt="Muzzicycles" 
                   className="h-10 w-auto object-contain cursor-pointer"
                   referrerPolicy="no-referrer"
@@ -125,16 +125,26 @@ export default function Footer({ onViewChange }: FooterProps) {
                     Termos
                   </button>
                 </div>
-                <div className="flex items-center gap-3">
-                  <a aria-label="Instagram" className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 hover:text-black hover:bg-black/10 transition" href="https://www.instagram.com/muzzicycles/" target="_blank" rel="noreferrer">
-                    <Instagram className="w-4 h-4" />
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <a 
+                    href="https://www.magoi.online" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="text-[10px] text-black/40 hover:text-brand-blue transition font-geist uppercase tracking-widest whitespace-nowrap"
+                  >
+                    Desenvolvido por Magoi
                   </a>
-                  <a aria-label="TikTok" className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 hover:text-black hover:bg-black/10 transition" href="https://www.tiktok.com/@muzzicycles?lang=en" target="_blank" rel="noreferrer">
-                    <Music2 className="w-4 h-4" />
-                  </a>
-                  <a aria-label="YouTube" className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 hover:text-black hover:bg-black/10 transition" href="https://www.youtube.com/@muzzicycles" target="_blank" rel="noreferrer">
-                    <Youtube className="w-4 h-4" />
-                  </a>
+                  <div className="flex items-center gap-3">
+                    <a aria-label="Instagram" className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 hover:text-black hover:bg-black/10 transition" href="https://www.instagram.com/muzzicycles/" target="_blank" rel="noreferrer">
+                      <Instagram className="w-4 h-4" />
+                    </a>
+                    <a aria-label="TikTok" className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 hover:text-black hover:bg-black/10 transition" href="https://www.tiktok.com/@muzzicycles?lang=en" target="_blank" rel="noreferrer">
+                      <Music2 className="w-4 h-4" />
+                    </a>
+                    <a aria-label="YouTube" className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 hover:text-black hover:bg-black/10 transition" href="https://www.youtube.com/@muzzicycles" target="_blank" rel="noreferrer">
+                      <Youtube className="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

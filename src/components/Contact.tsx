@@ -45,7 +45,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="max-w-7xl mx-auto px-6 sm:px-8 py-20 bg-gray-50 rounded-[3rem] my-20">
+    <section id="contact" className="max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-5 bg-gray-50 rounded-[3rem] mt-5 mb-5">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-5">
           <h2 className="text-4xl font-medium tracking-tighter font-geist mb-8">Fale Conosco</h2>

@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { PRODUCTS } from '../constants';
 import { Product } from '../types';
-import { History, Calendar, Award, Info } from 'lucide-react';
+import { History, Calendar, Award, Info, FileText, Download } from 'lucide-react';
 
 interface AcervoProps {
   onProductClick: (product: Product) => void;
@@ -38,7 +38,7 @@ export default function Acervo({ onProductClick }: AcervoProps) {
               <img 
                 src={product.image} 
                 alt={product.name} 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100"
+                className="w-full h-full object-cover transition-all duration-700"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -83,10 +83,14 @@ export default function Acervo({ onProductClick }: AcervoProps) {
           </div>
           <div className="lg:col-span-8 space-y-12">
             {[
-              { year: '1998', title: 'O Nascimento', desc: 'Juan Muzzi inicia os experimentos com injeção de polímeros reciclados para quadros de bicicleta.' },
-              { year: '2005', title: 'Reconhecimento', desc: 'A Muzzicycles recebe prêmios internacionais de inovação e design sustentável na Europa.' },
-              { year: '2012', title: 'Produção em Escala', desc: 'Inauguração da linha de montagem automatizada capaz de produzir um quadro a cada 3 minutos.' },
-              { year: '2024', title: 'Expansão Global', desc: 'Mais de 130.000 bicicletas produzidas e presença em diversos países como símbolo de tecnologia brasileira.' }
+              { year: '1976', title: 'Fundação Imaplast', desc: 'Juan Muzzi funda a Imaplast Indústria de Moldes, estabelecendo a expertise em ferramentaria industrial.' },
+              { year: '1998', title: 'O Nascimento', desc: 'Juan Muzzi inicia os experimentos com injeção de polímeros reciclados e pesquisas com nylon e PET.' },
+              { year: '2002', title: 'Injeção de Nylon', desc: 'Primeiros quadros injetados com sucesso em nylon, marcando a viabilidade técnica do monobloco.' },
+              { year: '2008', title: 'Molde Industrial', desc: 'Conclusão do molde de 7 toneladas e esculpimento do design final do quadro Muzzi.' },
+              { year: '2009', title: 'Certificação', desc: 'Testes de colisão e resistência de 3.5 toneladas aprovados pelos laboratórios Falcão Bauer e selo INMETRO.' },
+              { year: '2011', title: 'Inovação em Blendas', desc: 'Desenvolvimento de blendas com embalagens Tetra-Pak e outros polímeros de alta densidade.' },
+              { year: '2016', title: 'Escala Global', desc: 'Produção consolidada com materiais diversos e exportação para mais de 50 países.' },
+              { year: '2024', title: 'Futuro Orgânico', desc: 'Pesquisa avançada em materiais provenientes da fotossíntese para quadros 100% biodegradáveis.' }
             ].map((item, i) => (
               <div key={i} className="flex gap-8 group">
                 <div className="flex flex-col items-center">
@@ -101,6 +105,113 @@ export default function Acervo({ onProductClick }: AcervoProps) {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+      {/* Technical Features Section */}
+      <div className="mt-32 pt-32 border-t border-black/5">
+        <div className="mb-12">
+          <h3 className="text-3xl font-medium tracking-tighter font-geist mb-4">DNA de Engenharia</h3>
+          <p className="text-black/50 font-geist">Diferenciais técnicos que tornam a Muzzicycles única no mundo.</p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {[
+            { label: 'Estrutural', val: 'Monobloco', desc: 'Elimina solda e fadiga de materiais.' },
+            { label: 'Resistência', val: '3.5 Toneladas', desc: 'Testado por laboratórios Falcão Bauer.' },
+            { label: 'Flexibilidade', val: 'Nylon/PET', desc: 'Absorve trepidação do solo naturalmente.' },
+            { label: 'Garantia', val: 'Vitalícia', desc: 'Confiança total na durabilidade do quadro.' },
+            { label: 'Manutenção', val: 'Zero', desc: 'Não enferruja e é resistente a raios UV.' },
+            { label: 'Saúde', val: 'Ergonômica', desc: 'Reduz pressão na coluna e próstata.' },
+            { label: 'Cor', val: 'Injetada', desc: 'Acabamento direto no molde, sem pintura.' },
+            { label: 'Ecologia', val: '♻️ Circular', desc: 'Feita de plásticos que seriam descartados.' }
+          ].map((stat, i) => (
+            <div key={i} className="group">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-blue/50 block mb-2">{stat.label}</span>
+              <div className="text-2xl font-medium font-geist mb-2 group-hover:text-brand-blue transition-colors">{stat.val}</div>
+              <p className="text-xs text-black/40 font-geist leading-relaxed">{stat.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Documentation Section */}
+      <div className="mt-32 pt-32 border-t border-black/5">
+        <div className="mb-12">
+          <h3 className="text-3xl font-medium tracking-tighter font-geist mb-4">Documentação & Acervo Digital</h3>
+          <p className="text-black/50 font-geist">Acesse materiais técnicos, apresentações históricas e certificações da Muzzicycles.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            {
+              title: "Apresentação Institucional",
+              desc: "Histórico completo, fases de construção do molde e testes de crash test (1998-2024).",
+              icon: FileText,
+              link: "https://muzzicycles.com.br/apresentacao_institucional.pdf",
+              action: "Visualizar PDF"
+            },
+            {
+              title: "Patentes Mundiais",
+              desc: "Registros oficiais de patentes nos Estados Unidos, Holanda e outros territórios globais.",
+              icon: Award,
+              link: "https://muzzicycles.com.br/patentes.pdf",
+              action: "Detalhes Técnicos"
+            },
+            {
+              title: "Relatório de Sustentabilidade",
+              desc: "Impacto ambiental: economia de petróleo e redução drástica de emissões de CO2.",
+              icon: History,
+              link: "https://muzzicycles.com.br/sustentabilidade.pdf",
+              action: "Baixar Relatório"
+            },
+            {
+              title: "Catálogo de Componentes",
+              desc: "Guia técnico de peças, compatibilidades e especificações do quadro monobloco.",
+              icon: FileText,
+              link: "https://muzzicycles.com.br/catalogo_pecas.pdf",
+              action: "Abrir Catálogo"
+            },
+            {
+              title: "Manual do Usuário",
+              desc: "Instruções de montagem, cuidados com o polímero e termos da garantia vitalícia.",
+              icon: Info,
+              link: "https://muzzicycles.com.br/manual_usuario.pdf",
+              action: "Ler Manual"
+            },
+            {
+              title: "Certificações Técnicas",
+              desc: "Laudos laboratoriais Falcão Bauer e selos de conformidade INMETRO.",
+              icon: Award,
+              link: "https://muzzicycles.com.br/certificacoes.pdf",
+              action: "Ver Laudos"
+            }
+          ].map((doc, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="p-8 rounded-[2rem] bg-gray-50 border border-black/5 group hover:bg-white hover:shadow-xl transition-all duration-500 flex flex-col"
+            >
+              <div className="h-12 w-12 rounded-2xl bg-brand-blue/10 text-brand-blue flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <doc.icon className="w-6 h-6" />
+              </div>
+              <h4 className="text-xl font-medium font-geist mb-2">{doc.title}</h4>
+              <p className="text-sm text-black/50 font-geist mb-6 flex-grow">
+                {doc.desc}
+              </p>
+              <a 
+                href={doc.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-blue group-hover:gap-3 transition-all"
+              >
+                <Download className="w-4 h-4" />
+                {doc.action}
+              </a>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

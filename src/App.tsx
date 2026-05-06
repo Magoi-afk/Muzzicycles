@@ -21,6 +21,7 @@ import FavoritesDrawer from './components/FavoritesDrawer';
 import ProductDetail from './components/ProductDetail';
 import Acervo from './components/Acervo';
 import Checkout from './components/Checkout';
+import ModelsIntro from './components/ModelsIntro';
 import PurchaseModal from './components/PurchaseModal';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
@@ -93,8 +94,12 @@ export default function App() {
   };
 
   const handleCheckout = (product: Product, selectedAro?: string) => {
-    setSelectedProduct({ ...product, selectedAro });
-    setIsPurchaseModalOpen(true);
+    // Add to cart if not already there, then go to checkout
+    const existing = cartItems.find(item => item.id === product.id && item.selectedAro === selectedAro);
+    if (!existing) {
+      setCartItems(prev => [...prev, { ...product, quantity: 1, selectedAro }]);
+    }
+    setView('checkout');
     window.scrollTo(0, 0);
   };
 
@@ -109,8 +114,20 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  // Keyboard shortcut for search
+  // Keyboard shortcut for search and MP status
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
+    if (status === 'success') {
+      alert('Pagamento aprovado! Obrigado por escolher a Muzzicycles.');
+      setCartItems([]);
+      // Clean up URL
+      window.history.replaceState({}, '', '/');
+    } else if (status === 'failure') {
+      alert('Ocorreu um erro no pagamento. Por favor, tente novamente.');
+      window.history.replaceState({}, '', '/');
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setIsAuthLoading(false);
@@ -177,73 +194,75 @@ export default function App() {
         currentView={view}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        onProductSelect={handleProductClick}
       />
       
-      <main className="pb-20">
+      <main className="pt-20 pb-20">
         {view === 'home' && (
           <div className="space-y-20">
-            <Hero />
+            <Hero 
+              onHistoryClick={() => handleViewChange('history')} 
+              onExploreClick={() => handleViewChange('models')}
+            />
             <LogoCloud />
             <ProductGrid 
               onAddToCart={addToCart} 
               onProductClick={handleProductClick} 
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
-              searchQuery={searchQuery}
             />
             <Doctrine />
-            <Innovation />
-            <History />
-            <Sustainability />
             <FAQ />
             <Contact />
           </div>
         )}
 
         {view === 'models' && (
-          <div className="pt-12">
-            <ProductGrid 
-              onAddToCart={addToCart} 
-              onProductClick={handleProductClick} 
-              favorites={favorites}
-              onToggleFavorite={toggleFavorite}
-              searchQuery={searchQuery}
-            />
+          <div>
+            <ModelsIntro />
+            <div className="pt-20 border-t border-black/5">
+              <ProductGrid 
+                onAddToCart={addToCart} 
+                onProductClick={handleProductClick} 
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+              />
+            </div>
           </div>
         )}
 
         {view === 'history' && (
-          <div className="pt-12">
+          <div>
             <History />
           </div>
         )}
 
         {view === 'innovation' && (
-          <div className="pt-12">
+          <div>
             <Innovation />
           </div>
         )}
 
         {view === 'sustainability' && (
-          <div className="pt-12">
+          <div>
             <Sustainability />
           </div>
         )}
 
         {view === 'faq' && (
-          <div className="pt-12">
+          <div>
             <FAQ />
           </div>
         )}
 
         {view === 'contact' && (
-          <div className="pt-12">
+          <div>
             <Contact />
           </div>
         )}
 
         {view === 'acervo' && (
-          <div className="pt-12">
+          <div>
             <Acervo onProductClick={handleProductClick} />
           </div>
         )}
@@ -259,12 +278,12 @@ export default function App() {
           />
         )}
 
-        {view === 'checkout' && selectedProduct && (
+        {view === 'checkout' && (
           <Checkout 
-            product={selectedProduct} 
-            onBack={() => setView('detail')} 
+            items={cartItems} 
+            onBack={() => setView('home')} 
             onComplete={() => {
-              alert('Pedido realizado com sucesso!');
+              setCartItems([]);
               handleBackToHome();
             }}
           />
@@ -289,8 +308,9 @@ export default function App() {
         onRemove={removeFromCart}
         onCheckout={() => {
           if (cartItems.length > 0) {
-            handleCheckout(cartItems[0]);
+            setView('checkout');
             setIsCartOpen(false);
+            window.scrollTo(0, 0);
           }
         }}
       />

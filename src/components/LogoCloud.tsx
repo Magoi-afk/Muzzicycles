@@ -1,8 +1,8 @@
 import React from 'react';
 
 const logos = [
-  { name: "Bons Fluidos", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Bons%20Fluidos%20(1).png" },
-  { name: "Brasil Almanaque", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Brasil%20almanaque%20(1).png" },
+  { name: "Bons Fluidos", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Bons%20Fluidos.png" },
+  { name: "Brasil Almanaque", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Brasil%20almanaque.png" },
   { name: "Ciclomagazine", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Ciclomagazine.png" },
   { name: "DCI", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/DCI.png" },
   { name: "Docol", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Docol.png" },
@@ -11,11 +11,47 @@ const logos = [
   { name: "Inovacao", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Inovacao.png" },
   { name: "Jornal de Jundiai", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Jornal%20de%20Jundiai.png" },
   { name: "Plastico Industrial", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Plastico%20Industrial.png" },
+  { name: "Vo2", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/vo2.png", link: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/VO2.pdf" },
+  { name: "Voce", url: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/voce.png" },
 ];
 
 export default function LogoCloud() {
+  const renderLogo = (logo: typeof logos[0], suffix = "") => {
+    const Img = (
+      <img
+        src={logo.url}
+        alt={logo.name}
+        className="h-14 w-auto max-w-[180px] object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+        referrerPolicy="no-referrer"
+      />
+    );
+
+    if (logo.link) {
+      return (
+        <a
+          key={logo.name + suffix}
+          href={logo.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center cursor-pointer"
+        >
+          {Img}
+        </a>
+      );
+    }
+
+    return (
+      <div
+        key={logo.name + suffix}
+        className="flex items-center justify-center cursor-pointer"
+      >
+        {Img}
+      </div>
+    );
+  };
+
   return (
-    <section className="flex flex-col w-full py-20 items-center justify-center overflow-hidden border-t border-slate-200/30">
+    <section className="flex flex-col w-full pt-5 pb-5 mb-5 items-center justify-center overflow-hidden border-t border-slate-200/30">
       <p className="text-sm text-slate-400 font-semibold tracking-wide uppercase mb-12 px-6 text-center">
         Muzzicycles na Mídia
       </p>
@@ -36,37 +72,13 @@ export default function LogoCloud() {
           onMouseLeave={e => (e.currentTarget.style.animationPlayState = "running")}
         >
           {/* Primeiro set */}
-          <div className="flex items-center gap-16 md:gap-24 pr-16 md:pr-24">
-            {logos.map((logo) => (
-              <div
-                key={logo.name}
-                className="flex items-center justify-center cursor-pointer"
-              >
-                <img
-                  src={logo.url}
-                  alt={logo.name}
-                  className="h-10 w-auto max-w-[120px] object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            ))}
+          <div className="flex items-center gap-20 md:gap-32 pr-20 md:pr-32">
+            {logos.map((logo) => renderLogo(logo))}
           </div>
 
           {/* Segundo set (duplicado para loop infinito) */}
-          <div className="flex items-center gap-16 md:gap-24 pr-16 md:pr-24">
-            {logos.map((logo) => (
-              <div
-                key={logo.name + "-2"}
-                className="flex items-center justify-center cursor-pointer"
-              >
-                <img
-                  src={logo.url}
-                  alt={logo.name}
-                  className="h-10 w-auto max-w-[120px] object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            ))}
+          <div className="flex items-center gap-20 md:gap-32 pr-20 md:pr-32">
+            {logos.map((logo) => renderLogo(logo, "-2"))}
           </div>
         </div>
       </div>

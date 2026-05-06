@@ -8,25 +8,75 @@ import {
 } from "@tabler/icons-react";
 import { X, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { auth, googleProvider, signInWithPopup } from "../firebase";
+import { 
+  auth, 
+  googleProvider, 
+  signInWithPopup, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  updateProfile 
+} from "../firebase";
 
 interface LoginFormProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+type AuthMode = "login" | "signup";
+
 export function LoginForm({ isOpen, onClose }: LoginFormProps) {
+  const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // For now, we'll just show a loading state for the email/password form
     setIsLoading(true);
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      if (authMode === "login") {
+        await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      } else {
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        if (formData.firstname || formData.lastname) {
+          await updateProfile(userCredential.user, {
+            displayName: `${formData.firstname} ${formData.lastname}`.trim(),
+          });
+        }
+      }
+      onClose();
+    } catch (err: any) {
+      console.error("Erro na autenticação:", err);
+      let message = "Ocorreu um erro. Tente novamente.";
+      if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+        message = "E-mail ou senha inválidos.";
+      } else if (err.code === "auth/email-already-in-use") {
+        message = "Este e-mail já está cadastrado. Tente fazer login.";
+      } else if (err.code === "auth/operation-not-allowed") {
+        message = "O login por e-mail ainda não foi habilitado no Console do Firebase. Por favor, habilite o provedor 'Email/Password'.";
+      } else if (err.code === "auth/weak-password") {
+        message = "A senha deve ter pelo menos 6 caracteres.";
+      } else if (err.code === "auth/invalid-email") {
+        message = "Endereço de e-mail inválido.";
+      }
+      setError(message);
+    } finally {
       setIsLoading(false);
-      setError("O login por email ainda não está disponível. Use o Google para entrar.");
-    }, 1500);
+    }
   };
 
   const handleGoogleLogin = async () => {
@@ -46,7 +96,7 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -71,36 +121,74 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
             </button>
 
             <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-              Bem-vindo à Muzzicycles
+              {authMode === "login" ? "Bem-vindo de volta" : "Crie sua conta"}
             </h2>
             <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
-              Entre na sua conta para acompanhar seus pedidos e gerenciar seus favoritos.
+              {authMode === "login" 
+                ? "Entre na sua conta para acompanhar seus pedidos." 
+                : "Cadastre-se para gerenciar seus favoritos e pedidos."}
             </p>
 
             {error && (
-              <div className="mt-4 p-3 rounded-lg bg-red-50 text-red-600 text-xs font-medium border border-red-100">
+              <div className="mt-4 p-3 rounded-lg bg-red-50 text-red-600 text-[14px] leading-[18px] font-medium border border-red-100">
                 {error}
               </div>
             )}
 
             <form className="my-8" onSubmit={handleSubmit}>
-              <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
-                <LabelInputContainer>
-                  <Label htmlFor="firstname">Nome</Label>
-                  <Input id="firstname" placeholder="João" type="text" className="bg-gray-50 border-black/5 focus:ring-brand-blue/20 focus:border-brand-blue" disabled={isLoading} />
-                </LabelInputContainer>
-                <LabelInputContainer>
-                  <Label htmlFor="lastname">Sobrenome</Label>
-                  <Input id="lastname" placeholder="Silva" type="text" className="bg-gray-50 border-black/5 focus:ring-brand-blue/20 focus:border-brand-blue" disabled={isLoading} />
-                </LabelInputContainer>
-              </div>
+              {authMode === "signup" && (
+                <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
+                  <LabelInputContainer>
+                    <Label htmlFor="firstname">Nome</Label>
+                    <Input 
+                      id="firstname" 
+                      placeholder="João" 
+                      type="text" 
+                      className="bg-gray-50 border-black/5" 
+                      disabled={isLoading}
+                      value={formData.firstname}
+                      onChange={handleChange}
+                    />
+                  </LabelInputContainer>
+                  <LabelInputContainer>
+                    <Label htmlFor="lastname">Sobrenome</Label>
+                    <Input 
+                      id="lastname" 
+                      placeholder="Silva" 
+                      type="text" 
+                      className="bg-gray-50 border-black/5" 
+                      disabled={isLoading}
+                      value={formData.lastname}
+                      onChange={handleChange}
+                    />
+                  </LabelInputContainer>
+                </div>
+              )}
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="email">Endereço de Email</Label>
-                <Input id="email" placeholder="joao@exemplo.com" type="email" className="bg-gray-50 border-black/5 focus:ring-brand-blue/20 focus:border-brand-blue" disabled={isLoading} />
+                <Input 
+                  id="email" 
+                  placeholder="joao@exemplo.com" 
+                  type="email" 
+                  required
+                  className="bg-gray-50 border-black/5" 
+                  disabled={isLoading}
+                  value={formData.email}
+                  onChange={handleChange}
+                />
               </LabelInputContainer>
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="password">Senha</Label>
-                <Input id="password" placeholder="••••••••" type="password" className="bg-gray-50 border-black/5 focus:ring-brand-blue/20 focus:border-brand-blue" disabled={isLoading} />
+                <Input 
+                  id="password" 
+                  placeholder="••••••••" 
+                  type="password" 
+                  required
+                  className="bg-gray-50 border-black/5" 
+                  disabled={isLoading}
+                  value={formData.password}
+                  onChange={handleChange}
+                />
               </LabelInputContainer>
 
               <button
@@ -111,29 +199,42 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Entrando...
+                    {authMode === "login" ? "Entrando..." : "Criando conta..."}
                   </div>
                 ) : (
-                  <>Entrar &rarr;</>
+                  <>{authMode === "login" ? "Entrar" : "Criar conta"} &rarr;</>
                 )}
                 <BottomGradient />
               </button>
 
-              <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => setAuthMode(authMode === "login" ? "signup" : "login")}
+                  className="text-xs text-neutral-600 hover:text-brand-blue transition-colors"
+                  disabled={isLoading}
+                >
+                  {authMode === "login" 
+                    ? "Não tem uma conta? Cadastre-se" 
+                    : "Já tem uma conta? Entre aqui"}
+                </button>
+              </div>
+
+              <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent" />
 
               <div className="flex flex-col space-y-4">
                 <button
-                  className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626] hover:bg-brand-blue hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black hover:bg-brand-blue hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   type="button"
                   onClick={handleGoogleLogin}
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin text-neutral-800 dark:text-neutral-300 group-hover:text-white" />
+                    <Loader2 className="h-4 w-4 animate-spin group-hover:text-white" />
                   ) : (
-                    <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300 group-hover:text-white" />
+                    <IconBrandGoogle className="h-4 w-4 group-hover:text-white" />
                   )}
-                  <span className="text-sm text-neutral-700 dark:text-neutral-300 group-hover:text-white">
+                  <span className="text-sm group-hover:text-white">
                     {isLoading ? "Conectando..." : "Continuar com o Google"}
                   </span>
                   <BottomGradient />
