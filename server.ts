@@ -140,13 +140,11 @@ async function startServer() {
       const clientCode = process.env.JADLOG_CLIENT_CODE;
       const originZip = process.env.ORIGIN_ZIP_CODE || "01001000";
 
-      if (!user || !token) {
-        console.error("Erro: JADLOG_USER ou JADLOG_TOKEN não configurados.");
-        return res.status(500).json({ error: "Configuração da Jadlog ausente no servidor." });
-      }
-
       // Jadlog API calculation
       const calculate = async (type: "E" | "R") => {
+        if (!user || !token) {
+          throw new Error("Configuração da Jadlog ausente no servidor.");
+        }
         const bodyV1: any = {
           "cepOrigem": originZip.replace(/\D/g, ''),
           "cepDestino": destZipCode.replace(/\D/g, ''),
