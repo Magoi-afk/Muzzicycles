@@ -140,14 +140,24 @@ async function startServer() {
       const clientCode = process.env.JADLOG_CLIENT_CODE;
       const originZip = process.env.ORIGIN_ZIP_CODE || "01001000";
 
+      // Basic validation to prevent crashes
+      if (!destZipCode || typeof destZipCode !== 'string') {
+        return res.status(400).json({ error: "CEP de destino inválido." });
+      }
+
       // Jadlog API calculation
       const calculate = async (type: "E" | "R") => {
+        // If no credentials, don't even try - go straight to simulated results via Promise.allSettled
         if (!user || !token) {
-          throw new Error("Configuração da Jadlog ausente no servidor.");
+          return null; 
         }
+        
+        const cleanDestZip = destZipCode.replace(/\D/g, '');
+        if (cleanDestZip.length !== 8) return null;
+
         const bodyV1: any = {
           "cepOrigem": originZip.replace(/\D/g, ''),
-          "cepDestino": destZipCode.replace(/\D/g, ''),
+          "cepDestino": cleanDestZip,
           "vlrDeclarado": value || 100,
           "peso": weight || 1,
           "tpEntrega": type,
@@ -161,128 +171,92 @@ async function startServer() {
           bodyV1.cnpj = clientCode;
         }
 
-        // Try these endpoints in order
         const endpoints = [
           "https://www.jadlog.com.br/inter/edi/api/frete/valor",
-          "https://www.jadlog.com.br/ediapi/api/frete/valor",
-          "https://www.jadlog.com.br/jadlog-api/webapi/frete/valor"
+          "https://www.jadlog.com.br/ediapi/api/frete/valor"
         ];
 
-        // V2 Body Format (used by some EDI API versions)
-        const bodyV2 = {
-          "vlrConstante": 0,
-          "vlrDeclarado": value || 100,
-          "vlrColeta": 0,
-          "vlrFrete": 0,
-          "vlrTaxaExtra": 0,
-          "ceps": [
-            {
-              "cepOrig": parseInt(originZip.replace(/\D/g, '')),
-              "cepDest": parseInt(destZipCode.replace(/\D/g, '')),
-              "peso": weight || 1,
-              "vlrFrete": 0,
-              "nfe": ""
-            }
-          ],
-          "tpEntrega": type,
-          "tpModalidade": "P", // "P" for Porta
-          "tpServico": 1,
-          "tpCarga": "N"
-        };
-
         for (const url of endpoints) {
-          // Try with V1 body first, then V2 if it failed with 400 or something similar
-          const bodies = [bodyV1, bodyV2];
-          
-          for (const bodyToTry of bodies) {
-            try {
-              console.log(`Tentando Jadlog API (${type}) em: ${url} (Corpo: ${bodyToTry === bodyV1 ? 'V1' : 'V2'})`);
-              const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                  "Authorization": `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                  "Accept": "application/json"
-                },
-                body: JSON.stringify(bodyToTry)
-              });
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+              },
+              body: JSON.stringify(bodyV1)
+            });
 
-              const status = response.status;
-              const resultText = await response.text();
-              
-              if (response.ok) {
-                console.log(`Sucesso na Jadlog API (${type}) via ${url} (Corpo: ${bodyToTry === bodyV1 ? 'V1' : 'V2'})`);
-                return JSON.parse(resultText);
-              } else {
-                console.warn(`Jadlog API (${type}) em ${url} com corpo ${bodyToTry === bodyV1 ? 'V1' : 'V2'} falhou com status ${status}: ${resultText.substring(0, 100)}`);
-              }
-            } catch (err) {
-              console.error(`Erro ao chamar ${url}:`, err);
+            if (response.ok) {
+              const result = await response.json();
+              return result;
             }
+          } catch (err) {
+            console.error(`Erro ao chamar Jadlog ${url}:`, err);
           }
-        }
-
-        throw new Error(`Todas as tentativas de API Jadlog falharam para o tipo ${type}`);
-      };
-
-      const extractFrete = (val: any) => {
-        if (!val) return null;
-        if (val.frete) {
-          return Array.isArray(val.frete) ? val.frete[0] : val.frete;
-        }
-        // Se vlrFrete estiver diretamente na raiz (comum em V1)
-        if (val.vlrFrete !== undefined) {
-          return val;
         }
         return null;
       };
 
-      const [express, rodoviario] = await Promise.allSettled([
-        calculate("E"),
-        calculate("R")
+      const extractFrete = (val: any) => {
+        if (!val) return null;
+        if (val.frete) return Array.isArray(val.frete) ? val.frete[0] : val.frete;
+        if (val.vlrFrete !== undefined) return val;
+        return null;
+      };
+
+      // Run both calculations
+      const [expressRes, rodoviarioRes] = await Promise.all([
+        calculate("E").catch(() => null),
+        calculate("R").catch(() => null)
       ]);
 
       const results = [];
       
-      const expVal = express.status === "fulfilled" ? extractFrete(express.value) : null;
+      const expVal = extractFrete(expressRes);
       if (expVal && expVal.vlrFrete !== undefined) {
         const price = typeof expVal.vlrFrete === 'string' ? parseFloat(expVal.vlrFrete.replace(',', '.')) : Number(expVal.vlrFrete);
         results.push({ type: "express", ...expVal, vlrFrete: price });
       }
 
-      const rodVal = rodoviario.status === "fulfilled" ? extractFrete(rodoviario.status === "fulfilled" ? rodoviario.value : null) : null;
+      const rodVal = extractFrete(rodoviarioRes);
       if (rodVal && rodVal.vlrFrete !== undefined) {
         const price = typeof rodVal.vlrFrete === 'string' ? parseFloat(rodVal.vlrFrete.replace(',', '.')) : Number(rodVal.vlrFrete);
         results.push({ type: "standard", ...rodVal, vlrFrete: price });
       }
 
+      // ALWAYS provide a fallback if Jadlog fails or is not configured
       if (results.length === 0) {
-        console.warn("Jadlog API falhou totalmente. Ativando fallback de segurança para não bloquear o checkout.");
-        
-        // Fallback dinâmico baseado em peso (Estimativa segura)
-        const basePrice = 25.00;
-        const weightFactor = (weight || 1) * 5.50; // R$ 5,50 por kg
-        const estimatedPrice = basePrice + weightFactor;
+        const basePrice = 28.50;
+        const weightKg = Number(weight) || 1;
+        const estimatedPrice = basePrice + (weightKg * 6.50);
 
         results.push({
           type: "express",
-          vlrFrete: estimatedPrice + 15,
-          prazo: "3 a 5 dias úteis",
-          simulated: true
+          vlrFrete: estimatedPrice + 12,
+          prazo: "2 a 4 dias úteis",
+          simulated: true,
+          vlrFreteOriginal: estimatedPrice + 12
         });
         
         results.push({
           type: "standard",
           vlrFrete: estimatedPrice,
-          prazo: "7 a 12 dias úteis",
-          simulated: true
+          prazo: "6 a 10 dias úteis",
+          simulated: true,
+          vlrFreteOriginal: estimatedPrice
         });
       }
 
       res.json(results);
     } catch (error) {
-      console.error("Erro geral ao calcular frete Jadlog:", error);
-      res.status(500).json({ error: "Erro interno ao calcular frete." });
+      console.error("Erro fatal no cálculo de frete:", error);
+      // Even in case of fatal error, return simulated results
+      res.json([
+        { type: "express", vlrFrete: 45.00, prazo: "4 dias úteis", simulated: true },
+        { type: "standard", vlrFrete: 32.00, prazo: "8 dias úteis", simulated: true }
+      ]);
     }
   });
 
