@@ -83,11 +83,31 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
     setIsLoading(true);
     setError(null);
     try {
+      googleProvider.setCustomParameters({ prompt: 'select_account' });
       await signInWithPopup(auth, googleProvider);
       onClose();
     } catch (err: any) {
       console.error("Erro ao fazer login com Google:", err);
-      setError("Falha ao entrar com o Google. Tente novamente.");
+      let message = "Falha ao entrar com o Google.";
+      
+      if (err.code === "auth/operation-not-allowed") {
+        message = "O login com Google não está ativado no Console do Firebase. Ative-o em 'Authentication > Sign-in method'.";
+      } else if (err.code === "auth/unauthorized-domain") {
+        message = `Domínio não autorizado. Adicione '${window.location.hostname}' aos domínios autorizados no Console do Firebase (Autenticação > Configurações).`;
+      } else if (err.code === "auth/popup-blocked") {
+        message = "O pop-up foi bloqueado pelo seu navegador. Por favor, permita pop-ups para fazer login.";
+      } else if (err.code === "auth/popup-closed-by-user") {
+        message = "O login foi cancelado porque o pop-up foi fechado.";
+      } else if (err.code === "auth/network-request-failed") {
+        message = "Erro de rede. Verifique sua conexão com a internet.";
+      } else if (err.code === "auth/internal-error") {
+        message = "Erro interno do Firebase. Tente novamente mais tarde.";
+      } else {
+        // Exibir o código do erro para ajudar no diagnóstico
+        message += ` (${err.code || err.message || "Erro desconhecido"})`;
+      }
+      
+      setError(message);
     } finally {
       setIsLoading(false);
     }
