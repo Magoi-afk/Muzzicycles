@@ -26,9 +26,16 @@ export function HexagonPattern({
 }: HexagonPatternProps) {
   const id = useId();
 
-  // Hexagon path for a 40x40 area (approx)
-  // points: (20,0), (37.32, 10), (37.32, 30), (20, 40), (2.68, 30), (2.68, 10)
-  const hexagonPath = "M20 0L37.3205 10V30L20 40L2.67949 30V10L20 0Z";
+  // Points for a regular hexagon centered in width x height
+  const w = width;
+  const h = height;
+  const p1 = `${w / 2} 0`;
+  const p2 = `${w * 0.933} ${h * 0.25}`;
+  const p3 = `${w * 0.933} ${h * 0.75}`;
+  const p4 = `${w / 2} ${h}`;
+  const p5 = `${w * 0.067} ${h * 0.75}`;
+  const p6 = `${w * 0.067} ${h * 0.25}`;
+  const hexagonPath = `M${p1}L${p2}V${p3}L${p4}L${p5}V${p6}L${p1}Z`;
 
   return (
     <svg

@@ -30,9 +30,11 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
           [8, 5],
           [10, 10],
         ]}
+        width={100}
+        height={100}
         className={cn(
           "mask-[radial-gradient(420px_circle_at_center,white,transparent)]",
-          "inset-0 skew-y-6 opacity-20"
+          "inset-0 skew-y-6 opacity-30 fill-brand-blue/10 stroke-brand-blue/20"
         )}
       />
       <div className="pt-10 pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 relative z-10">

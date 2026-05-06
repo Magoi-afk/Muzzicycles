@@ -39,10 +39,10 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
     
     setIsCalculatingShipping(true);
     try {
-      console.log('Solicitando cálculo de frete para CEP:', cep);
+      console.log('Calculating shipping for CEP:', cep);
       // Basic estimates for shipping calculation
-      const totalWeight = items.reduce((acc, item) => acc + (item.quantity * 16), 0); // ~16kg per bike
-      const totalValue = items.reduce((acc, item) => acc + (item.quantity * item.price), 0);
+      const totalWeight = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * 16), 0) : 16;
+      const totalValue = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * item.price), 0) : 1000;
 
       const response = await fetch('/api/shipping/calculate', {
         method: 'POST',
@@ -57,27 +57,29 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
         })
       });
       
+      console.log('Shipping API status:', response.status);
       const data = await response.json();
+      console.log('Shipping API response data:', data);
+
       if (response.ok && Array.isArray(data) && data.length > 0) {
         setShippingOptions(data);
-        // Default to cheapest or first available
         setShippingMethod(data[0].type);
       } else {
-        console.warn('Backend retornou erro ou lista vazia, usando fallback local:', data);
-        applyLocalFallback(totalWeight);
+        console.warn('Backend returned error or empty list, falling back:', data);
+        applyLocalFallback();
       }
     } catch (error) {
-      console.error('Erro de conexão ao calcular frete, usando fallback local:', error);
-      const totalWeight = items.reduce((acc, item) => acc + (item.quantity * 16), 0);
-      applyLocalFallback(totalWeight);
+      console.error('Shipping connection error, falling back:', error);
+      applyLocalFallback();
     } finally {
       setIsCalculatingShipping(false);
     }
   };
 
-  const applyLocalFallback = (weight: number) => {
+  const applyLocalFallback = () => {
+    const totalWeight = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * 16), 0) : 16;
     const basePrice = 35.00;
-    const estimatedPrice = basePrice + (weight * 6.50);
+    const estimatedPrice = basePrice + (totalWeight * 6.50);
     
     const fallbackOptions = [
       { 
