@@ -21,20 +21,17 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
       <HexagonPattern
         hexagons={[
           [1, 1],
-          [4, 4],
           [2, 2],
-          [3, 4],
-          [5, 4],
-          [8, 2],
-          [6, 3],
-          [8, 5],
-          [10, 10],
+          [0, 2],
+          [3, 1],
+          [1, 3],
+          [4, 0],
         ]}
-        width={100}
-        height={100}
+        width={320}
+        height={320}
         className={cn(
-          "mask-[radial-gradient(420px_circle_at_center,white,transparent)]",
-          "inset-0 skew-y-6 opacity-30 fill-brand-blue/10 stroke-brand-blue/20"
+          "mask-[radial-gradient(800px_circle_at_center,white,transparent)]",
+          "inset-0 skew-y-3 opacity-30 fill-brand-blue/20 stroke-brand-blue/40"
         )}
       />
       <div className="pt-10 pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 relative z-10">

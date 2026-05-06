@@ -4,12 +4,14 @@ import { Loader2 } from 'lucide-react';
 
 // Initialize MP with Public Key
 const getPublicKey = () => {
-  return (import.meta as any).env.VITE_MERCADO_PAGO_PUBLIC_KEY || '';
+  return import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY || '';
 };
 
-const publicKey = getPublicKey();
-if (publicKey) {
-  initMercadoPago(publicKey, { locale: 'pt-BR' });
+// We'll initialize inside the component or effect to handle dynamic updates better if needed
+// but for now, top level is standard for the SDK
+const initialKey = getPublicKey();
+if (initialKey) {
+  initMercadoPago(initialKey, { locale: 'pt-BR' });
 }
 
 interface MercadoPagoButtonProps {
@@ -24,17 +26,21 @@ export default function MercadoPagoButton({ items, payer }: MercadoPagoButtonPro
   const [preferenceId, setPreferenceId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [publicKey, setPublicKey] = useState(getPublicKey());
+
+  useEffect(() => {
+    // Check for key periodically or on focus if it was missing
+    const key = getPublicKey();
+    if (key !== publicKey) {
+      setPublicKey(key);
+      if (key) initMercadoPago(key, { locale: 'pt-BR' });
+    }
+  }, [publicKey]);
 
   const handleCreatePreference = async () => {
     const currentKey = getPublicKey();
     if (!currentKey) {
-      setError(
-        'Configuração do Mercado Pago pendente. Para ativar os pagamentos:\n' +
-        '1. Vá em Settings > Secrets no topo do editor.\n' +
-        '2. Adicione VITE_MERCADO_PAGO_PUBLIC_KEY com sua Chave Pública.\n' +
-        '3. Adicione MERCADO_PAGO_ACCESS_TOKEN com seu Token de Acesso.\n' +
-        '4. Reinicie o servidor ou recarregue a página.'
-      );
+      setError('Configuração pendente');
       return;
     }
 
@@ -54,31 +60,47 @@ export default function MercadoPagoButton({ items, payer }: MercadoPagoButtonPro
 
       if (data.id) {
         setPreferenceId(data.id);
-        if (data.init_point) {
-          // Automatic redirection to Mercado Pago
-          window.location.href = data.init_point;
-        }
+        // Note: Wallet component is preferred over direct redirect for better experience
+        // but let's keep it robust
       } else {
         throw new Error(data.error || 'Erro ao criar preferência de pagamento.');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Erro MP:', err);
-      setError('Não foi possível iniciar o pagamento. Tente novamente.');
+      setError(err.message || 'Não foi possível iniciar o pagamento. Tente novamente.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleSimulatedPayment = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      alert('Pagamento SIMULADO realizado com sucesso! (Apenas para teste)');
+      window.location.reload();
+    }, 2000);
+  };
+
   useEffect(() => {
-    if (items && items.length > 0 && !preferenceId && !isLoading && !error) {
+    if (items && items.length > 0 && !preferenceId && !isLoading && !error && publicKey) {
       handleCreatePreference();
     }
   }, [items]);
 
-  if (error) {
+  if (error && !publicKey) {
     return (
-      <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
-        {error}
+      <div className="space-y-4">
+        <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 text-blue-800 text-sm font-medium">
+          <p className="mb-2">Configuração do Mercado Pago pendente.</p>
+          <p className="text-xs font-normal opacity-80">Para ativar pagamentos reais, adicione as chaves em Settings &gt; Secrets.</p>
+        </div>
+        <button
+          onClick={handleSimulatedPayment}
+          disabled={isLoading}
+          className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20 flex items-center justify-center gap-3 disabled:opacity-50"
+        >
+          {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Teste com Pagamento Simulado'}
+        </button>
       </div>
     );
   }

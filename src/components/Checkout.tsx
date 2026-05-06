@@ -77,6 +77,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
   };
 
   const applyLocalFallback = () => {
+    console.log('Applying local shipping fallback values');
     const totalWeight = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * 16), 0) : 16;
     const basePrice = 35.00;
     const estimatedPrice = basePrice + (totalWeight * 6.50);
