@@ -39,7 +39,8 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
     
     setIsCalculatingShipping(true);
     try {
-      console.log('Calculating shipping for CEP:', cep);
+      const cleanCep = cep.replace(/\D/g, '');
+      console.log('Calculating shipping for CEP:', cleanCep);
       // Basic estimates for shipping calculation
       const totalWeight = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * 16), 0) : 16;
       const totalValue = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * item.price), 0) : 1000;
@@ -48,12 +49,12 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          destZipCode: cep,
+          destZipCode: cleanCep,
           weight: totalWeight,
           value: totalValue,
-          width: 80,
-          height: 120,
-          length: 20
+          width: 20,
+          height: 80,
+          length: 120
         })
       });
       
@@ -65,39 +66,15 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
         setShippingOptions(data);
         setShippingMethod(data[0].type);
       } else {
-        console.warn('Backend returned error or empty list, falling back:', data);
-        applyLocalFallback();
+        console.warn('Backend returned error or empty list:', data);
+        setShippingOptions([]);
       }
     } catch (error) {
-      console.error('Shipping connection error, falling back:', error);
-      applyLocalFallback();
+      console.error('Shipping connection error:', error);
+      setShippingOptions([]);
     } finally {
       setIsCalculatingShipping(false);
     }
-  };
-
-  const applyLocalFallback = () => {
-    console.log('Applying local shipping fallback values');
-    const totalWeight = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * 16), 0) : 16;
-    const basePrice = 35.00;
-    const estimatedPrice = basePrice + (totalWeight * 6.50);
-    
-    const fallbackOptions = [
-      { 
-        type: "express", 
-        vlrFrete: estimatedPrice + 15, 
-        prazo: "3 a 5 dias úteis", 
-        simulated: true 
-      },
-      { 
-        type: "standard", 
-        vlrFrete: estimatedPrice, 
-        prazo: "8 a 12 dias úteis", 
-        simulated: true 
-      }
-    ];
-    setShippingOptions(fallbackOptions);
-    setShippingMethod(fallbackOptions[0].type);
   };
 
   const lookupAddress = async (cep: string) => {
@@ -325,8 +302,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                           <div className="text-left">
                             <span className="block font-medium font-geist">{option.type === 'express' ? 'Jadlog .Package' : 'Jadlog .Com'}</span>
                             <span className="text-xs text-black/40 font-geist">
-                              Estimativa: {typeof option.prazo === 'number' ? `${option.prazo} ${option.prazo === 1 ? 'dia útil' : 'dias úteis'}` : option.prazo}
-                              {option.simulated && <span className="ml-2 text-[10px] text-brand-blue font-bold">(Estimativa Segura)</span>}
+                            Estimativa: {typeof option.prazo === 'number' ? `${option.prazo} ${option.prazo === 1 ? 'dia útil' : 'dias úteis'}` : option.prazo}
                             </span>
                           </div>
                         </div>

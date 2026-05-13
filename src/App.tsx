@@ -19,7 +19,8 @@ import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import FavoritesDrawer from './components/FavoritesDrawer';
 import ProductDetail from './components/ProductDetail';
-import Acervo from './components/Acervo';
+import NossaHistoria from './components/NossaHistoria';
+import Support from './components/Support';
 import Checkout from './components/Checkout';
 import ModelsIntro from './components/ModelsIntro';
 import PurchaseModal from './components/PurchaseModal';
@@ -29,7 +30,7 @@ import { LoginForm } from './components/LoginForm';
 import { auth, onAuthStateChanged, User, signOut } from './firebase';
 import { Product, CartItem } from './types';
 
-type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'models' | 'history' | 'sustainability' | 'faq' | 'contact' | 'innovation' | 'acervo';
+type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'bikes' | 'about' | 'support';
 
 export default function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -41,8 +42,17 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [view, setView] = useState<View>('home');
+  const [aboutTab, setAboutTab] = useState('history');
+  const [supportTab, setSupportTab] = useState<'faq' | 'contact'>('faq');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleViewChange = (newView: View, tab?: string) => {
+    setView(newView);
+    if (newView === 'about' && tab) setAboutTab(tab);
+    if (newView === 'support' && tab) setSupportTab(tab as 'faq' | 'contact');
+    window.scrollTo(0, 0);
+  };
 
   const toggleFavorite = (product: Product) => {
     setFavorites((prev) => {
@@ -106,11 +116,6 @@ export default function App() {
   const handleBackToHome = () => {
     setView('home');
     setSelectedProduct(null);
-    window.scrollTo(0, 0);
-  };
-
-  const handleViewChange = (newView: View) => {
-    setView(newView);
     window.scrollTo(0, 0);
   };
 
@@ -201,8 +206,8 @@ export default function App() {
         {view === 'home' && (
           <div className="space-y-20">
             <Hero 
-              onHistoryClick={() => handleViewChange('history')} 
-              onExploreClick={() => handleViewChange('models')}
+              onHistoryClick={() => handleViewChange('about')} 
+              onExploreClick={() => handleViewChange('bikes')}
             />
             <LogoCloud />
             <ProductGrid 
@@ -217,7 +222,7 @@ export default function App() {
           </div>
         )}
 
-        {view === 'models' && (
+        {view === 'bikes' && (
           <div>
             <ModelsIntro />
             <div className="pt-20 border-t border-black/5">
@@ -231,40 +236,19 @@ export default function App() {
           </div>
         )}
 
-        {view === 'history' && (
-          <div>
-            <History />
-          </div>
+        {view === 'about' && (
+          <NossaHistoria 
+            key={aboutTab}
+            onProductClick={handleProductClick} 
+            initialTab={aboutTab} 
+          />
         )}
 
-        {view === 'innovation' && (
-          <div>
-            <Innovation />
-          </div>
-        )}
-
-        {view === 'sustainability' && (
-          <div>
-            <Sustainability />
-          </div>
-        )}
-
-        {view === 'faq' && (
-          <div>
-            <FAQ />
-          </div>
-        )}
-
-        {view === 'contact' && (
-          <div>
-            <Contact />
-          </div>
-        )}
-
-        {view === 'acervo' && (
-          <div>
-            <Acervo onProductClick={handleProductClick} />
-          </div>
+        {view === 'support' && (
+          <Support 
+            key={supportTab}
+            initialTab={supportTab} 
+          />
         )}
 
         {view === 'detail' && selectedProduct && (

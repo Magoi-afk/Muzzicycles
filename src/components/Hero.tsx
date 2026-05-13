@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { useState, Suspense } from 'react';
 import Spline from '@splinetool/react-spline';
 import WordRotate from './magicui/WordRotate';
-import { HexagonPattern } from './magicui/HexagonPattern';
+import { LightRays } from './magicui/LightRays';
 import FrameModal from './FrameModal';
 import arImage from '../assets/images/regenerated_image_1778029817416.jpg';
 import { cn } from '../lib/utils';
@@ -18,22 +18,15 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
 
   return (
     <section className="max-w-7xl sm:px-8 mx-auto px-6 relative overflow-hidden">
-      <HexagonPattern
-        hexagons={[
-          [1, 1],
-          [2, 2],
-          [0, 2],
-          [3, 1],
-          [1, 3],
-          [4, 0],
-        ]}
-        width={320}
-        height={320}
-        className={cn(
-          "mask-[radial-gradient(800px_circle_at_center,white,transparent)]",
-          "inset-0 skew-y-3 opacity-30 fill-brand-blue/20 stroke-brand-blue/40"
-        )}
-      />
+      <div className="absolute inset-0 z-0">
+        <LightRays 
+          count={10} 
+          color="rgba(37, 99, 235, 0.15)" 
+          blur={40} 
+          speed={15} 
+          length="100%"
+        />
+      </div>
       <div className="pt-10 pb-10 sm:pt-10 sm:pb-10 lg:pt-10 lg:pb-10 relative z-10">
         <div className="grid lg:grid-cols-12 gap-8 items-center">
           <motion.div 

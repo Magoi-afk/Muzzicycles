@@ -2,13 +2,13 @@ import { BadgeCheck, Send, Instagram, Youtube, Check, Music2, MessageCircle } fr
 import { WHATSAPP_NUMBER } from '../constants';
 
 interface FooterProps {
-  onViewChange?: (view: any) => void;
+  onViewChange?: (view: any, tab?: string) => void;
 }
 
 export default function Footer({ onViewChange }: FooterProps) {
-  const handleViewChange = (view: string) => {
+  const handleViewChange = (view: string, tab?: string) => {
     if (onViewChange) {
-      onViewChange(view);
+      onViewChange(view, tab);
       window.scrollTo(0, 0);
     }
   };
@@ -72,34 +72,30 @@ export default function Footer({ onViewChange }: FooterProps) {
                     <div>
                       <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Bikes</h5>
                       <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Catálogo</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Comparador</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Especificações</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('models')}>Guia de Tamanhos</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>Modelos</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>Quadros</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>Bikes</button></li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Ajuda</h5>
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Nossa História</h5>
                       <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('faq')}>FAQ</button></li>
-                        <li><a className="hover:text-black transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
-                          Atendimento
-                          <MessageCircle className="w-3 h-3" />
-                        </a></li>
-                        <li><a className="hover:text-black transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
-                          Fale Conosco
-                          <MessageCircle className="w-3 h-3" />
-                        </a></li>
-                        <li><a className="hover:text-black transition font-geist" href="tel:+5511995997454">(11) 99599-7454</a></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'innovation')}>Inovação</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'history')}>Histórias</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'sustainability')}>Sustentabilidade</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'acervo')}>Acervo</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'media')}>Na Mídia</button></li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Sobre</h5>
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Contato</h5>
                       <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('acervo')}>Acervo Histórico</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('history')}>Nossa História</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('sustainability')}>Sustentabilidade</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('innovation')}>Inovação e Patentes</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('support', 'faq')}>FAQ</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('support', 'contact')}>Contato</button></li>
+                        <li className="pt-2"><a className="hover:text-black transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
+                          WhatsApp
+                          <MessageCircle className="w-3 h-3" />
+                        </a></li>
                       </ul>
                     </div>
                   </div>

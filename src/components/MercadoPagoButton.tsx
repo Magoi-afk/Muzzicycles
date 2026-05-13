@@ -73,33 +73,21 @@ export default function MercadoPagoButton({ items, payer }: MercadoPagoButtonPro
     }
   };
 
-  const handleSimulatedPayment = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      alert('Pagamento SIMULADO realizado com sucesso! (Apenas para teste)');
-      window.location.reload();
-    }, 2000);
-  };
-
   useEffect(() => {
     if (items && items.length > 0 && !preferenceId && !isLoading && !error && publicKey) {
       handleCreatePreference();
     }
   }, [items]);
 
-  if (error && !publicKey) {
+  if (error) {
     return (
-      <div className="space-y-4">
-        <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 text-blue-800 text-sm font-medium">
-          <p className="mb-2">Configuração do Mercado Pago pendente.</p>
-          <p className="text-xs font-normal opacity-80">Para ativar pagamentos reais, adicione as chaves em Settings &gt; Secrets.</p>
-        </div>
-        <button
-          onClick={handleSimulatedPayment}
-          disabled={isLoading}
-          className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20 flex items-center justify-center gap-3 disabled:opacity-50"
+      <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium">
+        {error}
+        <button 
+          onClick={() => { setError(null); handleCreatePreference(); }}
+          className="block mt-2 text-xs underline"
         >
-          {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Teste com Pagamento Simulado'}
+          Tentar novamente
         </button>
       </div>
     );

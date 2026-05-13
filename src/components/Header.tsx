@@ -117,13 +117,9 @@ export default function Header({
   };
 
   const menuItems = [
-    { id: 'models', label: 'Modelo' },
-    { id: 'innovation', label: 'Inovação' },
-    { id: 'history', label: 'Histórias' },
-    { id: 'sustainability', label: 'Sustentabilidade' },
-    { id: 'acervo', label: 'Acervo' },
-    { id: 'faq', label: 'FAQ' },
-    { id: 'contact', label: 'Contato' },
+    { id: 'bikes', label: 'Bikes' },
+    { id: 'about', label: 'Nossa História' },
+    { id: 'support', label: 'Contato' },
   ];
 
   const handleNavClick = (view: string) => {

@@ -181,17 +181,21 @@ async function startServer() {
             const response = await fetch(url, {
               method: "POST",
               headers: {
-                "Authorization": `Bearer ${token}`,
+                "Authorization": token.startsWith('Bearer') ? token : `Bearer ${token}`,
                 "Content-Type": "application/json",
                 "Accept": "application/json"
               },
               body: JSON.stringify(bodyV1)
             });
 
-            if (response.ok) {
-              const result = await response.json();
-              return result;
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error(`Jadlog API Error (${url}) - Status: ${response.status}:`, errorText);
+              continue;
             }
+            
+            const result = await response.json();
+            return result;
           } catch (err) {
             console.error(`Erro ao chamar Jadlog ${url}:`, err);
           }
@@ -226,37 +230,10 @@ async function startServer() {
         results.push({ type: "standard", ...rodVal, vlrFrete: price });
       }
 
-      // ALWAYS provide a fallback if Jadlog fails or is not configured
-      if (results.length === 0) {
-        const basePrice = 28.50;
-        const weightKg = Number(weight) || 1;
-        const estimatedPrice = basePrice + (weightKg * 6.50);
-
-        results.push({
-          type: "express",
-          vlrFrete: estimatedPrice + 12,
-          prazo: "2 a 4 dias úteis",
-          simulated: true,
-          vlrFreteOriginal: estimatedPrice + 12
-        });
-        
-        results.push({
-          type: "standard",
-          vlrFrete: estimatedPrice,
-          prazo: "6 a 10 dias úteis",
-          simulated: true,
-          vlrFreteOriginal: estimatedPrice
-        });
-      }
-
       res.json(results);
     } catch (error) {
       console.error("Erro fatal no cálculo de frete:", error);
-      // Even in case of fatal error, return simulated results so the user isn't blocked
-      return res.json([
-        { type: "express", vlrFrete: 48.00, prazo: "4 dias úteis", simulated: true },
-        { type: "standard", vlrFrete: 36.00, prazo: "8 dias úteis", simulated: true }
-      ]);
+      res.status(500).json({ error: "Erro ao calcular frete com a Jadlog oficial." });
     }
   });
 
