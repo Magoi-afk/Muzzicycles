@@ -26,11 +26,12 @@ import ModelsIntro from './components/ModelsIntro';
 import PurchaseModal from './components/PurchaseModal';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import CustomerDashboard from './components/CustomerDashboard';
 import { LoginForm } from './components/LoginForm';
-import { auth, onAuthStateChanged, User, signOut } from './firebase';
+import { auth, onAuthStateChanged, User, signOut, db, getDoc, doc, setDoc, serverTimestamp, handleFirestoreError, OperationType } from './firebase';
 import { Product, CartItem } from './types';
 
-type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'bikes' | 'about' | 'support';
+type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'bikes' | 'about' | 'support' | 'dashboard';
 
 export default function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -40,6 +41,7 @@ export default function App() {
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [view, setView] = useState<View>('home');
   const [aboutTab, setAboutTab] = useState('history');
@@ -124,17 +126,58 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const status = params.get('status');
     if (status === 'success') {
-      alert('Pagamento aprovado! Obrigado por escolher a Muzzicycles.');
-      setCartItems([]);
-      // Clean up URL
-      window.history.replaceState({}, '', '/');
+      const saveOrder = async () => {
+        if (user && cartItems.length > 0) {
+          try {
+            const orderId = `MUZ-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+            await setDoc(doc(db, 'orders', orderId), {
+              userId: user.uid,
+              items: cartItems.map(item => ({
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                image: item.image,
+                selectedAro: item.selectedAro
+              })),
+              total: cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0),
+              status: 'processing',
+              trackingNumber: `BR${Math.floor(100000000 + Math.random() * 900000000)}JB`,
+              createdAt: serverTimestamp()
+            });
+            console.log("Pedido salvo com sucesso!");
+          } catch (error) {
+            console.error("Erro ao salvar pedido:", error);
+            handleFirestoreError(error, OperationType.WRITE, 'orders');
+          }
+        }
+      };
+      
+      saveOrder().then(() => {
+        alert('Pagamento aprovado! Obrigado por escolher a Muzzicycles.');
+        setCartItems([]);
+        window.history.replaceState({}, '', '/');
+      });
+      return; // Prevent duplication
     } else if (status === 'failure') {
       alert('Ocorreu um erro no pagamento. Por favor, tente novamente.');
       window.history.replaceState({}, '', '/');
     }
 
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+          if (userDoc.exists()) {
+            setUserProfile(userDoc.data());
+          }
+        } catch (error) {
+          console.error("Erro ao buscar perfil do usuário:", error);
+        }
+      } else {
+        setUserProfile(null);
+      }
       setIsAuthLoading(false);
     });
 
@@ -148,9 +191,19 @@ export default function App() {
         setIsCartOpen(false);
       }
     };
+
+    const handleChangeView = (e: any) => {
+      if (e.detail?.view) {
+        handleViewChange(e.detail.view);
+      }
+    };
+
+    window.addEventListener('changeView', handleChangeView);
     window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('changeView', handleChangeView);
       unsubscribe();
     };
   }, []);
@@ -248,6 +301,16 @@ export default function App() {
           <Support 
             key={supportTab}
             initialTab={supportTab} 
+          />
+        )}
+        
+        {view === 'dashboard' && user && (
+          <CustomerDashboard 
+            user={user} 
+            userProfile={userProfile}
+            onProductClick={handleProductClick}
+            favorites={favorites}
+            onToggleFavorite={toggleFavorite}
           />
         )}
 

@@ -1,5 +1,6 @@
 {
   "name": "Muzzicycles",
   "description": "A primeira bicicleta do mundo com quadro feito de plástico reciclado. Inovação brasileira, sustentabilidade e design premiado.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

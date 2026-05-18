@@ -265,6 +265,16 @@ export default function Header({
                         </div>
                         <button 
                           onClick={() => {
+                            onViewChange('dashboard');
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-2 text-sm text-black/70 hover:bg-black/5 transition-colors"
+                        >
+                          <User className="h-4 w-4" />
+                          Meu Painel
+                        </button>
+                        <button 
+                          onClick={() => {
                             onLogout();
                             setIsUserMenuOpen(false);
                           }}
@@ -375,6 +385,15 @@ export default function Header({
                     <div className="flex-1">
                       <p className="text-sm font-bold text-black/40 uppercase tracking-widest">Logado como</p>
                       <p className="text-lg font-medium text-black">{user.displayName || user.email}</p>
+                      <button 
+                        onClick={() => {
+                          onViewChange('dashboard');
+                          setIsMenuOpen(false);
+                        }}
+                        className="text-xs font-bold text-brand-blue uppercase tracking-widest mt-1 hover:underline"
+                      >
+                        Ver Meu Painel
+                      </button>
                     </div>
                     <button 
                       onClick={() => {

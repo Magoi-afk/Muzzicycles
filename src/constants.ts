@@ -1,6 +1,7 @@
 import { Product } from './types';
 
-export const WHATSAPP_NUMBER = '5511995997454';
+export const WHATSAPP_NUMBER = '5511973868371';
+export const PHYSICAL_PHONE = '(11) 3966-6533';
 
 export const PRODUCTS: Product[] = [
   {

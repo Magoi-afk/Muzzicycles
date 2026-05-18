@@ -14,7 +14,14 @@ import {
   signInWithPopup, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  updateProfile 
+  updateProfile,
+  db,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
+  handleFirestoreError,
+  OperationType
 } from "../firebase";
 
 interface LoginFormProps {
@@ -52,10 +59,26 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
       } else {
         const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-        if (formData.firstname || formData.lastname) {
-          await updateProfile(userCredential.user, {
-            displayName: `${formData.firstname} ${formData.lastname}`.trim(),
+        const user = userCredential.user;
+        const displayName = `${formData.firstname} ${formData.lastname}`.trim();
+        
+        if (displayName) {
+          await updateProfile(user, {
+            displayName: displayName,
           });
+        }
+
+        // Save user profile to Firestore
+        try {
+          await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            email: user.email,
+            displayName: displayName || user.email?.split('@')[0],
+            role: "user", // Default role
+            createdAt: serverTimestamp(),
+          });
+        } catch (error) {
+          handleFirestoreError(error, OperationType.WRITE, "users");
         }
       }
       onClose();
@@ -84,7 +107,26 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
     setError(null);
     try {
       googleProvider.setCustomParameters({ prompt: 'select_account' });
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Check if profile exists, if not create it
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (!userDoc.exists()) {
+          await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            role: "user",
+            createdAt: serverTimestamp(),
+          });
+        }
+      } catch (error) {
+        handleFirestoreError(error, OperationType.WRITE, "users");
+      }
+
       onClose();
     } catch (err: any) {
       console.error("Erro ao fazer login com Google:", err);

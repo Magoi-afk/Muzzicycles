@@ -1,5 +1,5 @@
-import { BadgeCheck, Send, Instagram, Youtube, Check, Music2, MessageCircle } from 'lucide-react';
-import { WHATSAPP_NUMBER } from '../constants';
+import { BadgeCheck, Send, Instagram, Youtube, Check, Music2, MessageCircle, Phone } from 'lucide-react';
+import { WHATSAPP_NUMBER, PHYSICAL_PHONE } from '../constants';
 
 interface FooterProps {
   onViewChange?: (view: any, tab?: string) => void;
@@ -96,6 +96,10 @@ export default function Footer({ onViewChange }: FooterProps) {
                           WhatsApp
                           <MessageCircle className="w-3 h-3" />
                         </a></li>
+                        <li><span className="text-black/70 font-geist flex items-center gap-1.5 text-xs">
+                          {PHYSICAL_PHONE}
+                          <Phone className="w-3 h-3 text-black/40" />
+                        </span></li>
                       </ul>
                     </div>
                   </div>
@@ -122,14 +126,19 @@ export default function Footer({ onViewChange }: FooterProps) {
                   </button>
                 </div>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                  <a 
-                    href="https://www.magoi.online" 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="text-[10px] text-black/40 hover:text-brand-blue transition font-geist uppercase tracking-widest whitespace-nowrap"
-                  >
-                    Desenvolvido por Magoi
-                  </a>
+                  <div className="flex flex-col gap-1">
+                    <a 
+                      href="https://www.magoi.online" 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="text-[10px] text-black/40 hover:text-brand-blue transition font-geist uppercase tracking-widest whitespace-nowrap"
+                    >
+                      Consultoria Digital por Magoi
+                    </a>
+                    <span className="text-[8px] text-black/20 font-geist uppercase tracking-wider">
+                      Desenvolvimento e Estratégia Muzzicycles
+                    </span>
+                  </div>
                   <div className="flex items-center gap-3">
                     <a aria-label="Instagram" className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 text-black/70 hover:text-black hover:bg-black/10 transition" href="https://www.instagram.com/muzzicycles/" target="_blank" rel="noreferrer">
                       <Instagram className="w-4 h-4" />

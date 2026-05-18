@@ -55,10 +55,20 @@ service cloud.firestore {
       return hasOnlyAllowedFields(['uid', 'displayName', 'email', 'photoURL', 'role', 'createdAt']) &&
              data.uid == request.auth.uid &&
              data.email is string && isValidEmail(data.email) &&
-             (data.displayName == null || (data.displayName is string && data.displayName.size() < 100)) &&
+             (data.displayName == null || (data.displayName is string && data.displayName.size() <= 100)) &&
              (data.photoURL == null || isValidUrl(data.photoURL)) &&
              data.role in ['user', 'admin'] &&
-             data.createdAt is timestamp;
+             (data.createdAt == request.time || data.createdAt is timestamp);
+    }
+
+    function isValidOrder(data) {
+      return hasOnlyAllowedFields(['userId', 'items', 'total', 'status', 'trackingNumber', 'createdAt']) &&
+             data.userId == request.auth.uid &&
+             data.items is list && data.items.size() > 0 &&
+             data.total is number && data.total >= 0 &&
+             data.status in ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] &&
+             (data.trackingNumber == null || (data.trackingNumber is string && data.trackingNumber.size() <= 100)) &&
+             (data.createdAt == request.time || data.createdAt is timestamp);
     }
 
     // ===============================================================
@@ -67,10 +77,18 @@ service cloud.firestore {
 
     match /users/{userId} {
       allow read: if isOwner(userId) || isAdmin();
-      allow create: if isAuthenticated() && isValidUser(request.resource.data) && 
-                    ((isOwner(userId) && request.resource.data.role == 'user') || isAdmin());
-      allow update: if isAuthenticated() && isValidUser(request.resource.data) && 
-                    ((isOwner(userId) && request.resource.data.role == resource.data.role) || isAdmin());
+      allow create: if isAuthenticated() && isValidUser(incoming()) && 
+                    ((isOwner(userId) && incoming().role == 'user') || isAdmin());
+      allow update: if isAuthenticated() && isValidUser(incoming()) && 
+                    ((isOwner(userId) && incoming().role == existing().role) || isAdmin()) &&
+                    incoming().createdAt == existing().createdAt;
+      allow delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && isValidOrder(incoming());
+      allow update: if isAdmin();
       allow delete: if isAdmin();
     }
 
