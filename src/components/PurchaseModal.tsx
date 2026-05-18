@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Download, MessageCircle, Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { X, Download, MessageCircle, Info, Phone } from 'lucide-react';
 import { CartItem } from '../types';
-import { WHATSAPP_NUMBER } from '../constants';
+import { WHATSAPP_NUMBER, PHYSICAL_PHONE } from '../constants';
 
 interface PurchaseModalProps {
   isOpen: boolean;
@@ -10,17 +11,20 @@ interface PurchaseModalProps {
 }
 
 export default function PurchaseModal({ isOpen, onClose, items }: PurchaseModalProps) {
+  const { t, i18n } = useTranslation();
+
   const handleDownload = () => {
-    const date = new Date().toLocaleDateString('pt-BR');
-    const content = `PEDIDO MUZZICYCLES - ${date}\n\n` + 
-      items.map(item => `- ${item.name} (Quantidade: ${item.quantity})${item.selectedAro ? `\n  Aro: ${item.selectedAro}` : ''}`).join('\n') +
-      `\n\nInstruções: Envie este arquivo para o vendedor no WhatsApp para finalizar seu pedido.`;
+    const locale = i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES';
+    const date = new Date().toLocaleDateString(locale);
+    const content = `${t('purchase_modal.file_header')} - ${date}\n\n` + 
+      items.map(item => `- ${t(`products_data.${item.id}.name`, { defaultValue: item.name })} (${t('purchase_modal.file_qty')}: ${item.quantity})${item.selectedAro ? `\n  ${t('purchase_modal.file_rim')}: ${item.selectedAro}` : ''}`).join('\n') +
+      `\n\n${t('purchase_modal.file_instructions')}`;
     
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pedido-muzzicycles-${Date.now()}.txt`;
+    a.download = `order-muzzicycles-${Date.now()}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -28,7 +32,7 @@ export default function PurchaseModal({ isOpen, onClose, items }: PurchaseModalP
   };
 
   const handleWhatsApp = () => {
-    const message = encodeURIComponent("Olá! Acabei de gerar o arquivo do meu pedido Muzzicycles e gostaria de finalizar a compra.");
+    const message = encodeURIComponent(t('purchase_modal.whatsapp_message'));
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
   };
 
@@ -59,9 +63,9 @@ export default function PurchaseModal({ isOpen, onClose, items }: PurchaseModalP
               </button>
 
               <div className="mb-8">
-                <h2 className="text-2xl font-medium font-geist tracking-tight mb-2">Finalizar Pedido</h2>
+                <h2 className="text-2xl font-medium font-geist tracking-tight mb-2">{t('purchase_modal.title')}</h2>
                 <p className="text-black/60 font-geist text-sm">
-                  Siga os passos abaixo para completar sua solicitação com nossa equipe.
+                  {t('purchase_modal.subtitle')}
                 </p>
               </div>
 
@@ -69,7 +73,7 @@ export default function PurchaseModal({ isOpen, onClose, items }: PurchaseModalP
                 <div className="p-4 rounded-2xl bg-brand-blue/5 border border-brand-blue/10 flex gap-3">
                   <Info className="w-5 h-5 text-brand-blue shrink-0 mt-0.5" />
                   <p className="text-xs text-brand-blue/80 font-geist leading-relaxed">
-                    Primeiro, baixe o arquivo com os detalhes do seu pedido. Depois, envie-o para o vendedor via WhatsApp.
+                    {t('purchase_modal.info')}
                   </p>
                 </div>
 
@@ -78,7 +82,7 @@ export default function PurchaseModal({ isOpen, onClose, items }: PurchaseModalP
                   className="w-full h-14 rounded-2xl bg-black text-white font-medium font-geist flex items-center justify-center gap-3 hover:bg-black/90 transition shadow-lg shadow-black/10"
                 >
                   <Download className="w-5 h-5" />
-                  Iniciar Download
+                  {t('purchase_modal.download_button')}
                 </button>
 
                 <button
@@ -86,12 +90,28 @@ export default function PurchaseModal({ isOpen, onClose, items }: PurchaseModalP
                   className="w-full h-14 rounded-2xl bg-[#25D366] text-white font-medium font-geist flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition shadow-lg shadow-[#25D366]/20"
                 >
                   <MessageCircle className="w-5 h-5" />
-                  Instruções para o Vendedor
+                  {t('purchase_modal.whatsapp_button')}
                 </button>
+
+                <div className="mt-6 pt-6 border-t border-black/5">
+                  <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-brand-blue/5 flex items-center justify-center shrink-0">
+                      <Phone className="w-4 h-4 text-brand-blue" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-black/60 font-geist leading-tight mb-1">
+                        {t('purchase_modal.international_delivery')}
+                      </p>
+                      <p className="text-xs font-bold text-brand-blue font-geist">
+                        {t('purchase_modal.international_contact', { phone: PHYSICAL_PHONE, whatsapp: `+${WHATSAPP_NUMBER}` })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <p className="mt-8 text-center text-[10px] text-black/40 font-geist uppercase tracking-widest">
-                Muzzicycles — Tecnologia Sustentável
+                {t('purchase_modal.brand_tag')}
               </p>
             </div>
           </motion.div>

@@ -1,6 +1,7 @@
 import { ArrowRight, ArrowUpRight, Eye } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import Spline from '@splinetool/react-spline';
 import WordRotate from './magicui/WordRotate';
 import { LightRays } from './magicui/LightRays';
@@ -14,6 +15,7 @@ interface HeroProps {
 }
 
 export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -36,11 +38,11 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
             className="lg:col-span-6"
           >
             <h1 className="text-4xl sm:text-6xl lg:text-7xl leading-[1.05] text-black tracking-tighter font-geist">
-              A bike que nasce do que o mundo descarta
+              {t('hero.title')}
               <div className="min-h-[1.12em] mt-1 sm:mt-2">
                 <WordRotate 
                   className="text-brand-blue tracking-tighter font-geist"
-                  words={["plástico reciclado.", "100% brasileira.", "Garantia vitalícia."]}
+                  words={t('hero.words', { returnObjects: true }) as string[]}
                 />
               </div>
             </h1>
@@ -57,7 +59,7 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
                   border: 'none'
                 }}
               >
-                Explorar Bikes
+                {t('hero.cta')}
                 <span 
                   className="absolute right-[0.3em] flex items-center justify-center h-[2.2em] w-[2.2em] transition-all duration-300 group-hover:w-[calc(100%-0.6em)] active:scale-95 bg-white rounded-[0.7em]" 
                   style={{ boxShadow: '0.1em 0.1em 0.6em 0.2em rgba(37, 99, 235, 0.3)' }}
@@ -69,7 +71,7 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
                 onClick={onHistoryClick}
                 className="inline-flex items-center gap-2 text-sm text-black/70 hover:text-brand-blue transition font-geist cursor-pointer"
               >
-                Nossa História
+                {t('hero.history')}
                 <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>
@@ -121,7 +123,7 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
                   <div className="mt-2 text-center">
                     <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-brand-blue flex items-center justify-center gap-1">
                       <span className="h-1 w-1 rounded-full bg-brand-blue animate-pulse"></span>
-                      Scan for AR
+                      {t('hero.scan_ar')}
                     </p>
                   </div>
                 </motion.div>
@@ -130,13 +132,13 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
               <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/40 backdrop-blur px-3 py-1.5 border border-black/5 pointer-events-auto">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
-                  <span className="text-xs text-black/70 font-geist">Interativo: Gire para ver em 3D</span>
+                  <span className="text-xs text-black/70 font-geist">{t('hero.interactive')}</span>
                 </div>
                 <button 
                   onClick={() => setIsModalOpen(true)}
                   className="inline-flex items-center gap-2 text-xs rounded-lg bg-white/40 backdrop-blur px-3 h-8 border border-black/5 text-black/70 hover:bg-white/60 transition font-geist pointer-events-auto"
                 >
-                  Ficha Técnica
+                  {t('hero.specs_btn')}
                   <Eye className="w-3 h-3" />
                 </button>
               </div>

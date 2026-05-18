@@ -1,9 +1,11 @@
 import { Search, Heart, ShoppingCart, Menu, X, ChevronRight, User, LogOut, Loader2 } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { User as FirebaseUser } from '../firebase';
 import { PRODUCTS } from '../constants';
 import { Product } from '../types';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface HeaderProps {
   cartCount: number;
@@ -34,6 +36,7 @@ export default function Header({
   onSearchChange,
   onProductSelect
 }: HeaderProps) {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -117,9 +120,9 @@ export default function Header({
   };
 
   const menuItems = [
-    { id: 'bikes', label: 'Bikes' },
-    { id: 'about', label: 'Nossa História' },
-    { id: 'support', label: 'Contato' },
+    { id: 'bikes', label: t('nav.bikes') },
+    { id: 'about', label: t('nav.about') },
+    { id: 'support', label: t('nav.support') },
   ];
 
   const handleNavClick = (view: string) => {
@@ -167,7 +170,7 @@ export default function Header({
                   onFocus={() => setIsSearchFocused(true)}
                   onKeyDown={handleKeyDown}
                   className="block w-full pl-10 pr-3 py-2 border border-black/5 rounded-full bg-black/[0.02] text-sm placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
-                  placeholder="Pesquisar..."
+                  placeholder={t('nav.search')}
                 />
               </div>
 
@@ -230,6 +233,7 @@ export default function Header({
 
             {/* Right Actions */}
             <div className="flex items-center space-x-1 sm:space-x-3">
+              <LanguageSwitcher />
               <div className="relative">
                 <button 
                   onClick={user ? () => setIsUserMenuOpen(!isUserMenuOpen) : onLoginOpen}

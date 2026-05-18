@@ -1,4 +1,5 @@
 import { BadgeCheck, Send, Instagram, Youtube, Check, Music2, MessageCircle, Phone } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { WHATSAPP_NUMBER, PHYSICAL_PHONE } from '../constants';
 
 interface FooterProps {
@@ -6,6 +7,7 @@ interface FooterProps {
 }
 
 export default function Footer({ onViewChange }: FooterProps) {
+  const { t } = useTranslation();
   const handleViewChange = (view: string, tab?: string) => {
     if (onViewChange) {
       onViewChange(view, tab);
@@ -29,28 +31,28 @@ export default function Footer({ onViewChange }: FooterProps) {
                   onClick={() => handleViewChange('home')}
                 />
               </div>
-              <p className="text-black/70 max-w-3xl font-geist">A primeira bicicleta do mundo com quadro feito de plástico reciclado. Inovação brasileira para um futuro sustentável.</p>
+              <p className="text-black/70 max-w-3xl font-geist">{t('footer.brand_desc')}</p>
 
               <div className="mt-6 rounded-2xl border border-black/5 bg-white shadow-sm p-5 sm:p-8 md:p-10">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="space-y-4">
                     <div className="inline-flex items-center gap-2 rounded-full bg-brand-blue/10 text-brand-blue ring-1 ring-brand-blue/20 px-2.5 py-1 text-xs font-geist">
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
-                      Garantia Vitalícia no Quadro
+                      {t('footer.newsletter.badge')}
                     </div>
-                    <h4 className="text-black font-semibold tracking-tight font-geist">Faça parte da mudança</h4>
+                    <h4 className="text-black font-semibold tracking-tight font-geist">{t('footer.newsletter.title')}</h4>
                     <ul className="space-y-2 text-sm text-black/70">
                       <li className="flex items-start gap-2 font-geist">
                         <Check className="w-3 h-3 text-brand-blue mt-0.5 flex-shrink-0" />
-                        Novidades sobre novos modelos.
+                        {t('footer.newsletter.item1')}
                       </li>
                       <li className="flex items-start gap-2 font-geist">
                         <Check className="w-3 h-3 text-brand-blue mt-0.5 flex-shrink-0" />
-                        Conteúdo exclusivo sobre sustentabilidade.
+                        {t('footer.newsletter.item2')}
                       </li>
                       <li className="flex items-start gap-2 font-geist">
                         <Check className="w-3 h-3 text-brand-blue mt-0.5 flex-shrink-0" />
-                        Eventos e encontros da comunidade.
+                        {t('footer.newsletter.item3')}
                       </li>
                     </ul>
                     <div className="pt-2">
@@ -58,11 +60,11 @@ export default function Footer({ onViewChange }: FooterProps) {
                         <input 
                           type="email" 
                           required 
-                          placeholder="seu@email.com" 
+                          placeholder={t('footer.newsletter.placeholder')} 
                           className="w-full h-10 px-3 rounded-xl border border-black/10 bg-black/5 text-sm placeholder-black/40 text-black outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue"
                         />
                         <button className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-brand-blue text-sm text-white hover:bg-brand-blue/80 transition font-geist">
-                          Enviar
+                          {t('footer.newsletter.send')}
                           <Send className="w-3 h-3" />
                         </button>
                       </form>
@@ -70,28 +72,27 @@ export default function Footer({ onViewChange }: FooterProps) {
                   </div>
                   <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-8">
                     <div>
-                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Bikes</h5>
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.bikes')}</h5>
                       <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>Modelos</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>Quadros</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>Bikes</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>{t('products.found_many')}</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>{t('products.categories.componentes')}</button></li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Nossa História</h5>
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.about')}</h5>
                       <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'innovation')}>Inovação</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'history')}>Histórias</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'sustainability')}>Sustentabilidade</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'acervo')}>Acervo</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'media')}>Na Mídia</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'innovation')}>{t('footer.history_menu.innovation')}</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'history')}>{t('footer.history_menu.stories')}</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'sustainability')}>{t('footer.history_menu.sustainability')}</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'acervo')}>{t('footer.history_menu.collection')}</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'media')}>{t('footer.history_menu.media')}</button></li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">Contato</h5>
+                      <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.support')}</h5>
                       <ul className="mt-3 space-y-2 text-sm text-black/70">
                         <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('support', 'faq')}>FAQ</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('support', 'contact')}>Contato</button></li>
+                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('support', 'contact')}>{t('nav.support')}</button></li>
                         <li className="pt-2"><a className="hover:text-black transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
                           WhatsApp
                           <MessageCircle className="w-3 h-3" />
@@ -115,15 +116,17 @@ export default function Footer({ onViewChange }: FooterProps) {
                     onClick={() => handleViewChange('privacy')}
                     className="hover:text-black transition font-geist"
                   >
-                    Privacidade
+                    {t('nav.privacy') || 'Privacidade'}
                   </button>
                   <span className="text-black/20 font-geist">/</span>
                   <button 
                     onClick={() => handleViewChange('terms')}
                     className="hover:text-black transition font-geist"
                   >
-                    Termos
+                    {t('nav.terms') || 'Termos'}
                   </button>
+                  <span className="text-black/20 font-geist">|</span>
+                  <span className="text-[10px] font-geist uppercase tracking-widest">{t('footer.rights')}</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                   <div className="flex flex-col gap-1">
@@ -133,10 +136,10 @@ export default function Footer({ onViewChange }: FooterProps) {
                       rel="noreferrer"
                       className="text-[10px] text-black/40 hover:text-brand-blue transition font-geist uppercase tracking-widest whitespace-nowrap"
                     >
-                      Consultoria Digital por Magoi
+                      {t('footer.digital_consultancy')}
                     </a>
                     <span className="text-[8px] text-black/20 font-geist uppercase tracking-wider">
-                      Desenvolvimento e Estratégia Muzzicycles
+                      {t('footer.dev_strategy')}
                     </span>
                   </div>
                   <div className="flex items-center gap-3">

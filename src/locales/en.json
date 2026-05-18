@@ -1,0 +1,615 @@
+{
+  "nav": {
+    "home": "Home",
+    "bikes": "Bicycles",
+    "about": "Our Story",
+    "support": "Support",
+    "dashboard": "My Account",
+    "cart": "Cart",
+    "favorites": "Favorites",
+    "search": "Search products (Ctrl+K)"
+  },
+  "hero": {
+    "title": "The bike born from what the world discards",
+    "words": ["recycled plastic.", "100% Brazilian.", "Lifetime warranty."],
+    "cta": "Explore Bikes",
+    "history": "Our Story",
+    "interactive": "Interactive: Rotate to view in 3D",
+    "specs_btn": "Technical Specs",
+    "scan_ar": "Scan for AR"
+  },
+  "products": {
+    "title": "Our Models",
+    "subtitle": "2026 Collection",
+    "buy": "Buy Now",
+    "add_to_cart": "Add to Cart",
+    "view_details": "View Details",
+    "free_shipping": "Free Shipping South/Southeast BR",
+    "found_one": "model found",
+    "found_many": "models found",
+    "no_results": "No results found",
+    "try_another": "Try searching for other terms or clear filters.",
+    "categories": {
+      "all": "All",
+      "urbana": "Urban",
+      "aventura": "Adventure",
+      "performance": "Performance",
+      "componentes": "Components"
+    },
+    "sort": {
+      "highlights": "Highlights",
+      "rating": "Rating"
+    },
+    "specs": {
+      "frame": "Frame",
+      "transmission": "Transmission",
+      "brakes": "Brakes",
+      "weight": "Weight"
+    }
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "add_bike_prompt": "Add a bike to get started.",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "continue": "Continue shopping",
+    "remove": "Remove",
+    "wheel_size": "Wheel"
+  },
+  "checkout": {
+    "steps": {
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "review": "Review"
+    },
+    "titles": {
+      "shipping": "Shipping Information",
+      "payment": "Complete Payment",
+      "summary": "Order Summary",
+      "delivery_method": "Delivery Method",
+      "delivery_info": "Delivery Information",
+      "secure_processing": "Secure Processing"
+    },
+    "form": {
+      "name": "Full Name",
+      "name_placeholder": "Your name",
+      "cpf": "Tax ID / CPF",
+      "email": "Email",
+      "phone": "Phone",
+      "cep": "Zip Code",
+      "address": "Address",
+      "address_placeholder": "Street, Avenue...",
+      "number": "Number",
+      "neighborhood": "Neighborhood",
+      "city": "City",
+      "state": "State",
+      "select": "Select",
+      "errors": {
+        "required": "Please fill in all required fields correctly."
+      }
+    },
+    "shipping": {
+      "calculating": "Calculating shipping with Jadlog...",
+      "error": "There was an error calculating shipping with Jadlog.",
+      "prompt": "Enter your Zip Code to see delivery options.",
+      "estimate": "Estimate",
+      "business_day": "business day",
+      "business_days": "business days",
+      "calculating_cost": "Calculating..."
+    },
+    "summary": {
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "total": "Total",
+      "to_payment": "Proceed to Payment",
+      "back_to_shipping": "Back to Shipping"
+    },
+    "secure": {
+      "desc": "We are preparing your secure payment environment. You will be redirected to complete the transaction.",
+      "payment": "Secure Payment",
+      "sustainable": "100% Sustainable",
+      "tracking": "Real-time Tracking",
+      "warranty": "10-Year Warranty"
+    },
+    "edit": "Edit",
+    "destinatario": "Recipient"
+  },
+  "story": {
+    "title": "Our Story",
+    "intro": "Juan Muzzi, a Uruguayan plastic artist based in Brazil for over 40 years, dedicated 12 years of his life to proving that post-consumer plastic could be the foundation for indestructible urban mobility.",
+    "quote": "We're not just making bicycles, we're cleaning the planet and offering eternal freedom.",
+    "timeline": [
+      { "year": "1976", "title": "Foundation", "desc": "Juan Muzzi founds Imaplast Mold Industry, the base for decades of innovation." },
+      { "year": "1998", "title": "The PDL", "desc": "Beginning of the Clean Development Project (PDL) and research with polymer injection." },
+      { "year": "2008", "title": "Engineering", "desc": "Completion of the 7-ton industrial mold for injecting the monoblock frame." },
+      { "year": "2009", "title": "Certification", "desc": "Approval in rigorous resistance tests (3.5 ton) and INMETRO seal." },
+      { "year": "Today", "title": "Innovation", "desc": "Global production with PET, Nylon blends, and organic materials from photosynthesis." }
+    ],
+    "global": {
+      "badge": "Global Expansion",
+      "title": "Presence in over 40 countries",
+      "desc": "Our disruptive technology has already crossed oceans. From the Americas to Europe, each point on the map represents a community cycling toward the future of sustainable mobility.",
+      "warranty": "Global Lifetime Warranty",
+      "certification": "European Certification (CE)"
+    }
+  },
+  "history_pages": {
+    "innovation": {
+      "badge": "Disruptive Innovation",
+      "title": "From bone structure to the Clean Development Process (PDL)",
+      "subtitle": "Muzzicycles redefines cycling engineering through radical sustainability and nature mimicry.",
+      "bones": {
+        "title": "The Mystery of Hollow Bones",
+        "p1": "One of life's mysteries determined that bones should be hollow. In advanced studies, man discovers that if it weren't so, the heart would have to work harder and much more. Furthermore, body weight would increase by 20%, and limbs would bend easily.",
+        "p2": "These are internal cavities that form a more harmonic assembly regarding the compression, flexion, and traction required in this system. Hollow bones in skeleton formation allowed humans and vertebrate animals a longer life, offering greater agility, balance, and lightness even for flying, and mechanical resistance far above what one would imagine for a solid bone.",
+        "quote": "The sophistication of the structural mechanism in the skeleton allowed us to think of a bone structure used in a bicycle frame. Something that could offer lightness and agility, as well as safety to the entire body of the project.",
+        "p3": "With this reasoning, the internal parts of the frame were created, with volume variations in several locations, which brought more balance and harmony to the frame's structural behavior. Just like airplane wings, where wind exerts a flexion cushioning the impact on the main structure, the same principle was used in the bicycle frame.",
+        "p4": "The structure flexes to a certain point while riding, making the frame soft and cushioning impacts on the cyclist. For this to happen, a mold for gas-assisted (nitrogen) plastic injection up to 30% of the product's volume is necessary. The skeleton frame weighs 30% less than the solid frame and considerably increases its resistance."
+      },
+      "pillars": [
+        { "title": "Recycled Plastic", "desc": "We transform plastic waste into high-performance frames, removing tons of pollutants from the environment." },
+        { "title": "Lifetime Warranty", "desc": "Our trust in the material is absolute. The Muzzi frame is made to last for generations, without corrosion or fatigue." },
+        { "title": "Bio-Engineering", "desc": "Structure inspired by the biomechanics of hollow bones for maximum resistance with 30% less weight." },
+        { "title": "PDL Process", "desc": "Clean Development Process: 90% less energy consumption compared to aluminum." }
+      ],
+      "schumpeter": {
+        "title": "The Mirage of Innovation",
+        "desc": "Economist Joseph Schumpeter stated that an entrepreneur is not just someone who sets up any business, but someone who creates a truly innovative product or process that causes a rupture with the existing pattern.",
+        "badge": "Schumpeter's Theory"
+      },
+      "nature": {
+        "jung_quote": "To this day, humanity's great problems have never been solved by collective decrees, but only by the renewal of the individual's attitude. At no time was meditating on oneself such an imperious necessity.",
+        "title": "Nature Outperforms Humanity",
+        "p1": "Natural overcoming is daily, constant, and silent. We have much to learn from nature's 4,000 million years of continuous activity, which provides us with superior models for a more sustainable society.",
+        "p2": "The disposal of plastic materials and the production of aluminum are environmentally incorrect processes on a large scale. Therefore, we developed a contemporary industrial process that produces a frame with a lifetime warranty, based on the principle of photosynthesis."
+      },
+      "pdl": {
+        "title": "Clean Development Process (PDL)",
+        "item1_title": "Zero Plastic Waste",
+        "item1_desc": "We take biomass and discarded plastic waste to inject frames without mineral extraction.",
+        "item2_title": "90% Energy Saving",
+        "item2_desc": "We drastically reduce the greenhouse effect and energy consumption compared to traditional aluminum methods.",
+        "final_quote": "This PDL gives us the characteristics for a new concept of mobility, gathering art, philosophy, technology, and subtleties, such as solidarity and ecologically correct action."
+      }
+    }
+  },
+  "sustainability": {
+    "badge": "PDL — Clean Development Process",
+    "title": "Eco-efficiency in Every Detail",
+    "desc": "Our PDL process transforms what would be waste into structure. We reduce energy consumption by 90% compared to aluminum or steel frames, creating a new standard for the industry.",
+    "doc_button": "View Document: Nature Overcomes",
+    "stats": {
+      "energy": "Energy (KWh/Frame)",
+      "water": "Water Consumption",
+      "water_zero": "Zero",
+      "security": "Safety Certification",
+      "security_cert": "Cert"
+    },
+    "impact": {
+      "title": "Real Environmental Impact",
+      "subtitle": "Numbers that prove the feasibility of circular economy applied to urban mobility.",
+      "plastic": "Of plastic can be recycled currently, removing tons of waste from oceans and landfills.",
+      "clean_energy": "Produced with clean energy, Muzzicycles prove that the future is sustainable and scalable.",
+      "oil": "Total volume of oil saved, preserving finite natural resources.",
+      "co2": "Saving the atmosphere from CO2 in incinerated material, generating real carbon credits."
+    },
+    "materials": {
+      "title": "Materials We Transform",
+      "badge": "Raw Material",
+      "list": ["Polypropylene", "Polystyrene", "Nylon", "PET", "Polyethylene", "Tetrapack Polyaluminum", "Biomass"]
+    },
+    "categories": [
+      {
+        "name": "Low-Impact Production",
+        "items": [
+          { "title": "Water Consumption: ZERO", "desc": "Dry injection process that uses no water at any stage of frame production." },
+          { "title": "Energy: 5.0 KWh", "desc": "Extreme energy efficiency with consumption of only 5.0 KWh per produced frame." },
+          { "title": "No Welds", "desc": "Monoblock injection eliminates welding processes and toxic gas emissions." }
+        ]
+      },
+      {
+        "name": "Materials Engineering",
+        "items": [
+          { "title": "No Painting", "desc": "Color is incorporated directly into the material, eliminating solvents and peeling." },
+          { "title": "Rust-Immune", "desc": "High-tech polymer does not oxidize, being ideal for coastal and humid regions." },
+          { "title": "UV Resistance", "desc": "Special additives that protect the frame against solar drying and fading." }
+        ]
+      },
+      {
+        "name": "Safety and Quality",
+        "items": [
+          { "title": "CE Certification", "desc": "Full compliance with European safety standards for light vehicles." },
+          { "title": "Crash Test Approved", "desc": "Structure tested under rigorous impact standards, outperforming metal frames." },
+          { "title": "Lifetime Warranty", "desc": "Total confidence in the structural integrity of the recycled monoblock frame." }
+        ]
+      }
+    ]
+  },
+  "logocloud": {
+    "title": "MUZZICYCLES IN THE MEDIA",
+    "consultancy": "Digital Consultancy & Strategy by"
+  },
+  "doctrine": {
+    "title": "Our Doctrine",
+    "recycled": "100% Recycled",
+    "warranty": "Lifetime Warranty",
+    "emissions": "Zero Emissions",
+    "manifesto": "A Muzzicycles is not just a bicycle. It's a manifesto. Designed to outlast you, our structure challenges planned obsolescence and transforms waste into freedom."
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      { "q": "What is the Muzzicycles frame?", "a": "It is the world's first bicycle frame manufactured by injection of recycled polymers (post-consumer plastic), without welds and with a lifetime warranty." },
+      { "q": "How durable is the frame?", "a": "The frame is designed to last a long time. The material does not suffer fatigue like metal and is immune to oxidation." },
+      { "q": "Do the frames have certification?", "a": "Yes, all our models have European Community (CE) certification, ensuring the highest international safety and quality standards." },
+      { "q": "What rim sizes are available?", "a": "We work with models for 24, 26, and 29-inch rims, serving everyone from youth to adults on trails or in the city." },
+      { "q": "How does the lifetime warranty work?", "a": "The warranty covers any structural defect in the frame for the first owner. It is our promise of an eternal product." },
+      { "q": "Can the bike handle impacts and trails?", "a": "Yes. The polymer has a natural flexibility that absorbs impacts better than aluminum, making it excellent for urban use and light trails." },
+      { "q": "How do I place my order?", "a": "You can choose your model in our online catalog and finish the purchase via WhatsApp or directly through the website." },
+      { "q": "Do you deliver throughout Brazil?", "a": "Yes, we ship our bicycles and frames to all Brazilian states with reinforced packaging." },
+      { "q": "Can I buy just the frame?", "a": "Yes, we sell the Muzzi Frame separately for those who wish to build their own component configuration." },
+      { "q": "Does Muzzicycles export?", "a": "Yes, we have already exported to several countries and hold patents in more than 140 nations." }
+    ]
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have any questions about our models or want to know more about our technology? Our team is ready to assist you.",
+    "labels": {
+      "email": "Email",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "factory": "Factory",
+      "name": "Full Name",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "factory_address": "São Paulo, SP — Brazil",
+    "subjects": {
+      "models": "Model Inquiry",
+      "support": "Technical Support",
+      "partners": "Partnerships",
+      "others": "Others"
+    },
+    "placeholders": {
+      "name": "Your name",
+      "email": "your@email.com",
+      "message": "How can we help you?"
+    },
+    "success": {
+      "title": "Message Sent!",
+      "desc": "Thank you for your contact. We have received your message and will respond shortly to your email.",
+      "button": "Send another message"
+    },
+    "button": {
+      "sending": "Sending...",
+      "send": "Send Message"
+    }
+  },
+  "models_intro": {
+    "badge": "Sustainable Engineering",
+    "title": "Simplicity that changes the world.",
+    "desc": "Each Muzzicycles is assembled with high-precision components on a geometry optimized for comfort and urban performance.",
+    "structure": {
+      "title": "Structure",
+      "desc": "Lifetime warranty on the polymer frame."
+    },
+    "performance": {
+      "title": "Performance",
+      "desc": "High-fidelity Shimano transmission."
+    },
+    "tech_images": [
+      { "title": "Frame Geometry", "desc": "Angle and ergonomics analysis" },
+      { "title": "Technical Measurements", "desc": "26-inch rim specifications" }
+    ],
+    "documentation": {
+      "badge": "Documentation",
+      "title": "Standard Technical Sheet",
+      "desc": "Configuration optimized by Muzzicycles engineering for the perfect balance between lightness and structural resistance."
+    }
+  },
+  "support_page": {
+    "faq": "FAQ",
+    "contact": "Contact"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "desc": "Sign in to your account to track your orders.",
+      "button": "Sign In",
+      "loading": "Signing in...",
+      "toggle": "Don't have an account? Sign up",
+      "errors": {
+        "invalid": "Invalid email or password.",
+        "generic": "An error occurred. Please try again."
+      }
+    },
+    "signup": {
+      "title": "Create your account",
+      "desc": "Sign up to manage your favorites and orders.",
+      "button": "Create Account",
+      "loading": "Creating account...",
+      "toggle": "Already have an account? Sign in here",
+      "errors": {
+        "exists": "This email is already registered. Try signing in.",
+        "weak": "Password must be at least 6 characters long.",
+        "invalid_email": "Invalid email address."
+      }
+    },
+    "labels": {
+      "firstname": "First Name",
+      "lastname": "Last Name",
+      "email": "Email Address",
+      "password": "Password"
+    },
+    "placeholders": {
+      "firstname": "John",
+      "lastname": "Doe",
+      "email": "john@example.com",
+      "password": "••••••••"
+    },
+    "google": {
+      "button": "Continue with Google",
+      "loading": "Connecting...",
+      "errors": {
+        "failed": "Failed to sign in with Google.",
+        "blocked": "Pop-up was blocked by your browser. Please allow pop-ups to sign in.",
+        "closed": "Sign-in was cancelled because the pop-up was closed.",
+        "network": "Network error. Please check your internet connection."
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "Hello!",
+    "status": {
+      "pending": "Awaiting Payment",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "tabs": {
+      "orders": "Order History",
+      "tracking": "Delivery Tracking",
+      "favorites": "Favorites"
+    },
+    "orders": {
+      "title": "My Orders",
+      "count_one": "order placed",
+      "count_many": "orders placed",
+      "empty_title": "No orders found",
+      "empty_desc": "You haven't made any purchases yet. Explore our models and find the perfect Muzzicycles for you!",
+      "empty_button": "View Catalog",
+      "order_id": "ORDER",
+      "date": "Date",
+      "total": "Total",
+      "qty": "Qty",
+      "rim": "Rim",
+      "rim_single": "Single"
+    },
+    "tracking": {
+      "title": "Delivery Tracking",
+      "subtitle": "Stay informed about where your Muzzicycles is.",
+      "placeholder": "Tracking code or order ID",
+      "button": "Track",
+      "error": "Tracking code or order not found.",
+      "status_label": "Current Status",
+      "steps": {
+        "shipped": "Order Shipped",
+        "transit": "In Transit",
+        "location": "Treatment Unit - São Paulo/SP",
+        "out": "Out for Delivery",
+        "waiting": "Awaiting update"
+      },
+      "estimate": {
+        "title": "Estimated Delivery",
+        "days": "Next 3 days"
+      }
+    },
+    "favorites": {
+      "title": "Favorites",
+      "count_one": "item saved",
+      "count_many": "items saved",
+      "empty_title": "Your list is empty",
+      "empty_desc": "Save your favorite models here for quick access when you decide to buy them.",
+      "empty_button": "Explore Models"
+    }
+  },
+  "purchase_modal": {
+    "title": "Complete Order",
+    "subtitle": "Follow the steps below to complete your request with our team.",
+    "info": "First, download the file with your order details. Then, send it to the seller via WhatsApp.",
+    "download_button": "Start Download",
+    "whatsapp_button": "Instructions for Seller",
+    "brand_tag": "Muzzicycles — Sustainable Technology",
+    "international_delivery": "We only deliver to Brazil. For international deliveries, please contact us via landline or WhatsApp.",
+    "international_contact": "International Contact: {{phone}} or {{whatsapp}}",
+    "file_header": "MUZZICYCLES ORDER",
+    "file_qty": "Quantity",
+    "file_rim": "Rim",
+    "file_instructions": "Instructions: Send this file to the seller on WhatsApp to finalize your order.",
+    "whatsapp_message": "Hello! I have just generated the file for my Muzzicycles order and would like to complete the purchase."
+  },
+  "favorites_drawer": {
+    "title": "Your Favorites",
+    "empty": "Your wishlist is empty.",
+    "explore": "Explore models",
+    "add_to_cart": "Add to cart",
+    "continue": "Continue Browsing"
+  },
+  "product_detail": {
+    "back": "Back to catalog",
+    "eco_badge": "Eco-Innovation",
+    "exhibition_item": "Exhibition Item",
+    "dynamic_desc_suffix": "Developed with high-performance recycled polymers, the {name} offers structural lightness and superior impact absorption for the urban environment.",
+    "rim_size": "Rim Size",
+    "buy_now": "Buy Now",
+    "add_to_cart": "Add to Cart",
+    "acervo_notice": "This model is part of Muzzicycles' historical collection and is not available for sale.",
+    "delivery_guarantee": "Delivery throughout the national territory",
+    "acervo_guarantee": "Preserving the history of sustainability",
+    "engineering_badge": "Advanced Engineering",
+    "specs_geometry": "Specs & Geometry",
+    "specs_desc": "Each component has been selected to ensure maximum durability and compatibility with the recycled polymer frame.",
+    "geometry_title": "Frame Geometry",
+    "geometry_desc": "Muzzicycles geometry has been optimized for urban comfort, reducing postural fatigue and maximizing torque transfer. Ideal for users from 1.60m to 1.90m.",
+    "standard_config": "Standard Configuration",
+    "table": {
+      "product": "Product",
+      "manufacturer": "Manufacturer",
+      "qty": "Qty"
+    },
+    "specs_disclaimer": "* Muzzicycles reserves the right to change components for equivalents of the same quality subject to availability.",
+    "innovation_badge": "Innovation",
+    "frame_core": "Polymer Core Frame",
+    "frame_core_desc": "Our patented process transforms plastic waste into an unbreakable molecular structure with a lifetime warranty.",
+    "weight_label": "Weight",
+    "transmission_title": "Transmission",
+    "transmission_default": "Shimano TZ30 with 7 precise speeds for any elevation.",
+    "brakes_title": "Braking",
+    "brakes_default": "V-Brake system in high-friction aluminum for total safety.",
+    "lifetime_warranty": "Lifetime Warranty",
+    "lifetime_warranty_desc": "On the recycled polymer frame.",
+    "interactive_3d": "Interactive 3D"
+  },
+  "app": {
+    "loading": "Loading Muzzicycles...",
+    "payment_success": "Payment approved! Thank you for choosing Muzzicycles.",
+    "payment_error": "An error occurred during payment. Please try again.",
+    "order_saved": "Order saved successfully!"
+  },
+  "products_data": {
+    "1": {
+      "name": "NILO",
+      "description": "Simple Urban — Single-speed, V-brake brakes, rims 24, 26, 29 and 32",
+      "tag": "Pioneer",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "Single-speed",
+        "brakes": "Aluminum V-Brake"
+      }
+    },
+    "2": {
+      "name": "AMAZONAS",
+      "description": "Versatile Urban — Shimano TZ30 Revoshift derailleur, 7 gears, V-brake brakes, rims 24, 26, 29 and 32",
+      "tag": "Versatile",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "Shimano TZ30 7 Speeds",
+        "brakes": "Aluminum V-Brake"
+      }
+    },
+    "3": {
+      "name": "MOUNTAIN BIKE",
+      "description": "Urban Adventure — Shimano 7 speed derailleur, disc brakes, rims 24, 26, 29 and 32",
+      "tag": "Adventure",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "Shimano 7 Speeds",
+        "brakes": "Mechanical Disc"
+      }
+    },
+    "4": {
+      "name": "MISSISSIPPI 3V",
+      "description": "Comfort & City — Nexus 3v derailleur, V-brake brakes, rims 24, 26, 29 and 32",
+      "tag": "Comfort",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "Shimano Nexus 3v",
+        "brakes": "Aluminum V-Brake"
+      }
+    },
+    "8": {
+      "name": "MISSISSIPPI 5V",
+      "description": "Comfort & City — Nexus 5v derailleur, V-brake brakes, rims 24, 26, 29 and 32",
+      "tag": "Comfort",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "Shimano Nexus 5v",
+        "brakes": "Aluminum V-Brake"
+      }
+    },
+    "9": {
+      "name": "MISSISSIPPI 8V",
+      "description": "Comfort & City — Nexus 8v derailleur, V-brake brakes, rims 24, 26, 29 and 32",
+      "tag": "Comfort",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "Shimano Nexus 8v",
+        "brakes": "Aluminum V-Brake"
+      }
+    },
+    "5": {
+      "name": "TURRI",
+      "description": "Performance — Agility and lightness for the asphalt, rims 24, 26, 29 and 32",
+      "tag": "Performance",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "Shimano 9 Speeds",
+        "brakes": "Hydraulic Disc"
+      }
+    },
+    "10": {
+      "name": "MOUNTAIN BIKE FRAME",
+      "description": "Loose Mountain Bike frame — 100% recycled plastic, weld-free",
+      "tag": "MTB Base",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "N/A",
+        "brakes": "V-Brake/Disc Support"
+      }
+    },
+    "7": {
+      "name": "MUZZI FRAME",
+      "description": "Loose frame — 100% recycled plastic, weld-free",
+      "tag": "Base",
+      "specs": {
+        "frame": "Monoblock Recycled Polymer",
+        "transmission": "N/A",
+        "brakes": "V-Brake/Disc Support"
+      }
+    },
+    "h1": {
+      "name": "MUZZI 1998",
+      "description": "The first functional prototype — The beginning of the recycled polymer revolution.",
+      "tag": "Historical",
+      "specs": {
+        "frame": "Experimental Polymer",
+        "transmission": "Single-speed",
+        "brakes": "V-Brake"
+      }
+    },
+    "h2": {
+      "name": "EXPO MODEL 2005",
+      "description": "Special exhibition edition — Winner of international sustainable design awards.",
+      "tag": "Award-winning",
+      "specs": {
+        "frame": "Reinforced Polymer",
+        "transmission": "Shimano 3v",
+        "brakes": "V-Brake"
+      }
+    }
+  },
+  "footer": {
+    "brand_desc": "The world's first bicycle with a frame made of recycled plastic. Brazilian innovation for a sustainable future.",
+    "newsletter": {
+      "badge": "Lifetime Frame Warranty",
+      "title": "Be part of the change",
+      "item1": "News about new models.",
+      "item2": "Exclusive sustainability content.",
+      "item3": "Community events and meetups.",
+      "placeholder": "your@email.com",
+      "send": "Send"
+    },
+    "history_menu": {
+      "innovation": "Innovation",
+      "stories": "Stories",
+      "sustainability": "Sustainability",
+      "collection": "Collection",
+      "media": "In Media"
+    },
+    "rights": "All rights reserved.",
+    "digital_consultancy": "Digital Consultancy by Magoi",
+    "dev_strategy": "Development and Strategy Muzzicycles"
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { db, collection, query, where, getDocs, orderBy, User, handleFirestoreError, OperationType } from '../firebase';
 import { Package, Heart, History, Truck, Search, ChevronRight, Clock, CheckCircle2, AlertCircle, ShoppingBag, MapPin, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -22,20 +23,21 @@ interface CustomerDashboardProps {
   onToggleFavorite: (product: Product) => void;
 }
 
-const statusConfig = {
-  pending: { label: 'Aguardando Pagamento', icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-50' },
-  processing: { label: 'Em Processamento', icon: CheckCircle2, color: 'text-blue-600', bg: 'bg-blue-50' },
-  shipped: { label: 'Enviado', icon: Truck, color: 'text-purple-600', bg: 'bg-purple-50' },
-  delivered: { label: 'Entregue', icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50' },
-  cancelled: { label: 'Cancelado', icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50' },
-};
-
 export default function CustomerDashboard({ user, userProfile, onProductClick, favorites, onToggleFavorite }: CustomerDashboardProps) {
+  const { t, i18n } = useTranslation();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'orders' | 'favorites' | 'tracking'>('orders');
   const [trackingSearch, setTrackingSearch] = useState('');
   const [trackingResult, setTrackingResult] = useState<Order | null>(null);
+
+  const statusConfig = {
+    pending: { label: t('dashboard.status.pending'), icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-50' },
+    processing: { label: t('dashboard.status.processing'), icon: CheckCircle2, color: 'text-blue-600', bg: 'bg-blue-50' },
+    shipped: { label: t('dashboard.status.shipped'), icon: Truck, color: 'text-purple-600', bg: 'bg-purple-50' },
+    delivered: { label: t('dashboard.status.delivered'), icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50' },
+    cancelled: { label: t('dashboard.status.cancelled'), icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50' },
+  };
 
   useEffect(() => {
     async function fetchOrders() {
@@ -70,14 +72,14 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
     const found = orders.find(o => o.trackingNumber?.toLowerCase() === trackingSearch.toLowerCase() || o.id.toLowerCase().includes(trackingSearch.toLowerCase()));
     setTrackingResult(found || null);
     if (!found) {
-        alert('Código de rastreio ou pedido não encontrado.');
+        alert(t('dashboard.tracking.error'));
     }
   };
 
   const formatDate = (date: any) => {
     if (!date) return '-';
     const d = date.toDate ? date.toDate() : new Date(date);
-    return d.toLocaleDateString('pt-BR', {
+    return d.toLocaleDateString(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', {
       day: '2-digit',
       month: 'long',
       year: 'numeric'
@@ -85,7 +87,9 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('pt-BR', {
+    const locale = i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES';
+    
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'BRL'
     }).format(price);
@@ -113,7 +117,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                 </div>
               )}
             </div>
-            <h2 className="font-bold text-lg text-black truncate">{user.displayName || 'Olá!'}</h2>
+            <h2 className="font-bold text-lg text-black truncate">{user.displayName || t('dashboard.welcome')}</h2>
             <p className="text-xs text-black/40 truncate">{user.email}</p>
           </div>
 
@@ -126,7 +130,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
               )}
             >
               <Package className="w-4 h-4" />
-              Histórico de Pedidos
+              {t('dashboard.tabs.orders')}
             </button>
             <button
               onClick={() => setActiveTab('tracking')}
@@ -136,7 +140,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
               )}
             >
               <Truck className="w-4 h-4" />
-              Rastreio de Entrega
+              {t('dashboard.tabs.tracking')}
             </button>
             <button
               onClick={() => setActiveTab('favorites')}
@@ -146,7 +150,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
               )}
             >
               <Heart className="w-4 h-4" />
-              Favoritos
+              {t('dashboard.tabs.favorites')}
             </button>
           </nav>
         </div>
@@ -163,8 +167,10 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                 className="space-y-6"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-black font-geist">Meus Pedidos</h3>
-                  <div className="text-sm text-black/40">{orders.length} pedidos realizados</div>
+                  <h3 className="text-2xl font-bold text-black font-geist">{t('dashboard.orders.title')}</h3>
+                  <div className="text-sm text-black/40">
+                    {orders.length} {orders.length === 1 ? t('dashboard.orders.count_one') : t('dashboard.orders.count_many')}
+                  </div>
                 </div>
 
                 {isLoading ? (
@@ -176,15 +182,15 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                     <div className="h-20 w-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                       <ShoppingBag className="w-10 h-10 text-black/20" />
                     </div>
-                    <h4 className="text-lg font-bold text-black mb-2">Nenhum pedido encontrado</h4>
+                    <h4 className="text-lg font-bold text-black mb-2">{t('dashboard.orders.empty_title')}</h4>
                     <p className="text-sm text-black/40 mb-8 max-w-xs mx-auto">
-                      Você ainda não realizou nenhuma compra. Explore nossos modelos e encontre a Muzzicycles perfeita para você!
+                      {t('dashboard.orders.empty_desc')}
                     </p>
                     <button 
                          onClick={() => window.dispatchEvent(new CustomEvent('changeView', { detail: { view: 'bikes' } }))}
                          className="px-8 py-3 bg-brand-blue text-white rounded-full font-bold hover:bg-brand-blue-dark transition-all"
                     >
-                      Ver Catálogo
+                      {t('dashboard.orders.empty_button')}
                     </button>
                   </div>
                 ) : (
@@ -199,7 +205,9 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                                 <StatusIcon className={cn("w-6 h-6", statusConfig[order.status]?.color)} />
                               </div>
                               <div>
-                                <div className="text-xs text-black/40 font-medium mb-1 uppercase tracking-wider">PEDIDO #{order.id.slice(-6).toUpperCase()}</div>
+                                <div className="text-xs text-black/40 font-medium mb-1 uppercase tracking-wider">
+                                  {t('dashboard.orders.order_id')} #{order.id.slice(-6).toUpperCase()}
+                                </div>
                                 <div className={cn("text-sm font-bold", statusConfig[order.status]?.color)}>
                                   {statusConfig[order.status]?.label}
                                 </div>
@@ -207,11 +215,11 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                             </div>
                             <div className="flex items-center gap-6">
                               <div className="text-right">
-                                <div className="text-xs text-black/40 mb-1">Data</div>
+                                <div className="text-xs text-black/40 mb-1">{t('dashboard.orders.date')}</div>
                                 <div className="text-sm font-bold text-black">{formatDate(order.createdAt)}</div>
                               </div>
                               <div className="text-right">
-                                <div className="text-xs text-black/40 mb-1">Total</div>
+                                <div className="text-xs text-black/40 mb-1">{t('dashboard.orders.total')}</div>
                                 <div className="text-sm font-bold text-brand-blue">{formatPrice(order.total)}</div>
                               </div>
                             </div>
@@ -223,7 +231,9 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                                 <img src={item.image} alt={item.name} className="h-10 w-10 rounded-lg object-cover bg-gray-50" />
                                 <div className="text-xs">
                                   <div className="font-bold text-black">{item.name}</div>
-                                  <div className="text-black/40">Qtd: {item.quantity} • Aro: {item.selectedAro || 'Unico'}</div>
+                                  <div className="text-black/40">
+                                    {t('dashboard.orders.qty')}: {item.quantity} • {t('dashboard.orders.rim')}: {item.selectedAro || t('dashboard.orders.rim_single')}
+                                  </div>
                                 </div>
                               </div>
                             ))}
@@ -245,8 +255,8 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                 className="space-y-6"
               >
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-2xl font-bold text-black font-geist">Rastreio de Entrega</h3>
-                  <p className="text-sm text-black/40">Fique por dentro de onde está sua Muzzicycles.</p>
+                  <h3 className="text-2xl font-bold text-black font-geist">{t('dashboard.tracking.title')}</h3>
+                  <p className="text-sm text-black/40">{t('dashboard.tracking.subtitle')}</p>
                 </div>
 
                 <div className="bg-white rounded-3xl border border-black/5 p-8">
@@ -255,7 +265,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/20" />
                       <input
                         type="text"
-                        placeholder="Código de rastreamento ou ID do pedido"
+                        placeholder={t('dashboard.tracking.placeholder')}
                         className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50 border-none text-sm focus:ring-2 focus:ring-brand-blue/20 transition-all"
                         value={trackingSearch}
                         onChange={(e) => setTrackingSearch(e.target.value)}
@@ -265,7 +275,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                       type="submit"
                       className="px-8 py-4 bg-black text-white rounded-2xl font-bold hover:bg-black/80 transition-all flex items-center gap-2"
                     >
-                      Rastrear
+                      {t('dashboard.tracking.button')}
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   </form>
@@ -281,7 +291,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                           <Truck className="w-8 h-8 text-green-600" />
                         </div>
                         <div>
-                          <div className="text-xs text-black/40 font-bold uppercase tracking-widest mb-1">Status Atual</div>
+                          <div className="text-xs text-black/40 font-bold uppercase tracking-widest mb-1">{t('dashboard.tracking.status_label')}</div>
                           <div className="text-xl font-bold text-black">{statusConfig[trackingResult.status]?.label}</div>
                         </div>
                       </div>
@@ -289,7 +299,7 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                       <div className="relative pl-8 space-y-12 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-black/5">
                         <div className="relative">
                           <div className="absolute -left-[27px] top-1.5 h-[14px] w-[14px] rounded-full border-[3px] border-white bg-green-600 ring-4 ring-green-100" />
-                          <div className="text-sm font-bold text-black mb-1">Pedido Enviado</div>
+                          <div className="text-sm font-bold text-black mb-1">{t('dashboard.tracking.steps.shipped')}</div>
                           <p className="text-xs text-black/40 flex items-center gap-2">
                             <Calendar className="w-3 h-3" />
                             {formatDate(trackingResult.createdAt)}
@@ -297,15 +307,15 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                         </div>
                         <div className="relative">
                           <div className="absolute -left-[27px] top-1.5 h-[14px] w-[14px] rounded-full border-[3px] border-white bg-green-600" />
-                          <div className="text-sm font-bold text-black mb-1">Em Trânsito</div>
+                          <div className="text-sm font-bold text-black mb-1">{t('dashboard.tracking.steps.transit')}</div>
                           <p className="text-xs text-black/40 flex items-center gap-2">
-                             Unidade de Tratamento - São Paulo/SP
+                             {t('dashboard.tracking.steps.location')}
                           </p>
                         </div>
                         <div className="relative opacity-40">
                           <div className="absolute -left-[27px] top-1.5 h-[14px] w-[14px] rounded-full border-[3px] border-white bg-gray-300" />
-                          <div className="text-sm font-bold text-black mb-1">Saiu para Entrega</div>
-                          <p className="text-xs text-black/40">Aguardando atualização</p>
+                          <div className="text-sm font-bold text-black mb-1">{t('dashboard.tracking.steps.out')}</div>
+                          <p className="text-xs text-black/40">{t('dashboard.tracking.steps.waiting')}</p>
                         </div>
                       </div>
 
@@ -313,12 +323,12 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                         <div className="flex items-center gap-4">
                           <MapPin className="w-5 h-5 text-brand-blue" />
                           <div className="text-sm">
-                            <div className="font-bold text-black">Entrega Estimada</div>
+                            <div className="font-bold text-black">{t('dashboard.tracking.estimate.title')}</div>
                             <div className="text-black/60">São Paulo, Brasil</div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-sm font-bold text-brand-blue">Próximos 3 dias</div>
+                          <div className="text-sm font-bold text-brand-blue">{t('dashboard.tracking.estimate.days')}</div>
                         </div>
                       </div>
                     </motion.div>
@@ -336,8 +346,10 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                 className="space-y-6"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-bold text-black font-geist">Favoritos</h3>
-                  <div className="text-sm text-black/40">{favorites.length} itens salvos</div>
+                  <h3 className="text-2xl font-bold text-black font-geist">{t('dashboard.favorites.title')}</h3>
+                  <div className="text-sm text-black/40">
+                    {favorites.length} {favorites.length === 1 ? t('dashboard.favorites.count_one') : t('dashboard.favorites.count_many')}
+                  </div>
                 </div>
 
                 {favorites.length === 0 ? (
@@ -345,15 +357,15 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                     <div className="h-20 w-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                       <Heart className="w-10 h-10 text-black/20" />
                     </div>
-                    <h4 className="text-lg font-bold text-black mb-2">Sua lista está vazia</h4>
+                    <h4 className="text-lg font-bold text-black mb-2">{t('dashboard.favorites.empty_title')}</h4>
                     <p className="text-sm text-black/40 mb-8 max-w-xs mx-auto">
-                      Salve seus modelos favoritos aqui para ter acesso rápido quando decidir comprá-los.
+                      {t('dashboard.favorites.empty_desc')}
                     </p>
                     <button 
                          onClick={() => window.dispatchEvent(new CustomEvent('changeView', { detail: { view: 'bikes' } }))}
                          className="px-8 py-3 bg-brand-blue text-white rounded-full font-bold hover:bg-brand-blue-dark transition-all"
                     >
-                      Explorar Modelos
+                      {t('dashboard.favorites.empty_button')}
                     </button>
                   </div>
                 ) : (
@@ -382,13 +394,13 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
                         <div className="p-4">
                           <h4 className="font-bold text-black truncate mb-1">{product.name}</h4>
                           <p className="text-brand-blue font-bold text-sm">
-                            {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
+                            {formatPrice(product.price)}
                           </p>
                           <button 
                             onClick={() => onProductClick(product)}
                             className="w-full mt-4 py-2 text-xs font-bold uppercase tracking-wider text-black border border-black/10 rounded-lg hover:bg-black hover:text-white transition-all"
                           >
-                            Ver Detalhes
+                            {t('products.view_details')}
                           </button>
                         </div>
                       </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import FAQ from './FAQ';
 import Contact from './Contact';
 
@@ -7,6 +8,7 @@ interface SupportProps {
 }
 
 export default function Support({ initialTab = 'faq' }: SupportProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'faq' | 'contact'>(initialTab);
 
   return (
@@ -20,7 +22,7 @@ export default function Support({ initialTab = 'faq' }: SupportProps) {
                 activeTab === 'faq' ? 'text-brand-blue' : 'text-black/40 hover:text-black'
               }`}
             >
-              FAQ
+              {t('support_page.faq')}
               {activeTab === 'faq' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-blue" />
               )}
@@ -31,7 +33,7 @@ export default function Support({ initialTab = 'faq' }: SupportProps) {
                 activeTab === 'contact' ? 'text-brand-blue' : 'text-black/40 hover:text-black'
               }`}
             >
-              Contato
+              {t('support_page.contact')}
               {activeTab === 'contact' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-blue" />
               )}

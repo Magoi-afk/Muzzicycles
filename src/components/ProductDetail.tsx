@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { Shield, Zap, ChevronRight, ArrowLeft, Plus, Minus, Info, Heart, History, Loader2 } from 'lucide-react';
 import { Product } from '../types';
 import { useState } from 'react';
@@ -21,6 +22,7 @@ export default function ProductDetail({
   isFavorite,
   onToggleFavorite
 }: ProductDetailProps) {
+  const { t, i18n } = useTranslation();
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedAro, setSelectedAro] = useState('29');
@@ -29,6 +31,11 @@ export default function ProductDetail({
   const allImages = [product.image, ...(product.additionalImages || [])];
   const isBike = product.category !== 'Componentes';
   const has3DModel = product.id === '10'; // QUADRO MONTAIN BIKE
+
+  const formatCurrency = (value: number) => {
+    const locale = i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES';
+    return new Intl.NumberFormat(locale, { style: 'currency', currency: 'BRL' }).format(value);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -40,12 +47,12 @@ export default function ProductDetail({
             className="inline-flex items-center gap-2 text-sm text-black/50 hover:text-black transition font-geist"
           >
             <ArrowLeft className="w-4 h-4" />
-            Voltar para o catálogo
+            {t('product_detail.back')}
           </button>
           <div className="flex items-center gap-2 text-xs text-black/30 font-geist uppercase tracking-widest">
-            <span className="hover:text-black cursor-pointer">Bikes</span>
+            <span className="hover:text-black cursor-pointer">{t('nav.bikes')}</span>
             <ChevronRight className="w-3 h-3" />
-            <span className="text-black/60">{product.name}</span>
+            <span className="text-black/60">{t(`products_data.${product.id}.name`, { defaultValue: product.name })}</span>
           </div>
         </div>
 
@@ -63,7 +70,7 @@ export default function ProductDetail({
                     scene="https://prod.spline.design/G0n2U7VfS6BbmEx2/scene.splinecode" 
                   />
                   <div className="absolute bottom-6 right-6 z-10 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] text-white/60 font-bold uppercase tracking-widest pointer-events-none">
-                    Interativo 3D
+                    {t('product_detail.interactive_3d')}
                   </div>
                 </div>
               ) : (
@@ -104,23 +111,23 @@ export default function ProductDetail({
           <div className="flex flex-col">
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-4">
-                <span className="px-2.5 py-1 rounded-full bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-black/50 font-geist">Eco-Inovação</span>
+                <span className="px-2.5 py-1 rounded-full bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-black/50 font-geist">{t('product_detail.eco_badge')}</span>
               </div>
-              <h1 className="text-5xl font-medium tracking-tighter font-geist mb-2">{product.name}</h1>
+              <h1 className="text-5xl font-medium tracking-tighter font-geist mb-2">{t(`products_data.${product.id}.name`, { defaultValue: product.name })}</h1>
               <div className="mb-6">
                 {product.isAcervo ? (
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-widest border border-amber-200">
                     <History className="w-3 h-3" />
-                    Item de Exposição
+                    {t('product_detail.exhibition_item')}
                   </div>
                 ) : (
                   <p className="text-3xl font-bold text-brand-blue font-geist">
-                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
+                    {formatCurrency(product.price)}
                   </p>
                 )}
               </div>
               <p className="text-lg text-black/60 font-geist leading-relaxed">
-                {product.description}. Desenvolvida com polímeros reciclados de alta performance, a {product.name} oferece leveza estrutural e absorção de impacto superior para o ambiente urbano.
+                {t(`products_data.${product.id}.description`, { defaultValue: product.description })}. {t('product_detail.dynamic_desc_suffix', { name: t(`products_data.${product.id}.name`, { defaultValue: product.name }) })}
               </p>
             </div>
 
@@ -128,7 +135,7 @@ export default function ProductDetail({
             <div className="space-y-8 mb-10">
               {isBike && (
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist block mb-4">Tamanho do Aro</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist block mb-4">{t('product_detail.rim_size')}</span>
                   <div className="flex items-center gap-2">
                     {['24', '26', '29', '32'].map((aro) => (
                       <button 
@@ -149,7 +156,7 @@ export default function ProductDetail({
               {product.isAcervo ? (
                 <div className="p-6 rounded-2xl bg-gray-50 border border-black/5 text-center">
                   <p className="text-sm text-black/50 font-geist">
-                    Este modelo faz parte do acervo histórico da Muzzicycles e não está disponível para venda.
+                    {t('product_detail.acervo_notice')}
                   </p>
                 </div>
               ) : (
@@ -158,14 +165,14 @@ export default function ProductDetail({
                     onClick={() => onCheckout(product, isBike ? selectedAro : undefined)}
                     className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20"
                   >
-                    Comprar Agora
+                    {t('product_detail.buy_now')}
                   </button>
                   <div className="flex gap-3">
                     <button 
                       onClick={() => onAddToCart(product, isBike ? selectedAro : undefined)}
                       className="flex-1 h-14 rounded-2xl border border-black/5 bg-white text-black/70 font-bold font-geist text-lg hover:bg-black/5 transition"
                     >
-                      Adicionar ao Carrinho
+                      {t('product_detail.add_to_cart')}
                     </button>
                     <button 
                       onClick={onToggleFavorite}
@@ -178,7 +185,7 @@ export default function ProductDetail({
               )}
               <div className="flex items-center justify-center gap-2 text-xs text-black/40 font-geist mt-2">
                 <Shield className="w-3 h-3" />
-                {product.isAcervo ? 'Preservando a história da sustentabilidade' : 'Entrega em todo o território nacional'}
+                {product.isAcervo ? t('product_detail.acervo_guarantee') : t('product_detail.delivery_guarantee')}
               </div>
             </div>
           </div>
@@ -188,11 +195,11 @@ export default function ProductDetail({
         <div className="mt-24 pt-20 border-t border-black/5">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
             <div>
-              <span className="text-brand-blue font-bold uppercase tracking-widest text-[10px] mb-4 block">Engenharia Avançada</span>
-              <h2 className="text-4xl sm:text-5xl font-medium tracking-tighter font-geist">Especificações & Geometria</h2>
+              <span className="text-brand-blue font-bold uppercase tracking-widest text-[10px] mb-4 block">{t('product_detail.engineering_badge')}</span>
+              <h2 className="text-4xl sm:text-5xl font-medium tracking-tighter font-geist">{t('product_detail.specs_geometry')}</h2>
             </div>
             <p className="text-black/50 font-geist max-w-sm text-sm">
-              Cada componente foi selecionado para garantir a máxima durabilidade e compatibilidade com o quadro de polímero reciclado.
+              {t('product_detail.specs_desc')}
             </p>
           </div>
 
@@ -204,7 +211,7 @@ export default function ProductDetail({
                   <div className="h-8 w-8 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue">
                     <Info className="w-4 h-4" />
                   </div>
-                  <h3 className="text-xl font-medium font-geist">Geometria do Quadro</h3>
+                  <h3 className="text-xl font-medium font-geist">{t('product_detail.geometry_title')}</h3>
                 </div>
                 
                 <div className="space-y-6">
@@ -228,7 +235,7 @@ export default function ProductDetail({
                 
                 <div className="mt-8 p-6 rounded-2xl bg-brand-blue text-white">
                   <p className="text-sm font-geist leading-relaxed">
-                    A geometria Muzzicycles foi otimizada para o conforto urbano, reduzindo a fadiga postural e maximizando a transferência de torque. Ideal para usuários de 1.60m a 1.90m.
+                    {t('product_detail.geometry_desc')}
                   </p>
                 </div>
               </div>
@@ -243,7 +250,7 @@ export default function ProductDetail({
 
                 <div className="relative z-10">
                   <h3 className="text-2xl font-medium font-geist mb-8 flex items-center gap-3">
-                    Configuração Standard
+                    {t('product_detail.standard_config')}
                     <span className="px-2 py-1 rounded-md bg-white/10 text-[10px] font-bold uppercase tracking-widest text-white/60">Shimano 7v / Nexus 3</span>
                   </h3>
 
@@ -251,9 +258,9 @@ export default function ProductDetail({
                     <table className="w-full text-left font-geist">
                       <thead>
                         <tr className="text-[10px] font-bold uppercase tracking-widest text-white/30 border-b border-white/10">
-                          <th className="pb-4">Produto</th>
-                          <th className="pb-4 px-4">Fabricante</th>
-                          <th className="pb-4 text-right">Qtd</th>
+                          <th className="pb-4">{t('product_detail.table.product')}</th>
+                          <th className="pb-4 px-4">{t('product_detail.table.manufacturer')}</th>
+                          <th className="pb-4 text-right">{t('product_detail.table.qty')}</th>
                         </tr>
                       </thead>
                       <tbody className="text-sm divide-y divide-white/5">
@@ -287,7 +294,7 @@ export default function ProductDetail({
                     </table>
                   </div>
                   <p className="mt-8 text-[10px] text-white/30 font-geist italic">
-                    * A Muzzicycles reserva-se o direito de alterar componentes por equivalentes de mesma qualidade conforme disponibilidade.
+                    {t('product_detail.specs_disclaimer')}
                   </p>
                 </div>
               </div>
@@ -299,15 +306,15 @@ export default function ProductDetail({
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 p-8 rounded-[2.5rem] bg-neutral-900 text-white relative overflow-hidden">
             <div className="relative z-10">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 font-geist mb-2 block">Inovação</span>
-              <h3 className="text-2xl font-medium font-geist mb-4">Quadro Polymer Core</h3>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 font-geist mb-2 block">{t('product_detail.innovation_badge')}</span>
+              <h3 className="text-2xl font-medium font-geist mb-4">{t(`products_data.${product.id}.specs.frame`, { defaultValue: t('product_detail.frame_core') })}</h3>
               <p className="text-white/60 font-geist leading-relaxed max-w-md mb-8">
-                Nosso processo patenteado transforma resíduos plásticos em uma estrutura molecular inquebrável com garantia vitalícia.
+                {t('product_detail.frame_core_desc')}
               </p>
               <div className="flex items-baseline gap-1">
                 <span className="text-6xl font-medium font-geist tracking-tighter">{product.specs?.weight || '4.8'}</span>
                 <span className="text-xl font-medium font-geist text-white/40">kg</span>
-                <span className="text-xs font-bold uppercase tracking-widest text-white/40 font-geist ml-2">Peso</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-white/40 font-geist ml-2">{t('product_detail.weight_label')}</span>
               </div>
             </div>
             <div className="absolute right-[-10%] bottom-[-10%] opacity-10">
@@ -318,24 +325,24 @@ export default function ProductDetail({
           <div className="space-y-6">
             <div className="p-8 rounded-[2.5rem] bg-gray-50 border border-black/5">
               <Zap className="w-6 h-6 text-brand-blue mb-4" />
-              <h4 className="text-lg font-medium font-geist mb-2">Transmissão</h4>
+              <h4 className="text-lg font-medium font-geist mb-2">{t('product_detail.transmission_title')}</h4>
               <p className="text-sm text-black/50 font-geist leading-relaxed">
-                {product.specs?.transmission || 'Shimano TZ30 com 7 velocidades precisas para qualquer elevação.'}
+                {t(`products_data.${product.id}.specs.transmission`, { defaultValue: product.specs?.transmission || t('product_detail.transmission_default') })}
               </p>
             </div>
             <div className="p-8 rounded-[2.5rem] bg-gray-50 border border-black/5">
               <Shield className="w-6 h-6 text-brand-blue mb-4" />
-              <h4 className="text-lg font-medium font-geist mb-2">Frenagem</h4>
+              <h4 className="text-lg font-medium font-geist mb-2">{t('product_detail.brakes_title')}</h4>
               <p className="text-sm text-black/50 font-geist leading-relaxed">
-                {product.specs?.brakes || 'Sistema V-Brake em alumínio de alta fricção para segurança total.'}
+                {t(`products_data.${product.id}.specs.brakes`, { defaultValue: product.specs?.brakes || t('product_detail.brakes_default') })}
               </p>
             </div>
           </div>
 
           <div className="lg:col-span-3 p-10 rounded-[2.5rem] bg-brand-blue text-white flex items-center justify-between shadow-xl shadow-brand-blue/20">
             <div>
-              <h3 className="text-2xl font-medium font-geist mb-1">Garantia Vitalícia</h3>
-              <p className="text-white/70 font-geist">No quadro de polímero reciclado.</p>
+              <h3 className="text-2xl font-medium font-geist mb-1">{t('product_detail.lifetime_warranty')}</h3>
+              <p className="text-white/70 font-geist">{t('product_detail.lifetime_warranty_desc')}</p>
             </div>
             <Shield className="w-10 h-10 text-white/30" />
           </div>

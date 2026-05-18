@@ -1,5 +1,6 @@
 import { Filter, ChevronDown, Heart, Plus, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Product } from '../types';
 import { PRODUCTS } from '../constants';
 import { motion } from 'motion/react';
@@ -20,25 +21,31 @@ export default function ProductGrid({
   favorites,
   onToggleFavorite,
   searchQuery = '',
-  title = 'Nossos Modelos',
-  subtitle = 'Coleção 2026'
+  title,
+  subtitle
 }: ProductGridProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
-  const [sortBy, setSortBy] = useState<string>('Destaques');
+  const { t, i18n } = useTranslation();
+  const displayTitle = title || t('products.title');
+  const displaySubtitle = subtitle || t('products.subtitle');
+
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('highlights');
   const [isSortOpen, setIsSortOpen] = useState(false);
 
-  const categories = ['Todos', 'Urbana', 'Aventura', 'Performance', 'Componentes'];
-  const sortOptions = ['Destaques', 'Avaliação'];
+  const categories = ['all', 'urbana', 'aventura', 'performance', 'componentes'];
+  const sortOptions = ['highlights', 'rating'];
 
   const filteredProducts = PRODUCTS.filter(product => {
     if (product.isAcervo) return false;
-    const matchesCategory = selectedCategory === 'Todos' || product.category === selectedCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || product.category.toLowerCase() === selectedCategory;
+    const translatedName = t(`products_data.${product.id}.name`, { defaultValue: product.name });
+    const translatedDesc = t(`products_data.${product.id}.description`, { defaultValue: product.description });
+    const matchesSearch = translatedName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         translatedDesc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   }).sort((a, b) => {
-    if (sortBy === 'Avaliação') return b.rating - a.rating;
-    return 0; // Destaques (default order)
+    if (sortBy === 'rating') return b.rating - a.rating;
+    return 0; // Highlights (default order)
   });
 
   return (
@@ -47,11 +54,11 @@ export default function ProductGrid({
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-black/5 pt-20">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl sm:text-3xl text-black tracking-tighter font-geist">{title}</h2>
-            <span className="text-sm text-black/50 font-geist">{subtitle}</span>
+            <h2 className="text-2xl sm:text-3xl text-black tracking-tighter font-geist">{displayTitle}</h2>
+            <span className="text-sm text-black/50 font-geist">{displaySubtitle}</span>
           </div>
           <p className="text-sm text-black/40 font-geist">
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'modelo encontrado' : 'modelos encontrados'}
+            {filteredProducts.length} {filteredProducts.length === 1 ? t('products.found_one') : t('products.found_many')}
           </p>
         </div>
 
@@ -68,7 +75,7 @@ export default function ProductGrid({
                     : 'bg-black/5 text-black/60 hover:bg-black/10'
                 }`}
               >
-                {cat}
+                {t(`products.categories.${cat}`)}
               </button>
             ))}
           </div>
@@ -79,7 +86,7 @@ export default function ProductGrid({
               onClick={() => setIsSortOpen(!isSortOpen)}
               className="w-full h-9 px-4 rounded-full border border-black/5 bg-white text-sm text-black/70 hover:bg-black/5 transition-all flex items-center justify-between font-geist"
             >
-              <span>{sortBy}</span>
+              <span>{t(`products.sort.${sortBy}`)}</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isSortOpen ? 'rotate-180' : ''}`} />
             </button>
             
@@ -96,7 +103,7 @@ export default function ProductGrid({
                       sortBy === opt ? 'bg-brand-blue/5 text-brand-blue' : 'text-black/60 hover:bg-black/5'
                     }`}
                   >
-                    {opt}
+                    {t(`products.sort.${opt}`)}
                   </button>
                 ))}
               </div>
@@ -126,7 +133,7 @@ export default function ProductGrid({
                   />
                   {product.tag && (
                     <div className={`absolute top-3 left-3 inline-flex items-center px-2.5 h-7 rounded-full text-xs font-geist border ${product.tagColor}`}>
-                      {product.tag}
+                      {t(`products_data.${product.id}.tag`, { defaultValue: product.tag })}
                     </div>
                   )}
                   <button 
@@ -142,12 +149,15 @@ export default function ProductGrid({
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 cursor-pointer" onClick={() => onProductClick(product)}>
-                      <h3 className="text-base font-medium text-black tracking-tight font-geist">{product.name}</h3>
-                      <p className="text-sm text-black/60 font-geist">{product.description}</p>
+                      <h3 className="text-base font-medium text-black tracking-tight font-geist">{t(`products_data.${product.id}.name`, { defaultValue: product.name })}</h3>
+                      <p className="text-sm text-black/60 font-geist">{t(`products_data.${product.id}.description`, { defaultValue: product.description })}</p>
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-base font-bold text-black font-geist">
-                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.price)}
+                        {new Intl.NumberFormat(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', { 
+                          style: 'currency', 
+                          currency: 'BRL' 
+                        }).format(product.price)}
                       </p>
                     </div>
                   </div>
@@ -156,7 +166,7 @@ export default function ProductGrid({
                       onClick={() => onAddToCart(product)}
                       className="inline-flex items-center gap-2 h-9 px-3 rounded-xl bg-brand-blue text-white text-sm hover:bg-brand-blue-dark transition font-geist"
                     >
-                      Adicionar ao carrinho
+                      {t('products.add_to_cart')}
                       <Plus className="w-3 h-3" />
                     </button>
                   </div>
@@ -169,8 +179,8 @@ export default function ProductGrid({
             <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-black/5 mb-6">
               <Search className="h-10 w-10 text-black/20" />
             </div>
-            <h3 className="text-2xl font-medium tracking-tighter font-geist text-black mb-2">Nenhum resultado encontrado</h3>
-            <p className="text-black/50 font-geist">Tente pesquisar por outros termos ou limpe os filtros.</p>
+            <h3 className="text-2xl font-medium tracking-tighter font-geist text-black mb-2">{t('products.no_results')}</h3>
+            <p className="text-black/50 font-geist">{t('products.try_another')}</p>
           </div>
         )}
       </div>

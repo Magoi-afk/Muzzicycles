@@ -1,0 +1,615 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "bikes": "Bicicletas",
+    "about": "Nuestra Historia",
+    "support": "Soporte",
+    "dashboard": "Mi Cuenta",
+    "cart": "Carrito",
+    "favorites": "Favoritos",
+    "search": "Buscar productos (Ctrl+K)"
+  },
+  "hero": {
+    "title": "La bicicleta que nace de lo que el mundo desecha",
+    "words": ["plástico reciclado.", "100% brasileña.", "Garantía de por vida."],
+    "cta": "Explorar Bikes",
+    "history": "Nuestra Historia",
+    "interactive": "Interactivo: Girar para ver en 3D",
+    "specs_btn": "Ficha Técnica",
+    "scan_ar": "Scan para AR"
+  },
+  "products": {
+    "title": "Nuestros Modelos",
+    "subtitle": "Colección 2026",
+    "buy": "Comprar Ahora",
+    "add_to_cart": "Añadir al Carrito",
+    "view_details": "Ver Detalles",
+    "free_shipping": "Envío Gratis Sur/Sudeste BR",
+    "found_one": "modelo encontrado",
+    "found_many": "modelos encontrados",
+    "no_results": "Ningún resultado encontrado",
+    "try_another": "Intente buscar otros términos o limpie los filtros.",
+    "categories": {
+      "all": "Todos",
+      "urbana": "Urbana",
+      "aventura": "Aventura",
+      "performance": "Performance",
+      "componentes": "Componentes"
+    },
+    "sort": {
+      "highlights": "Destaques",
+      "rating": "Calificación"
+    },
+    "specs": {
+      "frame": "Cuadro",
+      "transmission": "Transmisión",
+      "brakes": "Frenos",
+      "weight": "Peso"
+    }
+  },
+  "cart": {
+    "title": "Tu carrito",
+    "empty": "Tu carrito está vacío.",
+    "add_bike_prompt": "Añade una bike para empezar.",
+    "subtotal": "Subtotal",
+    "checkout": "Finalizar Compra",
+    "continue": "Continuar comprando",
+    "remove": "Eliminar",
+    "wheel_size": "Aro"
+  },
+  "checkout": {
+    "steps": {
+      "shipping": "Envío",
+      "payment": "Pago",
+      "review": "Revisión"
+    },
+    "titles": {
+      "shipping": "Información de Envío",
+      "payment": "Finalizar Pago",
+      "summary": "Resumen del Pedido",
+      "delivery_method": "Método de Entrega",
+      "delivery_info": "Información de Entrega",
+      "secure_processing": "Procesamiento Seguro"
+    },
+    "form": {
+      "name": "Nombre Completo",
+      "name_placeholder": "Tu nombre",
+      "cpf": "DNI / NIE / CPF",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "cep": "Código Postal",
+      "address": "Dirección",
+      "address_placeholder": "Calle, Avenida...",
+      "number": "Número",
+      "neighborhood": "Barrio",
+      "city": "Ciudad",
+      "state": "Estado / Prov.",
+      "select": "Seleccione",
+      "errors": {
+        "required": "Por favor, complete todos los campos obligatorios correctamente."
+      }
+    },
+    "shipping": {
+      "calculating": "Calculando envío con Jadlog...",
+      "error": "Hubo un error al calcular el envío con Jadlog.",
+      "prompt": "Ingrese su Código Postal para ver las opciones de entrega.",
+      "estimate": "Estimación",
+      "business_day": "día hábil",
+      "business_days": "días hábiles",
+      "calculating_cost": "Calculando..."
+    },
+    "summary": {
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "total": "Total",
+      "to_payment": "Ir al Pago",
+      "back_to_shipping": "Volver al Envío"
+    },
+    "secure": {
+      "desc": "Estamos preparando su entorno de pago seguro. Será redirigido para completar la transacción.",
+      "payment": "Pago Seguro",
+      "sustainable": "100% Sostenible",
+      "tracking": "Seguimiento en Tiempo Real",
+      "warranty": "Garantía de 10 Años"
+    },
+    "edit": "Editar",
+    "destinatario": "Destinatario"
+  },
+  "story": {
+    "title": "Nuestra Historia",
+    "intro": "Juan Muzzi, artista plástico uruguayo radicado en Brasil hace más de 40 años, dedicó 12 años de su vida para probar que el plástico post-consumo podría ser la base de una movilidad urbana indestructible.",
+    "quote": "No solo estamos haciendo bicicletas, estamos limpiando el planeta y ofreciendo libertad eterna.",
+    "timeline": [
+      { "year": "1976", "title": "Fundación", "desc": "Juan Muzzi funda Imaplast Industria de Moldes, base para décadas de innovación." },
+      { "year": "1998", "title": "El PDL", "desc": "Inicio del Proyecto de Desarrollo Limpio (PDL) e investigaciones con inyección de polímeros." },
+      { "year": "2008", "title": "Ingeniería", "desc": "Conclusión del molde industrial de 7 toneladas para la inyección del cuadro monobloque." },
+      { "year": "2009", "title": "Certificación", "desc": "Aprobación en rigurosas pruebas de resistencia (3.5 ton) y sello INMETRO." },
+      { "year": "Hoy", "title": "Inovación", "desc": "Producción global con mezclas de PET, Nylon y materiales orgánicos de la fotosíntesis." }
+    ],
+    "global": {
+      "badge": "Expansión Global",
+      "title": "Presencia en más de 40 países",
+      "desc": "Nuestra tecnología disruptiva ya ha cruzado océanos. De las Américas a Europa, cada punto en el mapa representa una comunidad pedaleando hacia el futuro de la movilidad sostenible.",
+      "warranty": "Garantía de por Vida Global",
+      "certification": "Certificación Europea (CE)"
+    }
+  },
+  "history_pages": {
+    "innovation": {
+      "badge": "Inovación Disruptiva",
+      "title": "De la estructura ósea al Proceso de Desarrollo Limpio (PDL)",
+      "subtitle": "Muzzicycles redefine la ingeniería ciclística a través de la sostenibilidad radical y el mimetismo de la naturaleza.",
+      "bones": {
+        "title": "El Misterio de los Huesos Huecos",
+        "p1": "Uno de los misterios de la vida determinó que los huesos fueran huecos. Y en estudios avanzados el hombre descubre que, si no fuera así, el corazón tendría que hacer más esfuerzo y trabajaría mucho más. Además, el peso del cuerpo aumentaría en un 20%, y las extremidades se torcerían con facilidad.",
+        "p2": "Son cavidades internas que forman un conjunto más armónico en relación a la compresión, flexión y tracción exigidas en este sistema. Los huesos huecos en la formación del esqueleto permitieron al hombre y a los animales vertebrados una vida más larga, ofreciendo mayor agilidad, equilibrio y ligereza incluso para volar, y una resistencia mecánica muy por encima de lo que se imaginaría para un hueso macizo.",
+        "quote": "La sofisticación del mecanismo estructural en el esqueleto permitió pensar en una estructura ósea utilizada en el cuadro de una bicicleta. Algo que pudiera ofrecer ligereza y agilidad, así como seguridad a todo el cuerpo del proyecto.",
+        "p3": "Con este razonamiento se crearon las partes internas del cuadro, con variaciones de volumen en diversas localizaciones, lo que trajo más equilibrio y armonía al comportamiento estructural del cuadro. Al igual que las alas del avión, donde el viento ejerce una flexión amortiguando el impacto en la estructura principal, en el cuadro de la bicicleta se utilizó el mismo principio.",
+        "p4": "La estructura se flexiona hasta cierto punto al andar, dejando el cuadro suave y amortiguando los impactos en el ciclista. Para que esto suceda es necesario un molde para inyección de plástico asistido con gas nitrógeno en até el 30% del volumen del producto. El cuadro esqueleto pesa un 30% menos que el cuadro macizo, y aumenta considerablemente su resistencia."
+      },
+      "pillars": [
+        { "title": "Plástico Reciclado", "desc": "Transformamos residuos plásticos en cuadros de alto rendimiento, retirando toneladas de contaminantes del medio ambiente." },
+        { "title": "Garantía de por Vida", "desc": "Nuestra confianza en el material es absoluta. El cuadro Muzzi está hecho para durar generaciones, sin corrosión ni fatiga." },
+        { "title": "Bio-Ingeniería", "desc": "Estructura inspirada en la biomecánica de los huesos huecos para máxima resistencia con un 30% menos de peso." },
+        { "title": "Proceso PDL", "desc": "Proceso de Desarrollo Limpio: 90% menos consumo de energía en comparación con el aluminio." }
+      ],
+      "schumpeter": {
+        "title": "El Espejismo de la Inovación",
+        "desc": "El economista Joseph Schumpeter afirmaba que un emprendedor no es quien monta cualquier negocio, sino quien logra crear un producto o proceso realmente innovador que provoque una ruptura con el patrón existente.",
+        "badge": "Teoría de Schumpeter"
+      },
+      "nature": {
+        "jung_quote": "Hasta hoy, os grandes problemas da humanidade nunca foram resolvidos por decretos coletivos, mas somente pela renovação da atitude do indivíduo. Em tempo algum, meditar sobre si mesmo foi uma necessidade tão imperiosa.",
+        "title": "La Naturaleza Supera a la Humanidad",
+        "p1": "La superación natural es diaria, constante y silenciosa. Tenemos mucho que aprender de los 4.000 millones de años de actividad continua de la naturaleza, que nos proporciona modelos superiores para una sociedad más sostenible.",
+        "p2": "El descarte de materiales plásticos y la producción de aluminio son procesos ambientalmente incorrectos a gran escala. Por eso, elaboramos un proceso industrial contemporáneo que produce un cuadro con garantía de por vida, basado en el principio de la fotosíntesis."
+      },
+      "pdl": {
+        "title": "Proceso de Desarrollo Limpio (PDL)",
+        "item1_title": "Residuo Plástico Cero",
+        "item1_desc": "Aprovechamos biomasa y residuos plásticos descartados para inyectar cuadros sin extractivismo mineral.",
+        "item2_title": "90% Ahorro de Energía",
+        "item2_desc": "Reducimos drásticamente el efecto invernadero y el consumo energético comparado con los métodos tradicionales de aluminio.",
+        "final_quote": "Este PDL nos da as características para um novo conceito de mobilidade, reunindo arte, filosofia, tecnologia e sutilezas, tais como, solidariedade e a ação ecologicamente correta."
+      }
+    }
+  },
+  "sustainability": {
+    "badge": "PDL — Proceso de Desarrollo Limpio",
+    "title": "Ecoeficiencia en Cada Detalle",
+    "desc": "Nuestro proceso PDL transforma lo que sería basura en estructura. Reducimos en un 90% el consumo de energía en comparación con los cuadros de aluminio o acero, creando un nuevo estándar para la industria.",
+    "doc_button": "Ver Documento: La Naturaleza Supera",
+    "stats": {
+      "energy": "Energía (KWh/Cuadro)",
+      "water": "Consumo de Agua",
+      "water_zero": "Zero",
+      "security": "Certificación de Seguridad",
+      "security_cert": "Cert"
+    },
+    "impact": {
+      "title": "Impacto Ambiental Real",
+      "subtitle": "Cifras que demuestran la viabilidad de la economía circular aplicada a la movilidad urbana.",
+      "plastic": "De plástico pueden ser reciclados actualmente, retirando toneladas de residuos de los océanos y vertederos.",
+      "clean_energy": "Producidas con energía limpia, las Muzzicycles demuestran que el futuro es sostenible y escalable.",
+      "oil": "Volumen total de petróleo ahorrado, preservando recursos naturales finitos.",
+      "co2": "Ahorrando a la atmósfera de CO2 en material incinerado, generando créditos de carbono reales."
+    },
+    "materials": {
+      "title": "Materiales que Transformamos",
+      "badge": "Materia Prima",
+      "list": ["Polipropileno", "Poliestireno", "Nylon", "PET", "Polietileno", "Polialuminio Tetrapack", "Biomasa"]
+    },
+    "categories": [
+      {
+        "name": "Producción de Bajo Impacto",
+        "items": [
+          { "title": "Consumo de Agua: ZERO", "desc": "Proceso de inyección en seco que no utiliza agua en ninguna etapa de la producción del cuadro." },
+          { "title": "Energía: 5,0 KWh", "desc": "Eficiencia energética extrema con un consumo de solo 5,0 KWh por cuadro producido." },
+          { "title": "Sin Soldaduras", "desc": "La inyección monobloque elimina los procesos de soldadura y la emisión de gases tóxicos." }
+        ]
+      },
+      {
+        "name": "Ingeniería de Materiales",
+        "items": [
+          { "title": "Sin Pintura", "desc": "El color se incorpora directamente al material, eliminando solventes y el desprendimiento." },
+          { "title": "Inmune al Óxido", "desc": "El polímero de alta tecnología no se oxida, lo que lo hace ideal para regiones costeras y húmedas." },
+          { "title": "Resistencia UV", "desc": "Aditivos especiales que protegen el cuadro contra el resecamiento solar y la decoloración." }
+        ]
+      },
+      {
+        "name": "Seguridad y Calidad",
+        "items": [
+          { "title": "Certificación CE", "desc": "Cumplimiento total con los estándares de seguridad europeos para vehículos ligeros." },
+          { "title": "Prueba de Choque Aprobada", "desc": "Estructura probada bajo rigurosos estándares de impacto, superando a los cuadros metálicos." },
+          { "title": "Garantía de por Vida", "desc": "Confianza total en la integridad estructural del cuadro monobloque reciclado." }
+        ]
+      }
+    ]
+  },
+  "logocloud": {
+    "title": "MUZZICYCLES EN LOS MEDIOS",
+    "consultancy": "Consultoría Digital y Estrategia por"
+  },
+  "doctrine": {
+    "title": "Nuestra Doctrina",
+    "recycled": "100% Reciclado",
+    "warranty": "Garantía de por Vida",
+    "emissions": "Cero Emisiones",
+    "manifesto": "Una Muzzicycles no es solo una bicicleta. Es un manifiesto. Diseñada para durar más que tú, nuestra estructura desafía la obsolescencia programada y transforma el descarte en libertad."
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "items": [
+      { "q": "¿Qué es el cuadro Muzzicycles?", "a": "Es el primer cuadro de bicicleta del mundo fabricado por inyección de polímeros reciclados (plástico pós-consumo), sin soldaduras y con garantía de por vida." },
+      { "q": "¿Cuál es la durabilidad del cuadro?", "a": "El cuadro está diseñado para durar mucho tiempo. El material no sufre fatiga como el metal y es inmune a la oxidación." },
+      { "q": "¿Los cuadros tienen certificación?", "a": "Sí, todos nuestros modelos cuentan con la certificación de la Comunidad Europea (CE), lo que garantiza los más altos estándares internacionales de seguridad y calidad." },
+      { "q": "¿Qué tamaños de aro están disponibles?", "a": "Trabajamos con modelos para aros 24, 26 y 29, atendiendo a todos, desde jóvenes hasta adultos en senderos o en la ciudad." },
+      { "q": "¿Cómo funciona la garantía de por vida?", "a": "La garantía cubre cualquier defecto estructural en el cuadro para el primer propietario. Es nuestra promesa de un producto eterno." },
+      { "q": "¿La bicicleta aguanta impactos y senderos?", "a": "Sí. El polímero tiene una flexibilidad natural que absorbe los impactos mejor que el aluminio, lo que la hace excelente para uso urbano y senderos ligeros." },
+      { "q": "¿Cómo hago mi pedido?", "a": "Puede elegir su modelo en nuestro catálogo en línea y finalizar la compra vía WhatsApp o directamente a través del sitio web." },
+      { "q": "¿Realizan entregas en todo Brasil?", "a": "Sí, enviamos nuestras bicicletas y cuadros a todos los estados brasileños con embalajes reforzados." },
+      { "q": "¿Puedo comprar solo el cuadro?", "a": "Sí, vendemos el Cuadro Muzzi por separado para quienes deseen construir su propia configuración de componentes." },
+      { "q": "¿Muzzicycles exporta?", "a": "Sí, ya hemos exportado a varios países y tenemos patentes en más de 140 naciones." }
+    ]
+  },
+  "contact": {
+    "title": "Contáctenos",
+    "subtitle": "¿Tiene alguna pregunta sobre nuestros modelos o desea saber más sobre nuestra tecnología? Nuestro equipo está listo para ayudarle.",
+    "labels": {
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "whatsapp": "WhatsApp",
+      "factory": "Fábrica",
+      "name": "Nombre completo",
+      "subject": "Asunto",
+      "message": "Mensaje"
+    },
+    "factory_address": "São Paulo, SP — Brasil",
+    "subjects": {
+      "models": "Consulta sobre modelos",
+      "support": "Soporte técnico",
+      "partners": "Alianzas",
+      "others": "Otros"
+    },
+    "placeholders": {
+      "name": "Su nombre",
+      "email": "su@email.com",
+      "message": "¿Cómo podemos ayudarle?"
+    },
+    "success": {
+      "title": "¡Mensaje enviado!",
+      "desc": "Gracias por su contacto. Hemos recibido su mensaje y responderemos en breve a su correo electrónico.",
+      "button": "Enviar otro mensaje"
+    },
+    "button": {
+      "sending": "Enviando...",
+      "send": "Enviar mensaje"
+    }
+  },
+  "models_intro": {
+    "badge": "Ingeniería Sostenible",
+    "title": "Simplicidad que cambia el mundo.",
+    "desc": "Cada Muzzicycles se ensambla con componentes de alta precisión sobre una geometría optimizada para la comodidad y el rendimiento urbano.",
+    "structure": {
+      "title": "Estructura",
+      "desc": "Garantía de por vida en el cuadro de polímero."
+    },
+    "performance": {
+      "title": "Performance",
+      "desc": "Transmisión Shimano de alta fidelidad."
+    },
+    "tech_images": [
+      { "title": "Geometría del Cuadro", "desc": "Análisis de angulación y ergonomía" },
+      { "title": "Medidas Técnicas", "desc": "Especificaciones de aro 26" }
+    ],
+    "documentation": {
+      "badge": "Documentación",
+      "title": "Ficha Técnica Estándar",
+      "desc": "Configuración optimizada por la ingeniería de Muzzicycles para el equilibrio perfecto entre ligereza y resistencia estructural."
+    }
+  },
+  "support_page": {
+    "faq": "FAQ",
+    "contact": "Contacto"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de nuevo",
+      "desc": "Inicie sesión en su cuenta para realizar un seguimiento de sus pedidos.",
+      "button": "Iniciar sesión",
+      "loading": "Iniciando sesión...",
+      "toggle": "¿No tiene una cuenta? Regístrese",
+      "errors": {
+        "invalid": "Correo electrónico o contraseña incorrectos.",
+        "generic": "Ocurrió un error. Por favor, inténtelo de nuevo."
+      }
+    },
+    "signup": {
+      "title": "Cree su cuenta",
+      "desc": "Regístrese para gestionar sus favoritos y pedidos.",
+      "button": "Crear cuenta",
+      "loading": "Creando cuenta...",
+      "toggle": "¿Ya tiene una cuenta? Ingrese aquí",
+      "errors": {
+        "exists": "Este correo electrónico ya está registrado. Intente iniciar sesión.",
+        "weak": "La contraseña debe tener al menos 6 caracteres.",
+        "invalid_email": "Dirección de correo electrónico no válida."
+      }
+    },
+    "labels": {
+      "firstname": "Nombre",
+      "lastname": "Apellido",
+      "email": "Dirección de correo electrónico",
+      "password": "Contraseña"
+    },
+    "placeholders": {
+      "firstname": "Juan",
+      "lastname": "Pérez",
+      "email": "juan@ejemplo.com",
+      "password": "••••••••"
+    },
+    "google": {
+      "button": "Continuar con Google",
+      "loading": "Conectando...",
+      "errors": {
+        "failed": "No se pudo iniciar sesión con Google.",
+        "blocked": "El navegador bloqueó la ventana emergente. Por favor, permita las ventanas emergentes para iniciar sesión.",
+        "closed": "Se canceló el inicio de sesión porque se cerró la ventana emergente.",
+        "network": "Error de red. Verifique su conexión a Internet."
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "¡Hola!",
+    "status": {
+      "pending": "Esperando Pago",
+      "processing": "En Proceso",
+      "shipped": "Enviado",
+      "delivered": "Entregado",
+      "cancelled": "Cancelado"
+    },
+    "tabs": {
+      "orders": "Historial de Pedidos",
+      "tracking": "Rastreo de Entrega",
+      "favorites": "Favoritos"
+    },
+    "orders": {
+      "title": "Mis Pedidos",
+      "count_one": "pedido realizado",
+      "count_many": "pedidos realizados",
+      "empty_title": "No se encontraron pedidos",
+      "empty_desc": "Aún no ha realizado ninguna compra. ¡Explore nuestros modelos y encuentre la Muzzicycles perfecta para usted!",
+      "empty_button": "Ver Catálogo",
+      "order_id": "PEDIDO",
+      "date": "Fecha",
+      "total": "Total",
+      "qty": "Cant",
+      "rim": "Aro",
+      "rim_single": "Único"
+    },
+    "tracking": {
+      "title": "Rastreo de Entrega",
+      "subtitle": "Manténgase informado sobre dónde está su Muzzicycles.",
+      "placeholder": "Código de rastreo o ID del pedido",
+      "button": "Rastrear",
+      "error": "Código de rastreo o pedido no encontrado.",
+      "status_label": "Status Actual",
+      "steps": {
+        "shipped": "Pedido Enviado",
+        "transit": "En Tránsito",
+        "location": "Unidad de Tratamiento - São Paulo/SP",
+        "out": "Salió para Entrega",
+        "waiting": "Esperando actualización"
+      },
+      "estimate": {
+        "title": "Entrega Estimada",
+        "days": "Próximos 3 días"
+      }
+    },
+    "favorites": {
+      "title": "Favoritos",
+      "count_one": "artículo guardado",
+      "count_many": "artículos guardados",
+      "empty_title": "Tu lista está vacía",
+      "empty_desc": "Guarda tus modelos favoritos aquí para tener acceso rápido cuando decidas comprarlos.",
+      "empty_button": "Explorar Modelos"
+    }
+  },
+  "purchase_modal": {
+    "title": "Finalizar Pedido",
+    "subtitle": "Siga los pasos a continuación para completar su solicitud con nuestro equipo.",
+    "info": "Primero, descargue el archivo con los detalles de su pedido. Luego, envíelo al vendedor a través de WhatsApp.",
+    "download_button": "Iniciar Descarga",
+    "whatsapp_button": "Instrucciones para el Vendedor",
+    "brand_tag": "Muzzicycles — Tecnologia Sostenible",
+    "international_delivery": "Entregamos solamente en Brasil. Para envíos internacionales, por favor póngase en contacto a través de teléfono fijo o WhatsApp.",
+    "international_contact": "Contacto Internacional: {{phone}} o {{whatsapp}}",
+    "file_header": "PEDIDO MUZZICYCLES",
+    "file_qty": "Cantidad",
+    "file_rim": "Aro",
+    "file_instructions": "Instrucciones: Envíe este archivo al vendedor en WhatsApp para finalizar su pedido.",
+    "whatsapp_message": "¡Hola! Acabo de generar el archivo de mi pedido Muzzicycles y me gustaría completar la compra."
+  },
+  "favorites_drawer": {
+    "title": "Sus Favoritos",
+    "empty": "Su lista de deseos está vacía.",
+    "explore": "Explorar modelos",
+    "add_to_cart": "Añadir al carrito",
+    "continue": "Continuar Navegando"
+  },
+  "product_detail": {
+    "back": "Volver al catálogo",
+    "eco_badge": "Eco-Innovación",
+    "exhibition_item": "Ítem de Exposición",
+    "dynamic_desc_suffix": "Desarrollada con polímeros reciclados de alto rendimiento, la {name} ofrece ligereza estructural y una absorción de impacto superior para el entorno urbano.",
+    "rim_size": "Tamaño del Aro",
+    "buy_now": "Comprar Ahora",
+    "add_to_cart": "Añadir al Carrito",
+    "acervo_notice": "Este modelo forma parte del acervo histórico de Muzzicycles y no está disponible para la venta.",
+    "delivery_guarantee": "Entrega en todo el territorio nacional",
+    "acervo_guarantee": "Preservando la historia de la sostenibilidad",
+    "engineering_badge": "Ingeniería Avanzada",
+    "specs_geometry": "Especificaciones & Geometría",
+    "specs_desc": "Cada componente ha sido seleccionado para garantizar la máxima durabilidad y compatibilidad con el cuadro de polímero reciclado.",
+    "geometry_title": "Geometría del Cuadro",
+    "geometry_desc": "La geometría de Muzzicycles ha sido optimizada para la comodidad urbana, reduciendo la fatiga postural y maximizando la transferencia de torque. Ideal para usuarios de 1.60m a 1.90m.",
+    "standard_config": "Configuración Estándar",
+    "table": {
+      "product": "Producto",
+      "manufacturer": "Fabricante",
+      "qty": "Cant"
+    },
+    "specs_disclaimer": "* Muzzicycles se reserva el derecho de alterar componentes por equivalentes de misma calidad según disponibilidad.",
+    "innovation_badge": "Innovación",
+    "frame_core": "Cuadro Polymer Core",
+    "frame_core_desc": "Nuestro proceso patentado transforma residuos plásticos en una estructura molecular inquebrable con garantía de por vida.",
+    "weight_label": "Peso",
+    "transmission_title": "Transmisión",
+    "transmission_default": "Shimano TZ30 con 7 velocidades precisas para cualquier elevación.",
+    "brakes_title": "Frenado",
+    "brakes_default": "Sistema V-Brake en aluminio de alta fricción para una seguridad total.",
+    "lifetime_warranty": "Garantía de por Vida",
+    "lifetime_warranty_desc": "En el cuadro de polímero reciclado.",
+    "interactive_3d": "Interactivo 3D"
+  },
+  "app": {
+    "loading": "Cargando Muzzicycles...",
+    "payment_success": "¡Pago aprobado! Gracias por elegir Muzzicycles.",
+    "payment_error": "Hubo un error en el pago. Por favor, inténtelo de nuevo.",
+    "order_saved": "¡Pedido guardado con éxito!"
+  },
+  "products_data": {
+    "1": {
+      "name": "NILO",
+      "description": "Urbana Simple — Monomarcha, frenos V-brake, aros 24, 26, 29 y 32",
+      "tag": "Pionera",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "Monomarcha",
+        "brakes": "V-Brake Aluminio"
+      }
+    },
+    "2": {
+      "name": "AMAZONAS",
+      "description": "Urbana Versátil — Cambio Shimano TZ30 Revoshift, 7 marchas, frenos V-brake, aros 24, 26, 29 y 32",
+      "tag": "Versátil",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "Shimano TZ30 7 Velocidades",
+        "brakes": "V-Brake Aluminio"
+      }
+    },
+    "3": {
+      "name": "MOUNTAIN BIKE",
+      "description": "Aventura Urbana — Cambio Shimano 7 marchas, frenos de disco, aros 24, 26, 29 y 32",
+      "tag": "Aventura",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "Shimano 7 Velocidades",
+        "brakes": "Disco Mecánico"
+      }
+    },
+    "4": {
+      "name": "MISSISSIPPI 3V",
+      "description": "Confort & Ciudad — Cambio Nexus 3v, frenos V-brake, aros 24, 26, 29 y 32",
+      "tag": "Confort",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "Shimano Nexus 3v",
+        "brakes": "V-Brake Aluminio"
+      }
+    },
+    "8": {
+      "name": "MISSISSIPPI 5V",
+      "description": "Confort & Ciudad — Cambio Nexus 5v, frenos V-brake, aros 24, 26, 29 y 32",
+      "tag": "Confort",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "Shimano Nexus 5v",
+        "brakes": "V-Brake Aluminio"
+      }
+    },
+    "9": {
+      "name": "MISSISSIPPI 8V",
+      "description": "Confort & Ciudad — Cambio Nexus 8v, frenos V-brake, aros 24, 26, 29 y 32",
+      "tag": "Confort",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "Shimano Nexus 8v",
+        "brakes": "V-Brake Aluminio"
+      }
+    },
+    "5": {
+      "name": "TURRI",
+      "description": "Rendimiento — Agilidad y ligereza para el asfalto, aros 24, 26, 29 y 32",
+      "tag": "Rendimiento",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "Shimano 9 Velocidades",
+        "brakes": "Disco Hidráulico"
+      }
+    },
+    "10": {
+      "name": "CUADRO MOUNTAIN BIKE",
+      "description": "Cuadro suelto Mountain Bike — 100% plástico reciclado, sin soldaduras",
+      "tag": "Base MTB",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "N/A",
+        "brakes": "Soporte V-Brake/Disco"
+      }
+    },
+    "7": {
+      "name": "CUADRO MUZZI",
+      "description": "Cuadro suelto — 100% plástico reciclado, sin soldaduras",
+      "tag": "Base",
+      "specs": {
+        "frame": "Polímero Reciclado Monoblock",
+        "transmission": "N/A",
+        "brakes": "Soporte V-Brake/Disco"
+      }
+    },
+    "h1": {
+      "name": "MUZZI 1998",
+      "description": "El primer prototipo funcional — El comienzo de la revolución del polímero reciclado.",
+      "tag": "Histórico",
+      "specs": {
+        "frame": "Polímero Experimental",
+        "transmission": "Monomarcha",
+        "brakes": "V-Brake"
+      }
+    },
+    "h2": {
+      "name": "MODELO EXPO 2005",
+      "description": "Edición especial de exposición — Ganadora de premios internacionales de diseño sostenible.",
+      "tag": "Premiada",
+      "specs": {
+        "frame": "Polímero Reforzado",
+        "transmission": "Shimano 3v",
+        "brakes": "V-Brake"
+      }
+    }
+  },
+  "footer": {
+    "brand_desc": "La primera bicicleta del mundo con un cuadro hecho de plástico reciclado. Innovación brasileña para un futuro sostenible.",
+    "newsletter": {
+      "badge": "Garantía de por vida en el cuadro",
+      "title": "Sé parte del cambio",
+      "item1": "Novedades sobre nuevos modelos.",
+      "item2": "Contenido exclusivo sobre sostenibilidad.",
+      "item3": "Eventos e encuentros comunitarios.",
+      "placeholder": "tu@email.com",
+      "send": "Enviar"
+    },
+    "history_menu": {
+      "innovation": "Innovación",
+      "stories": "Historias",
+      "sustainability": "Sostenibilidad",
+      "collection": "Colección",
+      "media": "En los medios"
+    },
+    "rights": "Todos los derechos reservados.",
+    "digital_consultancy": "Consultoría Digital por Magoi",
+    "dev_strategy": "Desenvolvimiento y Estrategia Muzzicycles"
+  }
+}

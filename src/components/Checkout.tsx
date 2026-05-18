@@ -1,8 +1,10 @@
 import { motion } from 'motion/react';
-import { ShoppingCart, Shield, Recycle, Truck, ChevronRight, ArrowLeft, Check, Loader2 } from 'lucide-react';
+import { ShoppingCart, Shield, Recycle, Truck, ChevronRight, ArrowLeft, Check, Loader2, Phone } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { CartItem } from '../types';
 import React, { useState, useEffect } from 'react';
 import MercadoPagoButton from './MercadoPagoButton';
+import { PHYSICAL_PHONE, WHATSAPP_NUMBER } from '../constants';
 
 interface CheckoutProps {
   items: CartItem[];
@@ -11,6 +13,7 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
+  const { t, i18n } = useTranslation();
   const [step, setStep] = useState(1);
   const [shippingMethod, setShippingMethod] = useState('standard');
   const [shippingOptions, setShippingOptions] = useState<any[]>([]);
@@ -125,17 +128,17 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
         <div className="flex items-center justify-center gap-4 mb-16">
           <div className="flex items-center gap-2">
             <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold font-geist ${step >= 1 ? 'bg-brand-blue text-white' : 'bg-gray-100 text-black/30'}`}>1</div>
-            <span className={`text-sm font-medium font-geist ${step >= 1 ? 'text-brand-blue' : 'text-black/30'}`}>Envio</span>
+            <span className={`text-sm font-medium font-geist ${step >= 1 ? 'text-brand-blue' : 'text-black/30'}`}>{t('checkout.steps.shipping')}</span>
           </div>
           <div className="h-px w-12 bg-gray-100"></div>
           <div className="flex items-center gap-2">
             <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold font-geist ${step >= 2 ? 'bg-brand-blue text-white' : 'bg-gray-100 text-black/30'}`}>2</div>
-            <span className={`text-sm font-medium font-geist ${step >= 2 ? 'text-brand-blue' : 'text-black/30'}`}>Pagamento</span>
+            <span className={`text-sm font-medium font-geist ${step >= 2 ? 'text-brand-blue' : 'text-black/30'}`}>{t('checkout.steps.payment')}</span>
           </div>
           <div className="h-px w-12 bg-gray-100"></div>
           <div className="flex items-center gap-2">
             <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold font-geist ${step >= 3 ? 'bg-brand-blue text-white' : 'bg-gray-100 text-black/30'}`}>3</div>
-            <span className={`text-sm font-medium font-geist ${step >= 3 ? 'text-brand-blue' : 'text-black/30'}`}>Revisão</span>
+            <span className={`text-sm font-medium font-geist ${step >= 3 ? 'text-brand-blue' : 'text-black/30'}`}>{t('checkout.steps.review')}</span>
           </div>
         </div>
 
@@ -144,7 +147,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
           <div className="lg:col-span-7">
             <div className="mb-12">
               <h2 className="text-3xl font-medium tracking-tighter font-geist mb-8">
-                {step === 1 ? 'Informações de Envio' : 'Finalizar Pagamento'}
+                {step === 1 ? t('checkout.titles.shipping') : t('checkout.titles.payment')}
               </h2>
               
               {step === 1 ? (
@@ -152,18 +155,18 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                   <form className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Nome Completo</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.name')}</label>
                     <input 
                       type="text" 
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      placeholder="Seu nome" 
+                      placeholder={t('checkout.form.name_placeholder')}
                       className="w-full px-4 py-4 rounded-xl border border-black/5 bg-gray-50 focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue outline-none transition-all font-geist" 
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">CPF / CNPJ</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.cpf')}</label>
                     <input 
                       type="text" 
                       name="cpf"
@@ -177,7 +180,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Email</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.email')}</label>
                     <input 
                       type="email" 
                       name="email"
@@ -188,7 +191,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Telefone</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.phone')}</label>
                     <input 
                       type="tel" 
                       name="phone"
@@ -202,7 +205,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">CEP</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.cep')}</label>
                     <input 
                       type="text" 
                       name="cep"
@@ -213,13 +216,13 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Endereço</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.address')}</label>
                     <input 
                       type="text" 
                       name="address"
                       value={formData.address}
                       onChange={handleInputChange}
-                      placeholder="Rua, Avenida..." 
+                      placeholder={t('checkout.form.address_placeholder')}
                       className="w-full px-4 py-4 rounded-xl border border-black/5 bg-gray-50 focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue outline-none transition-all font-geist" 
                     />
                   </div>
@@ -227,7 +230,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Número</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.number')}</label>
                     <input 
                       type="text" 
                       name="number"
@@ -238,13 +241,13 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Bairro</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.neighborhood')}</label>
                     <input 
                       type="text" 
                       name="neighborhood"
                       value={formData.neighborhood}
                       onChange={handleInputChange}
-                      placeholder="Nome do bairro" 
+                      placeholder={t('checkout.form.neighborhood')}
                       className="w-full px-4 py-4 rounded-xl border border-black/5 bg-gray-50 focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue outline-none transition-all font-geist" 
                     />
                   </div>
@@ -252,25 +255,25 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Cidade</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.city')}</label>
                     <input 
                       type="text" 
                       name="city"
                       value={formData.city}
                       onChange={handleInputChange}
-                      placeholder="Cidade" 
+                      placeholder={t('checkout.form.city')}
                       className="w-full px-4 py-4 rounded-xl border border-black/5 bg-gray-50 focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue outline-none transition-all font-geist" 
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">Estado</label>
+                    <label className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist ml-1">{t('checkout.form.state')}</label>
                     <select 
                       name="state"
                       value={formData.state}
                       onChange={handleInputChange}
                       className="w-full px-4 py-4 rounded-xl border border-black/5 bg-gray-50 focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue outline-none transition-all font-geist appearance-none"
                     >
-                      <option value="">Selecione</option>
+                      <option value="">{t('checkout.form.select')}</option>
                       <option value="SP">São Paulo</option>
                       <option value="RJ">Rio de Janeiro</option>
                       <option value="MG">Minas Gerais</option>
@@ -280,12 +283,12 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
               </form>
 
               <div>
-                <h3 className="text-xl font-medium font-geist mb-6">Método de Entrega</h3>
+                <h3 className="text-xl font-medium font-geist mb-6">{t('checkout.titles.delivery_method')}</h3>
                 <div className="space-y-4">
                   {isCalculatingShipping ? (
                     <div className="p-12 flex flex-col items-center justify-center gap-4 bg-gray-50 rounded-2xl border border-dashed border-black/10">
                       <Loader2 className="w-8 h-8 text-brand-blue animate-spin" />
-                      <p className="text-sm text-black/40 font-geist">Calculando frete com Jadlog...</p>
+                      <p className="text-sm text-black/40 font-geist">{t('checkout.shipping.calculating')}</p>
                     </div>
                   ) : shippingOptions.length > 0 ? (
                     shippingOptions.map((option) => (
@@ -302,22 +305,22 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                           <div className="text-left">
                             <span className="block font-medium font-geist">{option.type === 'express' ? 'Jadlog .Package' : 'Jadlog .Com'}</span>
                             <span className="text-xs text-black/40 font-geist">
-                            Estimativa: {typeof option.prazo === 'number' ? `${option.prazo} ${option.prazo === 1 ? 'dia útil' : 'dias úteis'}` : option.prazo}
+                            {t('checkout.shipping.estimate')}: {typeof option.prazo === 'number' ? `${option.prazo} ${option.prazo === 1 ? t('checkout.shipping.business_day') : t('checkout.shipping.business_days')}` : option.prazo}
                             </span>
                           </div>
                         </div>
                         <span className="font-bold text-black font-geist">
-                          {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(option.vlrFrete))}
+                          {new Intl.NumberFormat(i18n.language, { style: 'currency', currency: i18n.language.startsWith('pt') ? 'BRL' : i18n.language.startsWith('es') ? 'EUR' : 'USD' }).format(Number(option.vlrFrete))}
                         </span>
                       </button>
                     ))
                   ) : formData.cep.replace(/\D/g, '').length === 8 ? (
                     <div className="p-8 text-center bg-red-50 rounded-2xl border border-red-100">
-                      <p className="text-sm text-red-600 font-geist">Houve um erro ao calcular o frete com a Jadlog.</p>
+                      <p className="text-sm text-red-600 font-geist">{t('checkout.shipping.error')}</p>
                     </div>
                   ) : (
                     <div className="p-8 text-center bg-gray-50 rounded-2xl border border-black/5">
-                      <p className="text-sm text-black/40 font-geist">Informe seu CEP para ver as opções de entrega.</p>
+                      <p className="text-sm text-black/40 font-geist">{t('checkout.shipping.prompt')}</p>
                     </div>
                   )}
                 </div>
@@ -329,19 +332,19 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-bold font-geist flex items-center gap-2">
                     <Check className="w-5 h-5 text-brand-blue" />
-                    Informações de Entrega
+                    {t('checkout.titles.delivery_info')}
                   </h3>
                   <button 
                     onClick={() => setStep(1)}
                     className="text-xs font-bold text-brand-blue uppercase tracking-widest hover:underline"
                   >
-                    Editar
+                    {t('checkout.edit')}
                   </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm font-geist">
                   <div className="space-y-4">
                     <div>
-                      <span className="block text-[10px] uppercase tracking-widest text-black/40 font-bold mb-1">Destinatário</span>
+                      <span className="block text-[10px] uppercase tracking-widest text-black/40 font-bold mb-1">{t('checkout.destinatario')}</span>
                       <p className="text-black font-medium">{formData.name}</p>
                       <p className="text-black/60">{formData.email}</p>
                       <p className="text-black/60">{formData.phone}</p>
@@ -349,7 +352,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <span className="block text-[10px] uppercase tracking-widest text-black/40 font-bold mb-1">Endereço</span>
+                      <span className="block text-[10px] uppercase tracking-widest text-black/40 font-bold mb-1">{t('checkout.form.address')}</span>
                       <p className="text-black font-medium">{formData.address}, {formData.number}</p>
                       <p className="text-black/60">{formData.neighborhood}</p>
                       <p className="text-black/60">{formData.city} - {formData.state}</p>
@@ -364,9 +367,9 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                   <Shield className="w-8 h-8 text-brand-blue" />
                 </div>
                 <div>
-                  <h4 className="text-xl font-medium font-geist mb-2">Processamento Seguro</h4>
+                  <h4 className="text-xl font-medium font-geist mb-2">{t('checkout.titles.secure_processing')}</h4>
                   <p className="text-sm text-black/40 font-geist max-w-sm">
-                    Estamos preparando seu ambiente de pagamento seguro. Você será redirecionado para concluir a transação.
+                    {t('checkout.secure.desc')}
                   </p>
                 </div>
               </div>
@@ -378,7 +381,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
       {/* Summary Section */}
       <div className="lg:col-span-5">
             <div className="sticky top-28 p-8 rounded-3xl bg-gray-50 border border-black/5">
-              <h3 className="text-xl font-medium font-geist mb-8">Resumo do Pedido</h3>
+              <h3 className="text-xl font-medium font-geist mb-8">{t('checkout.titles.summary')}</h3>
               
               <div className="space-y-6 mb-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {items.map((item, idx) => (
@@ -390,10 +393,10 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium font-geist mb-1 truncate">Muzzicycle {item.name}</h4>
                       {item.selectedAro && (
-                        <p className="text-[10px] text-black/40 font-geist uppercase tracking-widest mb-1">Aro: {item.selectedAro}</p>
+                        <p className="text-[10px] text-black/40 font-geist uppercase tracking-widest mb-1">{t('cart.wheel_size')}: {item.selectedAro}</p>
                       )}
                       <p className="text-sm font-bold text-brand-blue font-geist">
-                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price)}
+                        {new Intl.NumberFormat(i18n.language, { style: 'currency', currency: i18n.language.startsWith('pt') ? 'BRL' : i18n.language.startsWith('es') ? 'EUR' : 'USD' }).format(item.price)}
                       </p>
                     </div>
                   </div>
@@ -402,16 +405,16 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
 
               <div className="space-y-3 mb-8">
                 <div className="flex justify-between text-sm text-black/60 font-geist">
-                  <span>Subtotal</span>
-                  <span>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(getSubtotal())}</span>
+                  <span>{t('checkout.summary.subtotal')}</span>
+                  <span>{new Intl.NumberFormat(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'BRL' }).format(getSubtotal())}</span>
                 </div>
                 <div className="flex justify-between text-sm text-black/60 font-geist">
-                  <span>Frete</span>
-                  <span>{shippingMethod && shippingOptions.length > 0 ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(getShippingPrice()) : 'Calculando...'}</span>
+                  <span>{t('checkout.summary.shipping')}</span>
+                  <span>{shippingMethod && shippingOptions.length > 0 ? new Intl.NumberFormat(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'BRL' }).format(getShippingPrice()) : t('checkout.shipping.calculating_cost')}</span>
                 </div>
                 <div className="pt-4 border-t border-black/10 flex justify-between text-lg font-bold text-black font-geist">
-                  <span>Total</span>
-                  <span>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(getTotal())}</span>
+                  <span>{t('checkout.summary.total')}</span>
+                  <span>{new Intl.NumberFormat(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'BRL' }).format(getTotal())}</span>
                 </div>
               </div>
 
@@ -421,12 +424,12 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                     type="button"
                     onClick={() => {
                       if (isFormValid) setStep(2);
-                      else alert('Por favor, preencha todos os campos obrigatórios corretamente.');
+                      else alert(t('checkout.form.errors.required'));
                     }}
                     disabled={isCalculatingShipping || shippingOptions.length === 0}
                     className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20 mb-8 disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-3"
                   >
-                    Ir para Pagamento
+                    {t('checkout.summary.to_payment')}
                     <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 ) : (
@@ -449,7 +452,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                       onClick={() => setStep(1)}
                       className="w-full h-12 rounded-2xl border border-black/10 text-black/60 font-medium font-geist hover:bg-black/5 transition"
                     >
-                      Voltar para Envio
+                      {t('checkout.summary.back_to_shipping')}
                     </button>
                   </div>
                 )}
@@ -458,19 +461,35 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-2 text-[10px] text-black/40 font-geist">
                   <Check className="w-3 h-3 text-brand-blue" />
-                  Pagamento Seguro
+                  {t('checkout.secure.payment')}
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-black/40 font-geist">
                   <Recycle className="w-3 h-3 text-brand-blue" />
-                  100% Sustentável
+                  {t('checkout.secure.sustainable')}
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-black/40 font-geist">
                   <Truck className="w-3 h-3 text-brand-blue" />
-                  Rastreio em Tempo Real
+                  {t('checkout.secure.tracking')}
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-black/40 font-geist">
                   <Shield className="w-3 h-3 text-brand-blue" />
-                  Garantia de 10 Anos
+                  {t('checkout.secure.warranty')}
+                </div>
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-black/10">
+                <div className="flex gap-3">
+                  <div className="h-10 w-10 rounded-full bg-brand-blue/5 flex items-center justify-center shrink-0">
+                    <Phone className="w-4 h-4 text-brand-blue" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] text-black/60 font-geist leading-tight mb-1">
+                      {t('purchase_modal.international_delivery')}
+                    </p>
+                    <p className="text-xs font-bold text-brand-blue font-geist">
+                      {t('purchase_modal.international_contact', { phone: PHYSICAL_PHONE, whatsapp: `+${WHATSAPP_NUMBER}` })}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

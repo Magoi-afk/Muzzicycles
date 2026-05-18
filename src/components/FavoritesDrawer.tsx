@@ -1,4 +1,5 @@
 import { X, Heart, ShoppingCart, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
 
@@ -19,6 +20,8 @@ export default function FavoritesDrawer({
   onAddToCart,
   onProductClick
 }: FavoritesDrawerProps) {
+  const { t } = useTranslation();
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -43,7 +46,7 @@ export default function FavoritesDrawer({
             <header className="p-6 border-b border-black/5 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Heart className="w-5 h-5 text-brand-blue fill-brand-blue" />
-                <h2 className="text-xl font-medium font-geist">Seus Favoritos</h2>
+                <h2 className="text-xl font-medium font-geist">{t('favorites_drawer.title')}</h2>
               </div>
               <button 
                 onClick={onClose}
@@ -59,12 +62,12 @@ export default function FavoritesDrawer({
                   <div className="w-16 h-16 rounded-full bg-black/5 flex items-center justify-center mb-4">
                     <Heart className="w-8 h-8 text-black/20" />
                   </div>
-                  <p className="text-black/40 font-geist">Sua lista de desejos está vazia.</p>
+                  <p className="text-black/40 font-geist">{t('favorites_drawer.empty')}</p>
                   <button 
                     onClick={onClose}
                     className="mt-4 text-brand-blue font-medium hover:underline font-geist"
                   >
-                    Explorar modelos
+                    {t('favorites_drawer.explore')}
                   </button>
                 </div>
               ) : (
@@ -94,7 +97,7 @@ export default function FavoritesDrawer({
                               onClose();
                             }}
                           >
-                            {item.name}
+                            {t(`products_data.${item.id}.name`, { defaultValue: item.name })}
                           </h3>
                           <button 
                             onClick={() => onRemove(item.id)}
@@ -110,7 +113,7 @@ export default function FavoritesDrawer({
                             className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-blue hover:text-brand-blue-dark transition font-geist"
                           >
                             <ShoppingCart className="w-3 h-3" />
-                            Adicionar ao carrinho
+                            {t('favorites_drawer.add_to_cart')}
                           </button>
                         )}
                       </div>
@@ -125,7 +128,7 @@ export default function FavoritesDrawer({
                 onClick={onClose}
                 className="w-full h-12 rounded-xl border border-black/5 bg-white text-black text-sm font-medium hover:bg-black/5 transition font-geist"
               >
-                Continuar Navegando
+                {t('favorites_drawer.continue')}
               </button>
             </footer>
           </motion.div>

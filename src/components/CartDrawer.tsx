@@ -1,4 +1,5 @@
 import { ShoppingBag, X, PackageOpen, Package, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { CartItem } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -12,6 +13,7 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, onRemove, onCheckout }: CartDrawerProps) {
+  const { t, i18n } = useTranslation();
   return (
     <AnimatePresence>
       {isOpen && (
@@ -36,7 +38,7 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
             <header className="flex items-center justify-between px-5 h-14 border-b border-black/5">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4" />
-                <h3 className="text-sm font-medium tracking-tight font-geist">Seu carrinho</h3>
+                <h3 className="text-sm font-medium tracking-tight font-geist">{t('cart.title')}</h3>
               </div>
               <button 
                 onClick={onClose}
@@ -53,8 +55,8 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                   <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-black/5 text-black/60">
                     <PackageOpen className="w-5 h-5" />
                   </div>
-                  <p className="text-sm font-geist">Seu carrinho está vazio.</p>
-                  <p className="text-xs text-black/50 mt-1 font-geist">Adicione uma bike para começar.</p>
+                  <p className="text-sm font-geist">{t('cart.empty')}</p>
+                  <p className="text-xs text-black/50 mt-1 font-geist">{t('cart.add_bike_prompt')}</p>
                 </div>
               ) : (
                 <ul className="divide-y divide-black/5">
@@ -64,9 +66,9 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-black">{item.name}</p>
+                        <p className="text-sm font-medium text-black">{t(`products_data.${item.id}.name`, { defaultValue: item.name })}</p>
                         {item.selectedAro && (
-                          <p className="text-xs text-black/60">Aro: {item.selectedAro}</p>
+                          <p className="text-xs text-black/60">{t('cart.wheel_size')}: {item.selectedAro}</p>
                         )}
                         <div className="mt-2 inline-flex items-center gap-2">
                           <button 
@@ -89,12 +91,15 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                             className="ml-2 inline-flex items-center gap-1 h-8 px-2 rounded-lg border border-black/5 hover:bg-black/5 text-xs text-black/70"
                           >
                             <Trash2 className="w-3 h-3" />
-                            Remover
+                            {t('cart.remove')}
                           </button>
                         </div>
                       </div>
                       <div className="text-sm font-medium">
-                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price * item.quantity)}
+                        {new Intl.NumberFormat(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', { 
+                          style: 'currency', 
+                          currency: 'BRL' 
+                        }).format(item.price * item.quantity)}
                       </div>
                     </li>
                   ))}
@@ -108,14 +113,14 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                   onClick={onClose}
                   className="flex-1 h-10 rounded-xl border border-black/5 bg-white text-sm text-black/70 hover:bg-black/5 transition font-geist"
                 >
-                  Continuar comprando
+                  {t('cart.continue')}
                 </button>
                 <button 
                   onClick={onCheckout}
                   disabled={items.length === 0}
                   className="flex-1 h-10 rounded-xl bg-brand-blue text-white text-sm hover:bg-brand-blue-dark transition font-geist disabled:opacity-50"
                 >
-                  Finalizar Compra
+                  {t('cart.checkout')}
                 </button>
               </div>
             </footer>

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { cn } from "../lib/utils";
@@ -32,6 +33,7 @@ interface LoginFormProps {
 type AuthMode = "login" | "signup";
 
 export function LoginForm({ isOpen, onClose }: LoginFormProps) {
+  const { t } = useTranslation();
   const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,17 +86,17 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
       onClose();
     } catch (err: any) {
       console.error("Erro na autenticação:", err);
-      let message = "Ocorreu um erro. Tente novamente.";
+      let message = t('auth.login.errors.generic');
       if (err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
-        message = "E-mail ou senha inválidos.";
+        message = t('auth.login.errors.invalid');
       } else if (err.code === "auth/email-already-in-use") {
-        message = "Este e-mail já está cadastrado. Tente fazer login.";
+        message = t('auth.signup.errors.exists');
       } else if (err.code === "auth/operation-not-allowed") {
         message = "O login por e-mail ainda não foi habilitado no Console do Firebase. Por favor, habilite o provedor 'Email/Password'.";
       } else if (err.code === "auth/weak-password") {
-        message = "A senha deve ter pelo menos 6 caracteres.";
+        message = t('auth.signup.errors.weak');
       } else if (err.code === "auth/invalid-email") {
-        message = "Endereço de e-mail inválido.";
+        message = t('auth.signup.errors.invalid_email');
       }
       setError(message);
     } finally {
@@ -130,18 +132,18 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
       onClose();
     } catch (err: any) {
       console.error("Erro ao fazer login com Google:", err);
-      let message = "Falha ao entrar com o Google.";
+      let message = t('auth.google.errors.failed');
       
       if (err.code === "auth/operation-not-allowed") {
         message = "O login com Google não está ativado no Console do Firebase. Ative-o em 'Authentication > Sign-in method'.";
       } else if (err.code === "auth/unauthorized-domain") {
         message = `Domínio não autorizado. Adicione '${window.location.hostname}' aos domínios autorizados no Console do Firebase (Autenticação > Configurações).`;
       } else if (err.code === "auth/popup-blocked") {
-        message = "O pop-up foi bloqueado pelo seu navegador. Por favor, permita pop-ups para fazer login.";
+        message = t('auth.google.errors.blocked');
       } else if (err.code === "auth/popup-closed-by-user") {
-        message = "O login foi cancelado porque o pop-up foi fechado.";
+        message = t('auth.google.errors.closed');
       } else if (err.code === "auth/network-request-failed") {
-        message = "Erro de rede. Verifique sua conexão com a internet.";
+        message = t('auth.google.errors.network');
       } else if (err.code === "auth/internal-error") {
         message = "Erro interno do Firebase. Tente novamente mais tarde.";
       } else {
@@ -183,12 +185,12 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
             </button>
 
             <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-              {authMode === "login" ? "Bem-vindo de volta" : "Crie sua conta"}
+              {authMode === "login" ? t('auth.login.title') : t('auth.signup.title')}
             </h2>
             <p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
               {authMode === "login" 
-                ? "Entre na sua conta para acompanhar seus pedidos." 
-                : "Cadastre-se para gerenciar seus favoritos e pedidos."}
+                ? t('auth.login.desc') 
+                : t('auth.signup.desc')}
             </p>
 
             {error && (
@@ -201,10 +203,10 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
               {authMode === "signup" && (
                 <div className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
                   <LabelInputContainer>
-                    <Label htmlFor="firstname">Nome</Label>
+                    <Label htmlFor="firstname">{t('auth.labels.firstname')}</Label>
                     <Input 
                       id="firstname" 
-                      placeholder="João" 
+                      placeholder={t('auth.placeholders.firstname')} 
                       type="text" 
                       className="bg-gray-50 border-black/5" 
                       disabled={isLoading}
@@ -213,10 +215,10 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
                     />
                   </LabelInputContainer>
                   <LabelInputContainer>
-                    <Label htmlFor="lastname">Sobrenome</Label>
+                    <Label htmlFor="lastname">{t('auth.labels.lastname')}</Label>
                     <Input 
                       id="lastname" 
-                      placeholder="Silva" 
+                      placeholder={t('auth.placeholders.lastname')} 
                       type="text" 
                       className="bg-gray-50 border-black/5" 
                       disabled={isLoading}
@@ -227,10 +229,10 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
                 </div>
               )}
               <LabelInputContainer className="mb-4">
-                <Label htmlFor="email">Endereço de Email</Label>
+                <Label htmlFor="email">{t('auth.labels.email')}</Label>
                 <Input 
                   id="email" 
-                  placeholder="joao@exemplo.com" 
+                  placeholder={t('auth.placeholders.email')} 
                   type="email" 
                   required
                   className="bg-gray-50 border-black/5" 
@@ -240,10 +242,10 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
                 />
               </LabelInputContainer>
               <LabelInputContainer className="mb-4">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password">{t('auth.labels.password')}</Label>
                 <Input 
                   id="password" 
-                  placeholder="••••••••" 
+                  placeholder={t('auth.placeholders.password')} 
                   type="password" 
                   required
                   className="bg-gray-50 border-black/5" 
@@ -261,10 +263,10 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    {authMode === "login" ? "Entrando..." : "Criando conta..."}
+                    {authMode === "login" ? t('auth.login.loading') : t('auth.signup.loading')}
                   </div>
                 ) : (
-                  <>{authMode === "login" ? "Entrar" : "Criar conta"} &rarr;</>
+                  <>{authMode === "login" ? t('auth.login.button') : t('auth.signup.button')} &rarr;</>
                 )}
                 <BottomGradient />
               </button>
@@ -277,8 +279,8 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
                   disabled={isLoading}
                 >
                   {authMode === "login" 
-                    ? "Não tem uma conta? Cadastre-se" 
-                    : "Já tem uma conta? Entre aqui"}
+                    ? t('auth.login.toggle') 
+                    : t('auth.signup.toggle')}
                 </button>
               </div>
 
@@ -297,7 +299,7 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
                     <IconBrandGoogle className="h-4 w-4 group-hover:text-white" />
                   )}
                   <span className="text-sm group-hover:text-white">
-                    {isLoading ? "Conectando..." : "Continuar com o Google"}
+                    {isLoading ? t('auth.google.loading') : t('auth.google.button')}
                   </span>
                   <BottomGradient />
                 </button>

@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -34,6 +35,7 @@ import { Product, CartItem } from './types';
 type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'bikes' | 'about' | 'support' | 'dashboard';
 
 export default function App() {
+  const { t } = useTranslation();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [favorites, setFavorites] = useState<Product[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -145,7 +147,7 @@ export default function App() {
               trackingNumber: `BR${Math.floor(100000000 + Math.random() * 900000000)}JB`,
               createdAt: serverTimestamp()
             });
-            console.log("Pedido salvo com sucesso!");
+            console.log(t('app.order_saved'));
           } catch (error) {
             console.error("Erro ao salvar pedido:", error);
             handleFirestoreError(error, OperationType.WRITE, 'orders');
@@ -154,13 +156,13 @@ export default function App() {
       };
       
       saveOrder().then(() => {
-        alert('Pagamento aprovado! Obrigado por escolher a Muzzicycles.');
+        alert(t('app.payment_success'));
         setCartItems([]);
         window.history.replaceState({}, '', '/');
       });
       return; // Prevent duplication
     } else if (status === 'failure') {
-      alert('Ocorreu um erro no pagamento. Por favor, tente novamente.');
+      alert(t('app.payment_error'));
       window.history.replaceState({}, '', '/');
     }
 
@@ -206,7 +208,7 @@ export default function App() {
       window.removeEventListener('changeView', handleChangeView);
       unsubscribe();
     };
-  }, []);
+  }, [t, user, cartItems]);
 
   const handleLogout = async () => {
     try {
@@ -224,11 +226,12 @@ export default function App() {
             <div className="h-16 w-16 rounded-full border-4 border-brand-blue/20 animate-pulse"></div>
             <Loader2 className="absolute inset-0 h-16 w-16 text-brand-blue animate-spin" />
           </div>
-          <p className="text-sm font-medium text-black/60 font-geist animate-pulse">Carregando Muzzicycles...</p>
+          <p className="text-sm font-medium text-black/60 font-geist animate-pulse">{t('app.loading')}</p>
         </div>
       </div>
     );
   }
+
 
   return (
     <div className="min-h-screen relative">
