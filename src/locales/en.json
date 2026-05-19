@@ -599,7 +599,9 @@
       "item2": "Exclusive sustainability content.",
       "item3": "Community events and meetups.",
       "placeholder": "your@email.com",
-      "send": "Send"
+      "send": "Send",
+      "success": "Successfully subscribed! We will notify you about newsletter updates via email from now on.",
+      "error": "Subscription failed. Please try again."
     },
     "history_menu": {
       "innovation": "Innovation",

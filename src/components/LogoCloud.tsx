@@ -21,29 +21,34 @@ export default function LogoCloud() {
   const { t } = useTranslation();
 
   const renderItems = (items: typeof mediaItems, suffix = "") => (
-    <div className="flex items-center gap-16 lg:gap-32 pr-16 lg:pr-32">
+    <div className="flex items-center gap-20 lg:gap-32 pr-20 lg:pr-32">
       {items.map((item, index) => (
         <a
           key={`${index}${suffix}`}
           href={item.pdf}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-shrink-0 transition-all duration-300 hover:scale-110 hover:opacity-100 opacity-70 grayscale hover:grayscale-0 flex items-center justify-center min-w-[200px]"
+          className="flex-shrink-0 transition-all duration-300 hover:scale-110 hover:opacity-100 opacity-60 grayscale hover:grayscale-0 flex items-center justify-center py-4 px-8 group min-w-[200px]"
           title={item.name}
         >
-          <div className="flex flex-col items-center justify-center gap-2">
-            <img
-              src={item.img}
-              alt={item.name}
-              loading="lazy"
-              className="h-[60px] lg:h-[80px] w-auto object-contain mx-auto"
-              onError={(e) => {
-                // If image fails, we still want to see the name clearly
-                (e.currentTarget as HTMLImageElement).style.display = 'none';
-              }}
-            />
-            {/* Fallback label if image is missing is helpful, but here we want to avoid double labels if possible */}
-            <span className="text-[10px] font-bold text-black/20 uppercase tracking-widest text-center mt-2 group-hover:text-brand-blue transition-colors">
+          <div className="flex flex-col items-center justify-center gap-3">
+            <div className="h-10 lg:h-12 w-auto flex items-center justify-center">
+              <img
+                src={item.img}
+                alt={item.name}
+                loading="lazy"
+                className="h-full w-full object-contain"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
+                  (e.currentTarget.parentElement?.querySelector('.fallback-icon') as HTMLElement)?.classList.remove('hidden');
+                }}
+              />
+              {/* If image fails, show a clean initial icon */}
+              <div className="fallback-icon hidden h-10 w-10 flex items-center justify-center rounded-lg bg-black/5 text-black/20 font-bold text-lg">
+                {item.name.charAt(0)}
+              </div>
+            </div>
+            <span className="text-[11px] font-black text-black/40 uppercase tracking-[0.15em] text-center group-hover:text-brand-blue transition-colors whitespace-nowrap">
               {item.name}
             </span>
           </div>

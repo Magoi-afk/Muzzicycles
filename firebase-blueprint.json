@@ -28,6 +28,17 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["userId", "items", "total", "status"]
+    },
+    "newsletter": {
+      "title": "Newsletter Subscription",
+      "description": "Email subscriptions for the newsletter.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "unsubscribed"] }
+      },
+      "required": ["email", "createdAt"]
     }
   },
   "firestore": {
@@ -38,6 +49,10 @@
     "/orders/{orderId}": {
       "schema": "orders",
       "description": "Collection of orders."
+    },
+    "/newsletter/{email}": {
+      "schema": "newsletter",
+      "description": "Collection of newsletter subscriptions."
     }
   }
 }

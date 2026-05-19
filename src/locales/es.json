@@ -599,7 +599,9 @@
       "item2": "Contenido exclusivo sobre sostenibilidad.",
       "item3": "Eventos e encuentros comunitarios.",
       "placeholder": "tu@email.com",
-      "send": "Enviar"
+      "send": "Enviar",
+      "success": "¡Suscripción exitosa! Te notificaremos sobre las novedades del newsletter por correo electrónico a partir de ahora.",
+      "error": "Error al suscribirse. Inténtelo de nuevo."
     },
     "history_menu": {
       "innovation": "Innovación",

@@ -96,6 +96,15 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    match /newsletter/{email} {
+      allow read: if isAdmin();
+      allow create: if incoming().email == email && 
+                    incoming().email is string &&
+                    incoming().createdAt == request.time &&
+                    incoming().get('status', 'active') == 'active';
+      allow update, delete: if isAdmin();
+    }
+
     // Default deny
     match /{document=**} {
       allow read, write: if false;
