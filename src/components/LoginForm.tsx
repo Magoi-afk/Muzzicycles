@@ -109,26 +109,7 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
     setError(null);
     try {
       googleProvider.setCustomParameters({ prompt: 'select_account' });
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      // Check if profile exists, if not create it
-      try {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (!userDoc.exists()) {
-          await setDoc(doc(db, "users", user.uid), {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            role: "user",
-            createdAt: serverTimestamp(),
-          });
-        }
-      } catch (error) {
-        handleFirestoreError(error, OperationType.WRITE, "users");
-      }
-
+      await signInWithPopup(auth, googleProvider);
       onClose();
     } catch (err: any) {
       console.error("Erro ao fazer login com Google:", err);
@@ -147,7 +128,6 @@ export function LoginForm({ isOpen, onClose }: LoginFormProps) {
       } else if (err.code === "auth/internal-error") {
         message = "Erro interno do Firebase. Tente novamente mais tarde.";
       } else {
-        // Exibir o código do erro para ajudar no diagnóstico
         message += ` (${err.code || err.message || "Erro desconhecido"})`;
       }
       

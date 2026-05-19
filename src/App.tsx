@@ -170,12 +170,25 @@ export default function App() {
       setUser(currentUser);
       if (currentUser) {
         try {
-          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+          const userDocRef = doc(db, 'users', currentUser.uid);
+          const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             setUserProfile(userDoc.data());
+          } else {
+            // Create user profile if it doesn't exist
+            const newProfile = {
+              uid: currentUser.uid,
+              email: currentUser.email,
+              displayName: currentUser.displayName || currentUser.email?.split('@')[0],
+              photoURL: currentUser.photoURL || null,
+              role: 'user',
+              createdAt: serverTimestamp()
+            };
+            await setDoc(userDocRef, newProfile);
+            setUserProfile(newProfile);
           }
         } catch (error) {
-          console.error("Erro ao buscar perfil do usuário:", error);
+          console.error("Erro ao gerenciar perfil do usuário:", error);
         }
       } else {
         setUserProfile(null);
@@ -208,7 +221,7 @@ export default function App() {
       window.removeEventListener('changeView', handleChangeView);
       unsubscribe();
     };
-  }, [t, user, cartItems]);
+  }, [t]); // Reduced dependencies to prevent infinite loops/excessive runs
 
   const handleLogout = async () => {
     try {

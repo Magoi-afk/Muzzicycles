@@ -37,12 +37,31 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
     state: ''
   });
 
+  const [debouncedCep, setDebouncedCep] = useState('');
+
+  // Debounce CEP input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const cleanCep = formData.cep.replace(/\D/g, '');
+      if (cleanCep.length === 8) {
+        setDebouncedCep(cleanCep);
+      } else {
+        setDebouncedCep('');
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [formData.cep]);
+
   const calculateShipping = async (cep: string) => {
-    if (cep.replace(/\D/g, '').length < 8) return;
+    const cleanCep = cep.replace(/\D/g, '');
+    if (cleanCep.length !== 8) {
+      setShippingOptions([]);
+      return;
+    }
     
     setIsCalculatingShipping(true);
     try {
-      const cleanCep = cep.replace(/\D/g, '');
       console.log('Calculating shipping for CEP:', cleanCep);
       // Basic estimates for shipping calculation
       const totalWeight = Array.isArray(items) ? items.reduce((acc, item) => acc + (item.quantity * 16), 0) : 16;
@@ -61,9 +80,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
         })
       });
       
-      console.log('Shipping API status:', response.status);
       const data = await response.json();
-      console.log('Shipping API response data:', data);
 
       if (response.ok && Array.isArray(data) && data.length > 0) {
         setShippingOptions(data);
@@ -81,6 +98,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
   };
 
   const lookupAddress = async (cep: string) => {
+    if (cep.length !== 8) return;
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
@@ -98,13 +116,15 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
     }
   };
 
+  // Memoized cart signature to avoid unnecessary recalculations while capturing all changes
+  const cartSignature = JSON.stringify(items.map(i => ({ id: i.id, q: i.quantity })));
+
   useEffect(() => {
-    const cep = formData.cep.replace(/\D/g, '');
-    if (cep.length === 8) {
-      calculateShipping(cep);
-      lookupAddress(cep);
+    if (debouncedCep.length === 8) {
+      calculateShipping(debouncedCep);
+      lookupAddress(debouncedCep);
     }
-  }, [formData.cep]);
+  }, [debouncedCep, cartSignature]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

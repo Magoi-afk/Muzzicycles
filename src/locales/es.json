@@ -91,7 +91,7 @@
     },
     "shipping": {
       "calculating": "Calculando envío con Jadlog...",
-      "error": "Hubo un error al calcular el envío con Jadlog.",
+      "error": "No se pudo calcular el envío. Verifique el código postal e inténtelo de nuevo.",
       "prompt": "Ingrese su Código Postal para ver las opciones de entrega.",
       "estimate": "Estimación",
       "business_day": "día hábil",

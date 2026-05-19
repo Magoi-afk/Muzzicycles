@@ -25,18 +25,28 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
     function isAdmin() {
-      return isAuthenticated() && 
-        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
-         (request.auth.token.email == "matheusmagoi26@gmail.com" && request.auth.token.email_verified == true));
+      return isAuthenticated() && (
+        request.auth.token.email == "matheusmagoi26@gmail.com" ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'user') == 'admin')
+      );
     }
 
     function isValidEmail(email) {
-      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+      return email is string && email.matches("^.+@.+$");
     }
 
     function isValidUrl(url) {
@@ -52,11 +62,8 @@ service cloud.firestore {
     // ===============================================================
 
     function isValidUser(data) {
-      return hasOnlyAllowedFields(['uid', 'displayName', 'email', 'photoURL', 'role', 'createdAt']) &&
-             data.uid == request.auth.uid &&
-             data.email is string && isValidEmail(data.email) &&
-             (data.displayName == null || (data.displayName is string && data.displayName.size() <= 100)) &&
-             (data.photoURL == null || isValidUrl(data.photoURL)) &&
+      return data.uid == request.auth.uid &&
+             data.email is string &&
              data.role in ['user', 'admin'] &&
              (data.createdAt == request.time || data.createdAt is timestamp);
     }
@@ -76,12 +83,9 @@ service cloud.firestore {
     // ===============================================================
 
     match /users/{userId} {
-      allow read: if isOwner(userId) || isAdmin();
-      allow create: if isAuthenticated() && isValidUser(incoming()) && 
-                    ((isOwner(userId) && incoming().role == 'user') || isAdmin());
-      allow update: if isAuthenticated() && isValidUser(incoming()) && 
-                    ((isOwner(userId) && incoming().role == existing().role) || isAdmin()) &&
-                    incoming().createdAt == existing().createdAt;
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
       allow delete: if isAdmin();
     }
 

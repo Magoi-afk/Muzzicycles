@@ -91,7 +91,7 @@
     },
     "shipping": {
       "calculating": "Calculating shipping with Jadlog...",
-      "error": "There was an error calculating shipping with Jadlog.",
+      "error": "Could not calculate shipping. Please check the ZIP code and try again.",
       "prompt": "Enter your Zip Code to see delivery options.",
       "estimate": "Estimate",
       "business_day": "business day",

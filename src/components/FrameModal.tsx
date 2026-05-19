@@ -52,20 +52,20 @@ export default function FrameModal({ isOpen, onClose }: FrameModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-[1100] flex items-center justify-center p-2 sm:p-6 lg:p-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
           />
           
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto lg:overflow-hidden bg-white rounded-[2.5rem] shadow-2xl flex flex-col lg:flex-row custom-scrollbar"
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            className="relative w-full max-w-6xl max-h-[92vh] overflow-y-auto lg:overflow-hidden bg-white rounded-[2rem] sm:rounded-[3rem] shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] flex flex-col lg:flex-row custom-scrollbar"
           >
             {/* Close Button */}
             <button 
@@ -86,19 +86,21 @@ export default function FrameModal({ isOpen, onClose }: FrameModalProps) {
                 O Coração da Muzzi
               </h2>
 
-              <div className="space-y-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 lg:gap-14">
                   {categories.map((cat, idx) => (
-                    <div key={idx} className="space-y-6">
-                      <div className="flex items-center gap-3 pb-4 border-b border-black/5">
-                        {cat.icon}
-                        <h3 className="text-lg font-bold tracking-tight font-geist">{cat.title}</h3>
+                    <div key={idx} className="space-y-8 flex flex-col">
+                      <div className="flex items-center gap-4 pb-5 border-b border-black/5">
+                        <div className="p-2.5 rounded-xl bg-black/[0.03]">
+                          {cat.icon}
+                        </div>
+                        <h3 className="text-xl font-bold tracking-tight font-geist">{cat.title}</h3>
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-4 flex-1">
                         {cat.features.map((feature, i) => (
-                          <div key={i} className="flex items-start gap-3 group">
-                            <CheckCircle2 className="w-4 h-4 text-brand-blue shrink-0 mt-0.5 opacity-40 group-hover:opacity-100 transition-opacity" />
-                            <span className="text-sm text-black/70 font-geist leading-tight">{feature}</span>
+                          <div key={i} className="flex items-start gap-3.5 group">
+                            <CheckCircle2 className="w-4 h-4 text-brand-blue shrink-0 mt-0.5 opacity-30 group-hover:opacity-100 transition-opacity" />
+                            <span className="text-sm text-black/60 font-geist leading-tight group-hover:text-black transition-colors">{feature}</span>
                           </div>
                         ))}
                       </div>
@@ -106,16 +108,16 @@ export default function FrameModal({ isOpen, onClose }: FrameModalProps) {
                   ))}
                 </div>
 
-                <div className="p-8 rounded-[2rem] bg-gray-50 border border-black/5 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                    <HeartIcon className="w-32 h-32 text-brand-blue fill-current" />
+                <div className="p-10 rounded-[2.5rem] bg-black/[0.02] border border-black/5 relative overflow-hidden group">
+                  <div className="absolute -top-12 -right-12 p-8 opacity-[0.03] group-hover:scale-110 group-hover:opacity-[0.07] transition-all duration-1000">
+                    <HeartIcon className="w-64 h-64 text-brand-blue fill-current" />
                   </div>
                   <div className="relative z-10">
-                    <h3 className="text-3xl font-medium tracking-tight font-geist mb-6 flex items-center gap-3">
-                      <span className="text-brand-blue">"ELA"</span>
+                    <h3 className="text-3xl font-medium tracking-tight font-geist mb-8 flex items-center gap-3">
+                      <span className="text-brand-blue font-bold italic tracking-tighter text-4xl">"ELA"</span>
                     </h3>
-                    <div className="grid lg:grid-cols-2 gap-8 text-black/70 font-geist leading-relaxed text-base">
-                      <p>
+                    <div className="grid lg:grid-cols-2 gap-12 text-black/60 font-geist leading-relaxed text-base">
+                      <p className="first-letter:text-5xl first-letter:font-bold first-letter:text-brand-blue first-letter:mr-3 first-letter:float-left">
                         Veio das estrelas com refinamento contemporâneo, de andar levíssimo, sem dúvida é a mais suave de todas. 
                         A motivação desde o seu nascimento gira em torno da fotossíntese, da biomassa e da reciclagem. 
                         Ela foi pensada para dar todo conforto ao ecossistema. Para seu nascimento não foi necessário extrair minérios de ferro nem bauxita e muito menos produzir alumina.

@@ -91,7 +91,7 @@
     },
     "shipping": {
       "calculating": "Calculando frete com Jadlog...",
-      "error": "Houve um erro ao calcular o frete com a Jadlog.",
+      "error": "Não foi possível calcular o frete. Verifique o CEP e tente novamente.",
       "prompt": "Informe seu CEP para ver as opções de entrega.",
       "estimate": "Estimativa",
       "business_day": "dia útil",
