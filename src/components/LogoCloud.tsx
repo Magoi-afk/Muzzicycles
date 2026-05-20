@@ -83,11 +83,14 @@ export default function LogoCloud() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 mt-16 flex justify-center items-center gap-4">
-        <div className="h-px flex-1 bg-black/[0.03]"></div>
-        <p className="text-[10px] text-black/20 font-geist uppercase tracking-[0.25em] text-center whitespace-nowrap">
-          {t('logocloud.consultancy')} <a href="https://www.magoi.online" target="_blank" rel="noreferrer" className="hover:text-brand-blue transition font-bold">Magoi</a>
+        <div className="hidden sm:block h-px flex-1 bg-black/[0.03]"></div>
+        <p className="text-[9px] sm:text-[10px] text-black/20 font-geist uppercase tracking-[0.18em] sm:tracking-[0.25em] text-center max-w-xs sm:max-w-none">
+          {t('logocloud.consultancy')}{' '}
+          <a href="https://www.magoi.online" target="_blank" rel="noreferrer" className="hover:text-brand-blue transition font-bold whitespace-nowrap">
+            Magoi
+          </a>
         </p>
-        <div className="h-px flex-1 bg-black/[0.03]"></div>
+        <div className="hidden sm:block h-px flex-1 bg-black/[0.03]"></div>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `

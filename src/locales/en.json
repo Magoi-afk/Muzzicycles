@@ -7,7 +7,9 @@
     "dashboard": "My Account",
     "cart": "Cart",
     "favorites": "Favorites",
-    "search": "Search products (Ctrl+K)"
+    "search": "Search products (Ctrl+K)",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
   },
   "hero": {
     "title": "The bike born from what the world discards",

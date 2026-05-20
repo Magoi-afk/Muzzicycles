@@ -7,7 +7,9 @@
     "dashboard": "Mi Cuenta",
     "cart": "Carrito",
     "favorites": "Favoritos",
-    "search": "Buscar productos (Ctrl+K)"
+    "search": "Buscar productos (Ctrl+K)",
+    "privacy": "Políticas de Privacidad",
+    "terms": "Términos de Servicio"
   },
   "hero": {
     "title": "La bicicleta que nace de lo que el mundo desecha",

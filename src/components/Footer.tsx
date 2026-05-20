@@ -61,12 +61,12 @@ export default function Footer({ onViewChange }: FooterProps) {
   };
 
   return (
-    <footer className="w-full max-w-7xl mx-auto px-6 sm:px-8 pt-12 pb-10">
+    <footer className="w-full max-w-7xl mx-auto px-4 sm:px-8 pt-12 pb-10">
       <div className="relative overflow-hidden bg-white border border-black/5 rounded-3xl">
-        <div className="relative z-10 p-8 sm:p-12 md:p-16">
+        <div className="relative z-10 p-4 sm:p-12 md:p-16">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 pb-12 border-b border-black/5">
-            <div className="lg:col-span-4">
-              <div className="flex items-center gap-2 mb-4">
+            <div className="lg:col-span-4 flex flex-col items-center sm:items-start text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row items-center gap-2 mb-4 justify-center sm:justify-start">
                 <BadgeCheck className="w-5 h-5 text-black/80" />
                 <img 
                   src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/LogoMuzzi.png" 
@@ -76,33 +76,33 @@ export default function Footer({ onViewChange }: FooterProps) {
                   onClick={() => handleViewChange('home')}
                 />
               </div>
-              <p className="text-black/70 max-w-3xl font-geist">{t('footer.brand_desc')}</p>
+              <p className="text-black/70 max-w-3xl font-geist mx-auto sm:mx-0">{t('footer.brand_desc')}</p>
 
-              <div className="mt-6 rounded-2xl border border-black/5 bg-white shadow-sm p-5 sm:p-8 md:p-10">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="space-y-4">
+              <div className="mt-6 w-full rounded-2xl border border-black/5 bg-white shadow-sm p-4 sm:p-8 md:p-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="flex flex-col items-center sm:items-start text-center sm:text-left space-y-4">
                     <div className="inline-flex items-center gap-2 rounded-full bg-brand-blue/10 text-brand-blue ring-1 ring-brand-blue/20 px-2.5 py-1 text-xs font-geist">
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
                       {t('footer.newsletter.badge')}
                     </div>
                     <h4 className="text-black font-semibold tracking-tight font-geist">{t('footer.newsletter.title')}</h4>
-                    <ul className="space-y-2 text-sm text-black/70">
-                      <li className="flex items-start gap-2 font-geist">
-                        <Check className="w-3 h-3 text-brand-blue mt-0.5 flex-shrink-0" />
-                        {t('footer.newsletter.item1')}
+                    <ul className="space-y-2 text-sm text-black/70 flex flex-col items-center sm:items-start">
+                      <li className="flex items-center gap-2 font-geist justify-center sm:justify-start">
+                        <Check className="w-3.5 h-3.5 text-brand-blue flex-shrink-0" />
+                        <span>{t('footer.newsletter.item1')}</span>
                       </li>
-                      <li className="flex items-start gap-2 font-geist">
-                        <Check className="w-3 h-3 text-brand-blue mt-0.5 flex-shrink-0" />
-                        {t('footer.newsletter.item2')}
+                      <li className="flex items-center gap-2 font-geist justify-center sm:justify-start">
+                        <Check className="w-3.5 h-3.5 text-brand-blue flex-shrink-0" />
+                        <span>{t('footer.newsletter.item2')}</span>
                       </li>
-                      <li className="flex items-start gap-2 font-geist">
-                        <Check className="w-3 h-3 text-brand-blue mt-0.5 flex-shrink-0" />
-                        {t('footer.newsletter.item3')}
+                      <li className="flex items-center gap-2 font-geist justify-center sm:justify-start">
+                        <Check className="w-3.5 h-3.5 text-brand-blue flex-shrink-0" />
+                        <span>{t('footer.newsletter.item3')}</span>
                       </li>
                     </ul>
-                    <div className="pt-2">
+                    <div className="pt-2 w-full max-w-sm sm:max-w-none">
                       <form className="flex flex-col gap-2" onSubmit={handleNewsletterSubmit}>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                           <input 
                             type="email" 
                             required 
@@ -110,14 +110,14 @@ export default function Footer({ onViewChange }: FooterProps) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder={t('footer.newsletter.placeholder')} 
-                            className="w-full h-10 px-3 rounded-xl border border-black/10 bg-black/5 text-sm placeholder-black/40 text-black outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue disabled:opacity-50"
+                            className="w-full h-10 px-3 rounded-xl border border-black/10 bg-black/5 text-sm placeholder-black/40 text-black outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue disabled:opacity-50 min-w-0"
                             disabled={loading || status === 'success'}
                           />
                           <button 
                             id="newsletter-submit"
                             type="submit"
                             disabled={loading || status === 'success'}
-                            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-brand-blue text-sm text-white hover:bg-brand-blue/80 transition font-geist disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px] justify-center"
+                            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-brand-blue text-sm text-white hover:bg-brand-blue/80 transition font-geist disabled:opacity-50 disabled:cursor-not-allowed sm:min-w-[100px] justify-center"
                           >
                             {loading ? (
                               <Loader2 className="w-3 h-3 animate-spin" />
@@ -130,49 +130,53 @@ export default function Footer({ onViewChange }: FooterProps) {
                           </button>
                         </div>
                         {status === 'success' && (
-                          <p className="text-xs text-green-600 font-medium font-geist animate-in fade-in slide-in-from-top-1">
+                          <p className="text-xs text-green-600 font-medium font-geist animate-in fade-in slide-in-from-top-1 text-center sm:text-left">
                             {t('footer.newsletter.success') || 'Inscrito com sucesso!'}
                           </p>
                         )}
                         {status === 'error' && (
-                          <p className="text-xs text-red-600 font-medium font-geist animate-in fade-in slide-in-from-top-1">
+                          <p className="text-xs text-red-600 font-medium font-geist animate-in fade-in slide-in-from-top-1 text-center sm:text-left">
                             {t('footer.newsletter.error') || 'Erro ao assinar. Tente novamente.'}
                           </p>
                         )}
                       </form>
                     </div>
                   </div>
-                  <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-8">
-                    <div>
+                  <div className="lg:col-span-2 grid grid-cols-1 xs:grid-cols-3 gap-6 sm:gap-8 text-center xs:text-left">
+                    <div className="flex flex-col items-center xs:items-start">
                       <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.bikes')}</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>{t('products.found_many')}</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('bikes')}>{t('products.categories.componentes')}</button></li>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start">
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('bikes')}>{t('products.found_many')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('bikes')}>{t('products.categories.componentes')}</button></li>
                       </ul>
                     </div>
-                    <div>
+                    <div className="flex flex-col items-center xs:items-start">
                       <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.about')}</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'innovation')}>{t('footer.history_menu.innovation')}</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'history')}>{t('footer.history_menu.stories')}</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'sustainability')}>{t('footer.history_menu.sustainability')}</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'acervo')}>{t('footer.history_menu.collection')}</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('about', 'media')}>{t('footer.history_menu.media')}</button></li>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start">
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'innovation')}>{t('footer.history_menu.innovation')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'history')}>{t('footer.history_menu.stories')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'sustainability')}>{t('footer.history_menu.sustainability')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'acervo')}>{t('footer.history_menu.collection')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'media')}>{t('footer.history_menu.media')}</button></li>
                       </ul>
                     </div>
-                    <div>
+                    <div className="col-span-1 xs:col-span-1 flex flex-col items-center xs:items-start">
                       <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.support')}</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-black/70">
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('support', 'faq')}>FAQ</button></li>
-                        <li><button className="hover:text-black transition font-geist" onClick={() => handleViewChange('support', 'contact')}>{t('nav.support')}</button></li>
-                        <li className="pt-2"><a className="hover:text-black transition font-geist flex items-center gap-1.5" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
-                          WhatsApp
-                          <MessageCircle className="w-3 h-3" />
-                        </a></li>
-                        <li><span className="text-black/70 font-geist flex items-center gap-1.5 text-xs">
-                          {PHYSICAL_PHONE}
-                          <Phone className="w-3 h-3 text-black/40" />
-                        </span></li>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start">
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('support', 'faq')}>FAQ</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('support', 'contact')}>{t('nav.support')}</button></li>
+                        <li className="pt-2">
+                          <a className="hover:text-black transition font-geist flex items-center gap-1.5 justify-center xs:justify-start" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
+                            WhatsApp
+                            <MessageCircle className="w-3 h-3 flex-shrink-0" />
+                          </a>
+                        </li>
+                        <li>
+                          <span className="text-black/70 font-geist flex items-center gap-1.5 text-xs justify-center xs:justify-start">
+                            {PHYSICAL_PHONE}
+                            <Phone className="w-3 h-3 text-black/40 flex-shrink-0" />
+                          </span>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -180,28 +184,28 @@ export default function Footer({ onViewChange }: FooterProps) {
               </div>
 
               {/* Bottom bar */}
-              <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3 text-sm text-black/60">
-                  <span className="font-geist">© {new Date().getFullYear()} Muzzicycles</span>
-                  <span className="hidden sm:inline text-black/20 font-geist">|</span>
+              <div className="mt-8 w-full flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-2 text-xs sm:text-sm text-black/60 text-center">
+                  <span className="font-geist whitespace-nowrap">© {new Date().getFullYear()} Muzzicycles</span>
+                  <span className="hidden xs:inline text-black/20 font-geist">|</span>
                   <button 
                     onClick={() => handleViewChange('privacy')}
-                    className="hover:text-black transition font-geist"
+                    className="hover:text-black transition font-geist whitespace-nowrap"
                   >
                     {t('nav.privacy') || 'Privacidade'}
                   </button>
                   <span className="text-black/20 font-geist">/</span>
                   <button 
                     onClick={() => handleViewChange('terms')}
-                    className="hover:text-black transition font-geist"
+                    className="hover:text-black transition font-geist whitespace-nowrap"
                   >
                     {t('nav.terms') || 'Termos'}
                   </button>
-                  <span className="text-black/20 font-geist">|</span>
-                  <span className="text-[10px] font-geist uppercase tracking-widest">{t('footer.rights')}</span>
+                  <span className="hidden sm:inline text-black/20 font-geist">|</span>
+                  <span className="text-[10px] font-geist uppercase tracking-widest block w-full xs:w-auto mt-1 xs:mt-0">{t('footer.rights')}</span>
                 </div>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                  <div className="flex flex-col gap-1">
+                <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-right">
+                  <div className="flex flex-col items-center sm:items-end gap-1">
                     <a 
                       href="https://www.magoi.online" 
                       target="_blank" 
@@ -210,7 +214,7 @@ export default function Footer({ onViewChange }: FooterProps) {
                     >
                       {t('footer.digital_consultancy')}
                     </a>
-                    <span className="text-[8px] text-black/20 font-geist uppercase tracking-wider">
+                    <span className="text-[8px] text-black/20 font-geist uppercase tracking-wider block">
                       {t('footer.dev_strategy')}
                     </span>
                   </div>

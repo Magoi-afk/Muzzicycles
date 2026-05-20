@@ -7,7 +7,9 @@
     "dashboard": "Minha Conta",
     "cart": "Carrinho",
     "favorites": "Favoritos",
-    "search": "Buscar produtos (Ctrl+K)"
+    "search": "Buscar produtos (Ctrl+K)",
+    "privacy": "Privacidade",
+    "terms": "Termos de Uso"
   },
   "hero": {
     "title": "A bike que nasce do que o mundo descarta",
