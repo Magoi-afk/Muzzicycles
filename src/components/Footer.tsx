@@ -79,8 +79,9 @@ export default function Footer({ onViewChange }: FooterProps) {
               <p className="text-black/70 max-w-3xl font-geist mx-auto sm:mx-0">{t('footer.brand_desc')}</p>
 
               <div className="mt-6 w-full rounded-2xl border border-black/5 bg-white shadow-sm p-4 sm:p-8 md:p-10">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className="flex flex-col items-center sm:items-start text-center sm:text-left space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-12">
+                  {/* Column 1: Newsletter */}
+                  <div className="md:col-span-5 lg:col-span-4 flex flex-col items-center sm:items-start text-center sm:text-left space-y-4">
                     <div className="inline-flex items-center gap-2 rounded-full bg-brand-blue/10 text-brand-blue ring-1 ring-brand-blue/20 px-2.5 py-1 text-xs font-geist">
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
                       {t('footer.newsletter.badge')}
@@ -102,7 +103,7 @@ export default function Footer({ onViewChange }: FooterProps) {
                     </ul>
                     <div className="pt-2 w-full max-w-sm sm:max-w-none">
                       <form className="flex flex-col gap-2" onSubmit={handleNewsletterSubmit}>
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                        <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row items-stretch sm:items-center md:items-stretch lg:items-center gap-2">
                           <input 
                             type="email" 
                             required 
@@ -110,21 +111,21 @@ export default function Footer({ onViewChange }: FooterProps) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder={t('footer.newsletter.placeholder')} 
-                            className="w-full h-10 px-3 rounded-xl border border-black/10 bg-black/5 text-sm placeholder-black/40 text-black outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue disabled:opacity-50 min-w-0"
+                            className="w-full h-10 md:h-12 px-3 md:px-4 rounded-xl border border-black/10 bg-black/5 text-sm md:text-base placeholder-black/40 text-black outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue disabled:opacity-50 min-w-0"
                             disabled={loading || status === 'success'}
                           />
                           <button 
                             id="newsletter-submit"
                             type="submit"
                             disabled={loading || status === 'success'}
-                            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-brand-blue text-sm text-white hover:bg-brand-blue/80 transition font-geist disabled:opacity-50 disabled:cursor-not-allowed sm:min-w-[100px] justify-center"
+                            className="inline-flex items-center gap-2 h-10 md:h-12 px-4 md:px-5 rounded-xl bg-brand-blue text-sm md:text-base text-white hover:bg-brand-blue/80 transition font-geist disabled:opacity-50 disabled:cursor-not-allowed sm:min-w-[100px] md:min-w-0 lg:min-w-[100px] justify-center text-center font-medium"
                           >
                             {loading ? (
                               <Loader2 className="w-3 h-3 animate-spin" />
                             ) : (
                               <>
                                 {t('footer.newsletter.send')}
-                                <Send className="w-3 h-3" />
+                                <Send className="w-3.5 h-3.5" />
                               </>
                             )}
                           </button>
@@ -142,37 +143,43 @@ export default function Footer({ onViewChange }: FooterProps) {
                       </form>
                     </div>
                   </div>
-                  <div className="lg:col-span-2 grid grid-cols-1 xs:grid-cols-3 gap-6 sm:gap-8 text-center xs:text-left">
-                    <div className="flex flex-col items-center xs:items-start">
+
+                  {/* Column 2: Institutional (Bikes & About) */}
+                  <div className="md:col-span-3 lg:col-span-4 md:border-l md:border-black/5 md:pl-8 lg:pl-12 flex flex-col sm:flex-row md:flex-col gap-6 sm:gap-8 md:gap-6 lg:gap-8 text-center xs:text-left md:text-left">
+                    <div className="flex flex-col items-center xs:items-start md:items-start">
                       <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.bikes')}</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start">
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('bikes')}>{t('products.found_many')}</button></li>
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('bikes')}>{t('products.categories.componentes')}</button></li>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start md:items-start animate-fade-in">
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('bikes')}>{t('products.found_many')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('bikes')}>{t('products.categories.componentes')}</button></li>
                       </ul>
                     </div>
-                    <div className="flex flex-col items-center xs:items-start">
+                    <div className="flex flex-col items-center xs:items-start md:items-start lg:mt-2">
                       <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.about')}</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start">
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'innovation')}>{t('footer.history_menu.innovation')}</button></li>
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'history')}>{t('footer.history_menu.stories')}</button></li>
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'sustainability')}>{t('footer.history_menu.sustainability')}</button></li>
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'acervo')}>{t('footer.history_menu.collection')}</button></li>
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('about', 'media')}>{t('footer.history_menu.media')}</button></li>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start md:items-start">
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('about', 'innovation')}>{t('footer.history_menu.innovation')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('about', 'history')}>{t('footer.history_menu.stories')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('about', 'sustainability')}>{t('footer.history_menu.sustainability')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('about', 'acervo')}>{t('footer.history_menu.collection')}</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('about', 'media')}>{t('footer.history_menu.media')}</button></li>
                       </ul>
                     </div>
-                    <div className="col-span-1 xs:col-span-1 flex flex-col items-center xs:items-start">
+                  </div>
+
+                  {/* Column 3: Support */}
+                  <div className="md:col-span-4 lg:col-span-4 md:border-l md:border-black/5 md:pl-8 lg:pl-12 flex flex-col items-center xs:items-start md:items-start text-center xs:text-left md:text-left">
+                    <div className="w-full flex flex-col items-center xs:items-start md:items-start">
                       <h5 className="text-black/80 text-xs uppercase tracking-[0.2em] font-medium font-geist">{t('nav.support')}</h5>
-                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start">
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('support', 'faq')}>FAQ</button></li>
-                        <li><button className="hover:text-black transition font-geist text-center xs:text-left" onClick={() => handleViewChange('support', 'contact')}>{t('nav.support')}</button></li>
+                      <ul className="mt-3 space-y-2 text-sm text-black/70 flex flex-col items-center xs:items-start md:items-start">
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('support', 'faq')}>FAQ</button></li>
+                        <li><button className="hover:text-black transition font-geist text-center xs:text-left md:text-left" onClick={() => handleViewChange('support', 'contact')}>{t('nav.support')}</button></li>
                         <li className="pt-2">
-                          <a className="hover:text-black transition font-geist flex items-center gap-1.5 justify-center xs:justify-start" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
+                          <a className="hover:text-black transition font-geist flex items-center gap-1.5 justify-center xs:justify-start md:justify-start" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noreferrer">
                             WhatsApp
                             <MessageCircle className="w-3 h-3 flex-shrink-0" />
                           </a>
                         </li>
                         <li>
-                          <span className="text-black/70 font-geist flex items-center gap-1.5 text-xs justify-center xs:justify-start">
+                          <span className="text-black/70 font-geist flex items-center gap-1.5 text-xs justify-center xs:justify-start md:justify-start text-center xs:text-left">
                             {PHYSICAL_PHONE}
                             <Phone className="w-3 h-3 text-black/40 flex-shrink-0" />
                           </span>
@@ -184,8 +191,8 @@ export default function Footer({ onViewChange }: FooterProps) {
               </div>
 
               {/* Bottom bar */}
-              <div className="mt-8 w-full flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-2 text-xs sm:text-sm text-black/60 text-center">
+              <div className="mt-8 w-full flex flex-col lg:flex-row items-center justify-between gap-6 border-t border-black/5 pt-8">
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-2 text-xs sm:text-sm text-black/60 text-center">
                   <span className="font-geist whitespace-nowrap">© {new Date().getFullYear()} Muzzicycles</span>
                   <span className="hidden xs:inline text-black/20 font-geist">|</span>
                   <button 
@@ -201,11 +208,11 @@ export default function Footer({ onViewChange }: FooterProps) {
                   >
                     {t('nav.terms') || 'Termos'}
                   </button>
-                  <span className="hidden sm:inline text-black/20 font-geist">|</span>
+                  <span className="hidden lg:inline text-black/20 font-geist">|</span>
                   <span className="text-[10px] font-geist uppercase tracking-widest block w-full xs:w-auto mt-1 xs:mt-0">{t('footer.rights')}</span>
                 </div>
-                <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-right">
-                  <div className="flex flex-col items-center sm:items-end gap-1">
+                <div className="flex flex-col lg:flex-row items-center gap-6 text-center lg:text-right">
+                  <div className="flex flex-col items-center lg:items-end gap-1">
                     <a 
                       href="https://www.magoi.online" 
                       target="_blank" 
