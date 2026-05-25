@@ -67,7 +67,7 @@ export default function ProductDetail({
               {has3DModel && is3DActive ? (
                 <div className="w-full h-full relative bg-neutral-900">
                   <SplineScene 
-                    scene="https://prod.spline.design/G0n2U7VfS6BbmEx2/scene.splinecode" 
+                    scene="https://prod.spline.design/SBiRzcE7RfxQgTif/scene.splinecode" 
                   />
                   <div className="absolute bottom-6 right-6 z-10 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] text-white/60 font-bold uppercase tracking-widest pointer-events-none">
                     {t('product_detail.interactive_3d')}

@@ -17,6 +17,93 @@ const mediaItems = [
   { img: "/images/Jornal de Jundiai.png", pdf: "/pdfs/JornaldeJundiai.pdf", name: "Jornal de Jundiaí" },
 ];
 
+function BrandLogoFallback({ name }: { name: string }) {
+  const normalized = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  
+  switch (normalized) {
+    case "globo":
+      return (
+        <div className="flex items-center gap-2">
+          <svg viewBox="0 0 100 100" className="h-7 w-7 text-black/70 fill-current">
+            <circle cx="50" cy="50" r="45" />
+            <rect x="25" y="25" width="50" height="50" rx="12" className="text-white fill-current animate-pulse" style={{ fill: 'white' }} />
+            <circle cx="50" cy="50" r="16" className="text-black/70 fill-current" />
+          </svg>
+          <span className="font-sans font-bold lowercase tracking-tighter text-lg text-black/80">globo</span>
+        </div>
+      );
+    case "epoca":
+      return (
+        <span className="font-serif font-black text-xl tracking-tighter text-black/80">ÉPOCA</span>
+      );
+    case "vo2":
+      return (
+        <div className="flex items-center">
+          <span className="font-sans font-black italic text-xl tracking-tighter text-black/80">VO</span>
+          <span className="font-sans font-black italic text-xl text-brand-blue tracking-tighter">2</span>
+        </div>
+      );
+    case "voce":
+      return (
+        <span className="font-serif font-bold italic text-lg tracking-tight text-black/85">você</span>
+      );
+    case "bons fluidos":
+      return (
+        <div className="flex flex-col items-center leading-none">
+          <span className="font-sans font-light tracking-[0.2em] text-[10px] text-black/50 uppercase">BONS</span>
+          <span className="font-serif font-bold italic text-xs text-black/80 mt-0.5">fluidos</span>
+        </div>
+      );
+    case "brasil almanaque":
+      return (
+        <span className="font-serif italic text-base text-black/75 tracking-wide">Brasil Almanaque</span>
+      );
+    case "ciclomagazine":
+      return (
+        <span className="font-sans font-black uppercase tracking-wider text-xs text-black/80">CICLOMAGAZINE</span>
+      );
+    case "dci":
+      return (
+        <span className="font-sans font-black tracking-tight text-xl text-black/85">DCI</span>
+      );
+    case "desafio":
+      return (
+        <span className="font-sans font-bold tracking-[0.2em] text-[10px] text-black/75 uppercase">DESAFIO</span>
+      );
+    case "docol":
+      return (
+        <span className="font-sans font-light tracking-[0.35em] text-[11px] text-black/70 uppercase">docol</span>
+      );
+    case "inovacao":
+      return (
+        <div className="flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-brand-blue" />
+          <span className="font-sans font-bold tracking-[0.2em] text-[10px] text-black/85 uppercase">INOVAÇÃO</span>
+        </div>
+      );
+    case "jornal de jundiai":
+      return (
+        <div className="flex flex-col items-center leading-none">
+          <span className="font-serif font-black tracking-[0.15em] text-[8px] text-black/40 uppercase">JORNAL DE</span>
+          <span className="font-sans font-black tracking-widest text-xs text-black/80 mt-0.5 animate-fade-in">JUNDIAÍ</span>
+        </div>
+      );
+    case "plastico industrial":
+      return (
+        <div className="flex flex-col items-center leading-none">
+          <span className="font-sans font-extrabold tracking-widest text-[10px] text-black/80 uppercase">PLÁSTICO</span>
+          <span className="font-sans font-light tracking-[0.15em] text-[7px] text-black/50 mt-0.5">INDUSTRIAL</span>
+        </div>
+      );
+    default:
+      return (
+        <div className="h-8 px-3 flex items-center justify-center rounded-lg bg-black/5 text-black/50 font-bold text-sm">
+          {name}
+        </div>
+      );
+  }
+}
+
 export default function LogoCloud() {
   const { t } = useTranslation();
 
@@ -37,15 +124,16 @@ export default function LogoCloud() {
                 src={item.img}
                 alt={item.name}
                 loading="lazy"
+                referrerPolicy="no-referrer"
                 className="h-full w-full object-contain"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).style.display = 'none';
                   (e.currentTarget.parentElement?.querySelector('.fallback-icon') as HTMLElement)?.classList.remove('hidden');
                 }}
               />
-              {/* If image fails, show a clean initial icon */}
-              <div className="fallback-icon hidden h-10 w-10 flex items-center justify-center rounded-lg bg-black/5 text-black/20 font-bold text-lg">
-                {item.name.charAt(0)}
+              {/* If image fails, show a beautifully styled brand logo */}
+              <div className="fallback-icon hidden h-10 flex items-center justify-center">
+                <BrandLogoFallback name={item.name} />
               </div>
             </div>
             <span className="text-[11px] font-black text-black/40 uppercase tracking-[0.15em] text-center group-hover:text-brand-blue transition-colors whitespace-nowrap">

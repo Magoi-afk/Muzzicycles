@@ -70,7 +70,7 @@ export default function FrameModal({ isOpen, onClose }: FrameModalProps) {
             {/* Close Button */}
             <button 
               onClick={onClose}
-              className="absolute top-6 right-6 z-20 h-10 w-10 rounded-full bg-black/5 flex items-center justify-center text-black/50 hover:bg-black/10 hover:text-black transition-all"
+              className="absolute top-6 right-6 lg:right-[440px] z-20 h-10 w-10 rounded-full bg-white/80 hover:bg-white border border-black/5 backdrop-blur-sm shadow-sm flex items-center justify-center text-black/60 hover:text-black hover:scale-105 active:scale-95 transition-all duration-200"
             >
               <X className="w-5 h-5" />
             </button>

@@ -38,11 +38,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isAuthenticated() && (
-        request.auth.token.email == "matheusmagoi26@gmail.com" ||
-        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'user') == 'admin')
-      );
+      return isAuthenticated() && request.auth.token.email == "matheusmagoi26@gmail.com";
     }
 
     function isValidEmail(email) {
@@ -83,9 +79,8 @@ service cloud.firestore {
     // ===============================================================
 
     match /users/{userId} {
-      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
-      allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
-      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow read, update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow create: if isAuthenticated() && request.auth.uid == userId;
       allow delete: if isAdmin();
     }
 
@@ -103,6 +98,23 @@ service cloud.firestore {
                     incoming().createdAt == request.time &&
                     incoming().get('status', 'active') == 'active';
       allow update, delete: if isAdmin();
+    }
+
+    match /contacts/{contactId} {
+      allow create: if isValidContact(incoming()) && isValidId(contactId);
+      allow read, update, delete: if isAdmin();
+    }
+
+    function isValidContact(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 200 &&
+             data.email is string && data.email.matches("^.+@.+$") && data.email.size() <= 200 &&
+             data.subject is string && data.subject.size() > 0 && data.subject.size() <= 200 &&
+             data.message is string && data.message.size() > 0 && data.message.size() <= 5000 &&
+             data.createdAt == request.time;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
     }
 
     // Default deny

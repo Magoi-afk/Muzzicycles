@@ -2,6 +2,7 @@ import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, MessageCircle } from 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PHYSICAL_PHONE, WHATSAPP_NUMBER } from '../constants';
+import { db, collection, doc, setDoc, serverTimestamp } from '../firebase';
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -19,33 +20,108 @@ export default function Contact() {
     setStatus('loading');
     setErrorMessage('');
 
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // Frontend Field Validation
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedMessage = formData.message.trim();
 
-      let data;
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        data = await response.json();
-      } else {
-        const text = await response.text();
-        throw new Error(`Resposta do servidor não é JSON: ${text.substring(0, 100)}...`);
+    if (!trimmedName) {
+      setStatus('error');
+      setErrorMessage('Por favor, informe seu Nome Completo.');
+      return;
+    }
+    if (trimmedName.length < 3) {
+      setStatus('error');
+      setErrorMessage('O nome precisa ter pelo menos 3 caracteres.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!trimmedEmail) {
+      setStatus('error');
+      setErrorMessage('O endereço de e-mail é obrigatório.');
+      return;
+    }
+    if (!emailRegex.test(trimmedEmail)) {
+      setStatus('error');
+      setErrorMessage('Por favor, insira um endereço de e-mail válido.');
+      return;
+    }
+
+    if (!trimmedMessage) {
+      setStatus('error');
+      setErrorMessage('A sua mensagem não pode ser vazia.');
+      return;
+    }
+    if (trimmedMessage.length < 10) {
+      setStatus('error');
+      setErrorMessage('A mensagem deve ter pelo menos 10 caracteres para que possamos entender o seu caso.');
+      return;
+    }
+
+    try {
+      let apiSuccess = false;
+      let apiValidationError = '';
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: trimmedName,
+            email: trimmedEmail,
+            subject: formData.subject,
+            message: trimmedMessage
+          }),
+        });
+
+        const contentType = response.headers.get('content-type');
+        let data: any = {};
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+        }
+
+        if (response.ok) {
+          if (data && data.success) {
+            apiSuccess = true;
+          }
+        } else {
+          // Extract the exact error message and details to show on-screen
+          const errorMsg = data.error || 'Erro no servidor de e-mail';
+          const errorDetails = data.details ? ` (${data.details})` : '';
+          apiValidationError = `${errorMsg}${errorDetails}`;
+        }
+      } catch (apiErr) {
+        console.warn('API submission failed with network error, falling back to database writer:', apiErr);
       }
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao enviar mensagem');
+      // If API submission didn't succeed (e.g., server down, network issues, etc.)
+      if (!apiSuccess) {
+        console.log('Writing message directly to Firestore database for user:', trimmedEmail);
+        const contactsCol = collection(db, 'contacts');
+        const docRef = doc(contactsCol);
+        await setDoc(docRef, {
+          name: trimmedName,
+          email: trimmedEmail,
+          subject: formData.subject,
+          message: trimmedMessage,
+          createdAt: serverTimestamp()
+        });
+      }
+
+      // If there is an explicit API response error (e.g. Resend error details), throw it now
+      if (apiValidationError) {
+        throw new Error(apiValidationError);
       }
 
       setStatus('success');
-      setFormData({ name: '', email: '', subject: t('contact.subjects.models'), message: '' });
+      setFormData({ name: '', email: '', subject: formData.subject, message: '' });
     } catch (err) {
+      console.error('Contact submission error:', err);
       setStatus('error');
-      setErrorMessage(err instanceof Error ? err.message : 'Erro inesperado');
+      setErrorMessage(err instanceof Error ? err.message : 'Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.');
     }
   };
 

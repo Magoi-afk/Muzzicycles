@@ -39,6 +39,19 @@
         "status": { "type": "string", "enum": ["active", "unsubscribed"] }
       },
       "required": ["email", "createdAt"]
+    },
+    "contacts": {
+      "title": "Contact Submission",
+      "description": "User contact form submissions.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "subject": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "subject", "message", "createdAt"]
     }
   },
   "firestore": {
@@ -53,6 +66,10 @@
     "/newsletter/{email}": {
       "schema": "newsletter",
       "description": "Collection of newsletter subscriptions."
+    },
+    "/contacts/{contactId}": {
+      "schema": "contacts",
+      "description": "Collection of contact form submissions."
     }
   }
 }
