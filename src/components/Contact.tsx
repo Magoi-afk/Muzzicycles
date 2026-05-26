@@ -98,26 +98,37 @@ export default function Contact() {
       }
 
       // If API submission didn't succeed (e.g., server down, network issues, etc.)
+      let dbFallbackSuccess = false;
       if (!apiSuccess) {
         console.log('Writing message directly to Firestore database for user:', trimmedEmail);
-        const contactsCol = collection(db, 'contacts');
-        const docRef = doc(contactsCol);
-        await setDoc(docRef, {
-          name: trimmedName,
-          email: trimmedEmail,
-          subject: formData.subject,
-          message: trimmedMessage,
-          createdAt: serverTimestamp()
-        });
+        try {
+          const contactsCol = collection(db, 'contacts');
+          const docRef = doc(contactsCol);
+          await setDoc(docRef, {
+            name: trimmedName,
+            email: trimmedEmail,
+            subject: formData.subject,
+            message: trimmedMessage,
+            createdAt: serverTimestamp()
+          });
+          dbFallbackSuccess = true;
+        } catch (dbErr) {
+          console.error('Firestore fallback database write failed:', dbErr);
+        }
       }
 
-      // If there is an explicit API response error (e.g. Resend error details), throw it now
-      if (apiValidationError) {
-        throw new Error(apiValidationError);
+      // We consider the submission successful if either the API succeeded or the database fallback succeeded!
+      if (apiSuccess || dbFallbackSuccess) {
+        setStatus('success');
+        setFormData({ name: '', email: '', subject: formData.subject, message: '' });
+      } else {
+        // Both failed. Throw appropriate error message.
+        if (apiValidationError) {
+          throw new Error(apiValidationError);
+        } else {
+          throw new Error('Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.');
+        }
       }
-
-      setStatus('success');
-      setFormData({ name: '', email: '', subject: formData.subject, message: '' });
     } catch (err) {
       console.error('Contact submission error:', err);
       setStatus('error');
