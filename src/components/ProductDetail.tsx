@@ -28,6 +28,18 @@ export default function ProductDetail({
   const [selectedAro, setSelectedAro] = useState('29');
   const [is3DActive, setIs3DActive] = useState(product.id === '10');
 
+  const [selectedVersion, setSelectedVersion] = useState<'V3' | 'V5' | 'V8'>('V3');
+
+  const mississippiVersions = {
+    V3: { price: 4300, transmission: 'Shimano Nexus 3v', weight: '13.1' },
+    V5: { price: 6300, transmission: 'Shimano Nexus 5v', weight: '13.3' },
+    V8: { price: 8500, transmission: 'Shimano Nexus 8v', weight: '13.5' }
+  };
+
+  const currentPrice = product.id === '4' ? mississippiVersions[selectedVersion].price : product.price;
+  const currentTransmission = product.id === '4' ? mississippiVersions[selectedVersion].transmission : (product.specs?.transmission || '');
+  const currentWeight = product.id === '4' ? mississippiVersions[selectedVersion].weight : (product.specs?.weight || '13.1');
+
   const allImages = [product.image, ...(product.additionalImages || [])];
   const isBike = product.category !== 'Componentes';
   const has3DModel = product.id === '10'; // QUADRO MONTAIN BIKE
@@ -113,7 +125,9 @@ export default function ProductDetail({
               <div className="flex items-center gap-2 mb-4">
                 <span className="px-2.5 py-1 rounded-full bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-black/50 font-geist">{t('product_detail.eco_badge')}</span>
               </div>
-              <h1 className="text-5xl font-medium tracking-tighter font-geist mb-2">{t(`products_data.${product.id}.name`, { defaultValue: product.name })}</h1>
+              <h1 className="text-5xl font-medium tracking-tighter font-geist mb-2">
+                {t(`products_data.${product.id}.name`, { defaultValue: product.name })}{product.id === '4' ? ` ${selectedVersion}` : ''}
+              </h1>
               <div className="mb-6">
                 {product.isAcervo ? (
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-widest border border-amber-200">
@@ -122,7 +136,7 @@ export default function ProductDetail({
                   </div>
                 ) : (
                   <p className="text-3xl font-bold text-brand-blue font-geist">
-                    {formatCurrency(product.price)}
+                    {formatCurrency(currentPrice)}
                   </p>
                 )}
               </div>
@@ -133,6 +147,28 @@ export default function ProductDetail({
 
             {/* Options */}
             <div className="space-y-8 mb-10">
+              {product.id === '4' && (
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist block mb-4">
+                    {i18n.language === 'pt' ? 'VERSÃO DO CÂMBIO' : i18n.language === 'es' ? 'VERSIÓN DE CAMBIOS' : 'GEAR VERSION'}
+                  </span>
+                  <div className="flex flex-col gap-2">
+                    {(['V3', 'V5', 'V8'] as const).map((version) => (
+                      <button 
+                        key={version}
+                        onClick={() => setSelectedVersion(version)}
+                        className={`flex items-center justify-between h-12 px-5 rounded-xl border text-sm font-medium font-geist transition ${selectedVersion === version ? 'bg-brand-blue text-white border-brand-blue' : 'bg-white text-black/60 border-black/5 hover:border-black/20'}`}
+                      >
+                        <span>Shimano Nexus {version}</span>
+                        <span className={`${selectedVersion === version ? 'text-white' : 'text-brand-blue'} font-bold`}>
+                          {formatCurrency(mississippiVersions[version].price)}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {isBike && (
                 <div>
                   <span className="text-xs font-bold uppercase tracking-widest text-black/40 font-geist block mb-4">{t('product_detail.rim_size')}</span>
@@ -162,14 +198,44 @@ export default function ProductDetail({
               ) : (
                 <>
                   <button 
-                    onClick={() => onCheckout(product, isBike ? selectedAro : undefined)}
+                    onClick={() => {
+                      const finalProduct = product.id === '4' ? {
+                        ...product,
+                        price: currentPrice,
+                        selectedVersion,
+                        name: `${product.name} ${selectedVersion}`,
+                        specs: {
+                          ...product.specs,
+                          transmission: currentTransmission,
+                          weight: `${currentWeight}kg`,
+                          frame: product.specs?.frame || 'Polímero Reciclado Monobloco',
+                          brakes: product.specs?.brakes || 'V-Brake Alumínio'
+                        }
+                      } : product;
+                      onCheckout(finalProduct, isBike ? selectedAro : undefined);
+                    }}
                     className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20"
                   >
                     {t('product_detail.buy_now')}
                   </button>
                   <div className="flex gap-3">
                     <button 
-                      onClick={() => onAddToCart(product, isBike ? selectedAro : undefined)}
+                      onClick={() => {
+                        const finalProduct = product.id === '4' ? {
+                          ...product,
+                          price: currentPrice,
+                          selectedVersion,
+                          name: `${product.name} ${selectedVersion}`,
+                          specs: {
+                            ...product.specs,
+                            transmission: currentTransmission,
+                            weight: `${currentWeight}kg`,
+                            frame: product.specs?.frame || 'Polímero Reciclado Monobloco',
+                            brakes: product.specs?.brakes || 'V-Brake Alumínio'
+                          }
+                        } : product;
+                        onAddToCart(finalProduct, isBike ? selectedAro : undefined);
+                      }}
                       className="flex-1 h-14 rounded-2xl border border-black/5 bg-white text-black/70 font-bold font-geist text-lg hover:bg-black/5 transition"
                     >
                       {t('product_detail.add_to_cart')}
@@ -217,7 +283,7 @@ export default function ProductDetail({
                 <div className="space-y-6">
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-white border border-black/5 p-4 group cursor-zoom-in">
                     <img 
-                      src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Geometria%20Quadro%20Muzzicycles.png" 
+                      src="/images/Geometria Quadro Muzzicycles.png" 
                       alt="Geometria Quadro Muzzicycles" 
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                       referrerPolicy="no-referrer"
@@ -225,7 +291,7 @@ export default function ProductDetail({
                   </div>
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-white border border-black/5 p-4 group cursor-zoom-in">
                     <img 
-                      src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/medidas%20muzzi%20aro%2026.png" 
+                      src="/images/medidas muzzi aro 26.png" 
                       alt="Medidas Aro 26" 
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                       referrerPolicy="no-referrer"
@@ -327,7 +393,7 @@ export default function ProductDetail({
               <Zap className="w-6 h-6 text-brand-blue mb-4" />
               <h4 className="text-lg font-medium font-geist mb-2">{t('product_detail.transmission_title')}</h4>
               <p className="text-sm text-black/50 font-geist leading-relaxed">
-                {t(`products_data.${product.id}.specs.transmission`, { defaultValue: product.specs?.transmission || t('product_detail.transmission_default') })}
+                {product.id === '4' ? currentTransmission : t(`products_data.${product.id}.specs.transmission`, { defaultValue: product.specs?.transmission || t('product_detail.transmission_default') })}
               </p>
             </div>
             <div className="p-8 rounded-[2.5rem] bg-gray-50 border border-black/5">

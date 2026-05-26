@@ -55,7 +55,6 @@ export default function ProductGrid({
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <h2 className="text-2xl sm:text-3xl text-black tracking-tighter font-geist">{displayTitle}</h2>
-            <span className="text-sm text-black/50 font-geist">{displaySubtitle}</span>
           </div>
           <p className="text-sm text-black/40 font-geist">
             {filteredProducts.length} {filteredProducts.length === 1 ? t('products.found_one') : t('products.found_many')}

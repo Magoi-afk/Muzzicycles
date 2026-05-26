@@ -512,32 +512,12 @@
       }
     },
     "4": {
-      "name": "MISSISSIPPI 3V",
-      "description": "Conforto & Cidade — Câmbio Nexus 3v, freios V-brake, aros 24, 26, 29 e 32",
+      "name": "MISSISSIPPI",
+      "description": "Conforto & Cidade — Câmbio Nexus (3v, 5v ou 8v), freios V-brake, aros 24, 26, 29 e 32",
       "tag": "Conforto",
       "specs": {
         "frame": "Polímero Reciclado Monobloco",
-        "transmission": "Shimano Nexus 3v",
-        "brakes": "V-Brake Alumínio"
-      }
-    },
-    "8": {
-      "name": "MISSISSIPPI 5V",
-      "description": "Conforto & Cidade — Câmbio Nexus 5v, freios V-brake, aros 24, 26, 29 e 32",
-      "tag": "Conforto",
-      "specs": {
-        "frame": "Polímero Reciclado Monobloco",
-        "transmission": "Shimano Nexus 5v",
-        "brakes": "V-Brake Alumínio"
-      }
-    },
-    "9": {
-      "name": "MISSISSIPPI 8V",
-      "description": "Conforto & Cidade — Câmbio Nexus 8v, freios V-brake, aros 24, 26, 29 e 32",
-      "tag": "Conforto",
-      "specs": {
-        "frame": "Polímero Reciclado Monobloco",
-        "transmission": "Shimano Nexus 8v",
+        "transmission": "Shimano Nexus 3v / 5v / 8v",
         "brakes": "V-Brake Alumínio"
       }
     },

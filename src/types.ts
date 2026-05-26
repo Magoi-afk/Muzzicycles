@@ -19,6 +19,7 @@ export interface Product {
     weight: string;
   };
   selectedAro?: string;
+  selectedVersion?: string;
   isAcervo?: boolean;
 }
 

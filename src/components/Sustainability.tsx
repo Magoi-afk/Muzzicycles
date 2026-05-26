@@ -24,7 +24,7 @@ export default function Sustainability() {
           className="mt-8"
         >
           <a 
-            href="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/A%20Natureza%20Supera.pdf" 
+            href="/pdfs/A Natureza Supera.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-6 py-3 bg-brand-blue text-white rounded-2xl font-geist font-bold text-sm hover:scale-105 transition-transform shadow-xl shadow-brand-blue/20"

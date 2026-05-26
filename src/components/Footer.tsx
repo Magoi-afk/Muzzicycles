@@ -69,7 +69,7 @@ export default function Footer({ onViewChange }: FooterProps) {
               <div className="flex flex-col sm:flex-row items-center gap-2 mb-4 justify-center sm:justify-start">
                 <BadgeCheck className="w-5 h-5 text-black/80" />
                 <img 
-                  src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/LogoMuzzi.png" 
+                  src="/images/LogoMuzzi.png" 
                   alt="Muzzicycles" 
                   className="h-10 w-auto object-contain cursor-pointer"
                   referrerPolicy="no-referrer"
@@ -209,7 +209,7 @@ export default function Footer({ onViewChange }: FooterProps) {
                     {t('nav.terms') || 'Termos'}
                   </button>
                   <span className="hidden lg:inline text-black/20 font-geist">|</span>
-                  <span className="text-[10px] font-geist uppercase tracking-widest block w-full xs:w-auto mt-1 xs:mt-0">{t('footer.rights')}</span>
+                  <span className="text-[10px] font-geist uppercase tracking-widest block w-full xs:w-auto mt-1 xs:mt-0 text-left lg:text-left">{t('footer.rights')}</span>
                 </div>
                 <div className="flex flex-col lg:flex-row items-center gap-6 text-center lg:text-right">
                   <div className="flex flex-col items-center lg:items-end gap-1">

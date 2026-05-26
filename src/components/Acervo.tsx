@@ -147,42 +147,42 @@ export default function Acervo({ onProductClick }: AcervoProps) {
               title: "Apresentação Institucional",
               desc: "Histórico completo, fases de construção do molde e testes de crash test (1998-2024).",
               icon: FileText,
-              link: "https://muzzicycles.com.br/apresentacao_institucional.pdf",
+              link: "/pdfs/apresentacao_institucional.pdf",
               action: "Visualizar PDF"
             },
             {
               title: "Patentes Mundiais",
               desc: "Registros oficiais de patentes nos Estados Unidos, Holanda e outros territórios globais.",
               icon: Award,
-              link: "https://muzzicycles.com.br/patentes.pdf",
+              link: "/pdfs/patentes.pdf",
               action: "Detalhes Técnicos"
             },
             {
               title: "Relatório de Sustentabilidade",
               desc: "Impacto ambiental: economia de petróleo e redução drástica de emissões de CO2.",
               icon: History,
-              link: "https://muzzicycles.com.br/sustentabilidade.pdf",
+              link: "/pdfs/sustentabilidade.pdf",
               action: "Baixar Relatório"
             },
             {
               title: "Catálogo de Componentes",
               desc: "Guia técnico de peças, compatibilidades e especificações do quadro monobloco.",
               icon: FileText,
-              link: "https://muzzicycles.com.br/catalogo_pecas.pdf",
+              link: "/pdfs/catalogo_pecas.pdf",
               action: "Abrir Catálogo"
             },
             {
               title: "Manual do Usuário",
               desc: "Instruções de montagem, cuidados com o polímero e termos da garantia vitalícia.",
               icon: Info,
-              link: "https://muzzicycles.com.br/manual_usuario.pdf",
+              link: "/pdfs/manual_usuario.pdf",
               action: "Ler Manual"
             },
             {
               title: "Certificações Técnicas",
               desc: "Laudos laboratoriais Falcão Bauer e selos de conformidade INMETRO.",
               icon: Award,
-              link: "https://muzzicycles.com.br/certificacoes.pdf",
+              link: "/pdfs/certificacoes.pdf",
               action: "Ver Laudos"
             }
           ].map((doc, i) => (

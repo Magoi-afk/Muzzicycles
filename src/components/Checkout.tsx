@@ -462,7 +462,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                           name: `Entrega via Jadlog (${shippingMethod === 'express' ? 'Express' : 'Econômico'})`,
                           price: getShippingPrice(),
                           quantity: 1,
-                          image: 'https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/amazonas.png'
+                          image: '/images/amazonas.png'
                         }
                       ]}
                       payer={{ name: formData.name, email: formData.email }}

@@ -11,7 +11,7 @@ const partnerMedia: PartnerMedia[] = [
   {
     name: "Plastic Industrial",
     logoUrl: "/images/Plastico Industrial.png",
-    pdfUrl: "/pdfs/plasticoindustrial.pdf"
+    pdfUrl: "/pdfs/plasticoindutrial.pdf"
   },
   {
     name: "VO2Bike",
@@ -26,7 +26,7 @@ const partnerMedia: PartnerMedia[] = [
   {
     name: "Brasil Almanaque",
     logoUrl: "/images/Brasil almanaque.png",
-    pdfUrl: "/pdfs/Brasil-Almanaque.pdf"
+    pdfUrl: "/pdfs/Brasil Almanaque.pdf"
   },
   {
     name: "Ciclomagazine",

@@ -10,12 +10,12 @@ export default function ModelsIntro() {
   const techImagesData = t('models_intro.tech_images', { returnObjects: true }) as { title: string; desc: string }[];
   const techImages = [
     {
-      src: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/Geometria%20Quadro%20Muzzicycles.png",
+      src: "/images/Geometria Quadro Muzzicycles.png",
       title: techImagesData[0].title,
       desc: techImagesData[0].desc
     },
     {
-      src: "https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/medidas%20muzzi%20aro%2026.png",
+      src: "/images/medidas muzzi aro 26.png",
       title: techImagesData[1].title,
       desc: techImagesData[1].desc
     }

@@ -512,32 +512,12 @@
       }
     },
     "4": {
-      "name": "MISSISSIPPI 3V",
-      "description": "Comfort & City — Nexus 3v derailleur, V-brake brakes, rims 24, 26, 29 and 32",
+      "name": "MISSISSIPPI",
+      "description": "Comfort & City — Nexus gear selector (3v, 5v or 8v), V-brakes, rims 24, 26, 29 and 32",
       "tag": "Comfort",
       "specs": {
         "frame": "Monoblock Recycled Polymer",
-        "transmission": "Shimano Nexus 3v",
-        "brakes": "Aluminum V-Brake"
-      }
-    },
-    "8": {
-      "name": "MISSISSIPPI 5V",
-      "description": "Comfort & City — Nexus 5v derailleur, V-brake brakes, rims 24, 26, 29 and 32",
-      "tag": "Comfort",
-      "specs": {
-        "frame": "Monoblock Recycled Polymer",
-        "transmission": "Shimano Nexus 5v",
-        "brakes": "Aluminum V-Brake"
-      }
-    },
-    "9": {
-      "name": "MISSISSIPPI 8V",
-      "description": "Comfort & City — Nexus 8v derailleur, V-brake brakes, rims 24, 26, 29 and 32",
-      "tag": "Comfort",
-      "specs": {
-        "frame": "Monoblock Recycled Polymer",
-        "transmission": "Shimano Nexus 8v",
+        "transmission": "Shimano Nexus 3v / 5v / 8v",
         "brakes": "Aluminum V-Brake"
       }
     },

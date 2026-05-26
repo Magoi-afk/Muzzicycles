@@ -73,30 +73,49 @@ export default function App() {
   };
 
   const addToCart = (product: Product, selectedAro?: string) => {
+    const finalProduct = (product.id === '4' && !product.selectedVersion) ? {
+      ...product,
+      selectedVersion: 'V3',
+      price: 4300,
+      name: `${product.name} V3`
+    } : product;
+
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id && item.selectedAro === selectedAro);
+      const existing = prev.find((item) => 
+        item.id === finalProduct.id && 
+        item.selectedAro === selectedAro && 
+        item.selectedVersion === finalProduct.selectedVersion
+      );
       if (existing) {
         return prev.map((item) =>
-          (item.id === product.id && item.selectedAro === selectedAro) ? { ...item, quantity: item.quantity + 1 } : item
+          (item.id === finalProduct.id && item.selectedAro === selectedAro && item.selectedVersion === finalProduct.selectedVersion) 
+            ? { ...item, quantity: item.quantity + 1 } 
+            : item
         );
       }
-      return [...prev, { ...product, quantity: 1, selectedAro }];
+      return [...prev, { ...finalProduct, quantity: 1, selectedAro, selectedVersion: finalProduct.selectedVersion }];
     });
     setIsCartOpen(true);
   };
 
-  const updateQuantity = (id: string, delta: number) => {
+  const updateQuantity = (id: string, delta: number, selectedAro?: string, selectedVersion?: string) => {
     setCartItems((prev) =>
       prev
         .map((item) =>
-          item.id === id ? { ...item, quantity: Math.max(0, item.quantity + delta) } : item
+          (item.id === id && item.selectedAro === selectedAro && item.selectedVersion === selectedVersion) 
+            ? { ...item, quantity: Math.max(0, item.quantity + delta) } 
+            : item
         )
         .filter((item) => item.quantity > 0)
     );
   };
 
-  const removeFromCart = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = (id: string, selectedAro?: string, selectedVersion?: string) => {
+    setCartItems((prev) => 
+      prev.filter((item) => 
+        !(item.id === id && item.selectedAro === selectedAro && item.selectedVersion === selectedVersion)
+      )
+    );
   };
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -109,9 +128,13 @@ export default function App() {
 
   const handleCheckout = (product: Product, selectedAro?: string) => {
     // Add to cart if not already there, then go to checkout
-    const existing = cartItems.find(item => item.id === product.id && item.selectedAro === selectedAro);
+    const existing = cartItems.find(item => 
+      item.id === product.id && 
+      item.selectedAro === selectedAro && 
+      item.selectedVersion === product.selectedVersion
+    );
     if (!existing) {
-      setCartItems(prev => [...prev, { ...product, quantity: 1, selectedAro }]);
+      setCartItems(prev => [...prev, { ...product, quantity: 1, selectedAro, selectedVersion: product.selectedVersion }]);
     }
     setView('checkout');
     window.scrollTo(0, 0);

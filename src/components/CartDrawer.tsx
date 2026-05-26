@@ -7,8 +7,8 @@ interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   items: CartItem[];
-  onUpdateQuantity: (id: string, delta: number) => void;
-  onRemove: (id: string) => void;
+  onUpdateQuantity: (id: string, delta: number, selectedAro?: string, selectedVersion?: string) => void;
+  onRemove: (id: string, selectedAro?: string, selectedVersion?: string) => void;
   onCheckout: () => void;
 }
 
@@ -61,18 +61,26 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
               ) : (
                 <ul className="divide-y divide-black/5">
                   {items.map((item) => (
-                    <li key={item.id} className="flex items-center gap-3 p-4">
+                    <li key={`${item.id}-${item.selectedAro || ''}-${item.selectedVersion || ''}`} className="flex items-center gap-3 p-4">
                       <div className="h-14 w-14 rounded-xl bg-black/5 border border-black/5 flex items-center justify-center overflow-hidden">
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-black">{t(`products_data.${item.id}.name`, { defaultValue: item.name })}</p>
-                        {item.selectedAro && (
-                          <p className="text-xs text-black/60">{t('cart.wheel_size')}: {item.selectedAro}</p>
-                        )}
+                        <p className="text-sm font-medium text-black">
+                          {t(`products_data.${item.id}.name`, { defaultValue: item.name })}
+                          {item.id === '4' && item.selectedVersion ? ` ${item.selectedVersion}` : ''}
+                        </p>
+                        <div className="flex flex-wrap gap-x-2 text-xs text-black/60">
+                          {item.selectedVersion && (
+                            <p>Câmbio: Shimano Nexus {item.selectedVersion}</p>
+                          )}
+                          {item.selectedAro && (
+                            <p>{item.selectedVersion ? '• ' : ''}{t('cart.wheel_size')}: {item.selectedAro}</p>
+                          )}
+                        </div>
                         <div className="mt-2 inline-flex items-center gap-2">
                           <button 
-                            onClick={() => onUpdateQuantity(item.id, -1)}
+                            onClick={() => onUpdateQuantity(item.id, -1, item.selectedAro, item.selectedVersion)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-black/5 hover:bg-black/5" 
                             aria-label="Decrease quantity"
                           >
@@ -80,14 +88,14 @@ export default function CartDrawer({ isOpen, onClose, items, onUpdateQuantity, o
                           </button>
                           <span className="min-w-[1.5rem] text-center text-sm">{item.quantity}</span>
                           <button 
-                            onClick={() => onUpdateQuantity(item.id, 1)}
+                            onClick={() => onUpdateQuantity(item.id, 1, item.selectedAro, item.selectedVersion)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-black/5 hover:bg-black/5" 
                             aria-label="Increase quantity"
                           >
                             +
                           </button>
                           <button 
-                            onClick={() => onRemove(item.id)}
+                            onClick={() => onRemove(item.id, item.selectedAro, item.selectedVersion)}
                             className="ml-2 inline-flex items-center gap-1 h-8 px-2 rounded-lg border border-black/5 hover:bg-black/5 text-xs text-black/70"
                           >
                             <Trash2 className="w-3 h-3" />

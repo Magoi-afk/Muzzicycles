@@ -142,7 +142,7 @@ export default function Header({
               <button onClick={() => handleNavClick('home')} className="transition-opacity hover:opacity-80">
                 <img 
                   className="h-10 w-auto" 
-                  src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/LogoMuzzi.png" 
+                  src="/images/LogoMuzzi.png" 
                   alt="Muzzicycles" 
                   referrerPolicy="no-referrer"
                 />
@@ -342,7 +342,7 @@ export default function Header({
               <div className="flex justify-between items-center h-20 shrink-0">
                 <img 
                   className="h-10 w-auto" 
-                  src="https://cdn.jsdelivr.net/gh/Magoi-afk/Muzzicycles@main/LogoMuzzi.png" 
+                  src="/images/LogoMuzzi.png" 
                   alt="Muzzicycles" 
                   referrerPolicy="no-referrer"
                 />
