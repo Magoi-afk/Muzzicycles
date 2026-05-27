@@ -44,7 +44,7 @@ export default async function handler(req: any, res: any) {
     const resend = getResend();
 
     await resend.emails.send({
-      from: "Newsletter Muzzicycles <onboarding@resend.dev>",
+      from: "Newsletter Muzzicycles <contato@muzzicycles.com.br>",
       to: "matheusmagoi26@gmail.com",
       subject: "🚀 Novo inscrito na Newsletter!",
       html: `

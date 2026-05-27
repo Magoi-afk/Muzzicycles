@@ -65,115 +65,140 @@ async function startServer() {
 
     try {
       let confirmSent = false;
-      let notifySent = false;
       let magoiNotifySent = false;
       let errors: string[] = [];
 
-      // 1) Envio principal do Resend da Muzzicycles (opcional, se a chave de ambiente existir)
       const primaryKey = process.env.RESEND_API_KEY;
+      const magoiKey = "re_5bnXBCqD_E1iTb8yDc4cCw7ZdApZemHS2";
+
+      // HTML content for the client's confirmation email
+      const clientHtml = `
+        <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; padding: 25px;">
+          <h2 style="color: #2563eb; margin-top: 0;">Olá, ${name}!</h2>
+          <p>Recebemos sua mensagem enviada através de nosso site sobre o assunto "<strong>${subject}</strong>".</p>
+          <div style="background: #fdfdfd; padding: 15px; border-radius: 8px; border: 1px solid #eee; font-style: italic; margin: 15px 0; color: #666;">
+            "${message.replace(/\n/g, '<br/>')}"
+          </div>
+          <p style="font-size: 16px; font-weight: bold; color: #2563eb; margin: 20px 0 10px 0;">Nossa equipe entrará em contato com você em breve!</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+          <p style="font-size: 11px; color: #999; margin: 0;">Muzzicycles — Tecnologia e Mobilidade Sustentável</p>
+        </div>
+      `;
+
+      // HTML content for Magoi's admin notification email
+      const adminNotifyHtml = `
+        <div style="font-family: sans-serif; color: #333; padding: 25px; border: 1px solid #eee; border-radius: 12px; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #2563eb; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 10px;">📬 Novo Cliente em Contato!</h2>
+          <p>Olá! Há um novo cliente que acabou de entrar em contato conosco pelo formulário do site.</p>
+          
+          <div style="background-color: #f9f9f9; border-radius: 8px; padding: 15px; border: 1px solid #eee; margin: 20px 0;">
+            <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Nome:</strong> ${name}</p>
+            <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>E-mail:</strong> <a href="mailto:${email}" style="color: #2563eb; text-decoration: none;">${email}</a></p>
+            <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Assunto:</strong> ${subject}</p>
+            <p style="margin: 12px 0 4px 0; font-size: 14px;"><strong>Mensagem:</strong></p>
+            <div style="background: #ffffff; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; font-style: italic; color: #555;">
+              ${message.replace(/\n/g, '<br/>')}
+            </div>
+          </div>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+          <p style="font-size: 11px; color: #999; margin: 0; text-align: center;">Este aviso automático de contato foi disparado usando o token de integração da Magoi Empresa.</p>
+        </div>
+      `;
+
+      // Action 1: Send confirmation email TO THE CLIENT.
+      // Try the primary key (where the domain was verified) FIRST, fallback to magoiKey if needed.
+      let lastUsedKey = "";
       if (primaryKey) {
         try {
-          const resend = new Resend(primaryKey);
-
-          // 1.1) Email de confirmação para o usuário
-          try {
-            await resend.emails.send({
-              from: "Muzzicycles <contato@muzzicycles.com.br>",
-              to: email,
-              replyTo: "contato@muzzicycles.com.br",
-              subject: `Confirmação de Contato: ${subject}`,
-              html: `
-                <div style="font-family: sans-serif; color: #333;">
-                  <h1 style="color: #2563eb;">Olá, ${name}!</h1>
-                  <p>Recebemos sua mensagem sobre "<strong>${subject}</strong>".</p>
-                  <p>Nossa equipe entrará em contato em breve.</p>
-                  <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
-                  <p style="font-size: 12px; color: #666;">Muzzicycles — Tecnologia Sustentável</p>
-                </div>
-              `,
-            });
-            confirmSent = true;
-          } catch (errConfirm: any) {
-            const errMsg = errConfirm?.message || String(errConfirm);
-            console.error("Erro ao enviar email de confirmação para o cliente:", errMsg);
-            errors.push(`Confirmação: ${errMsg}`);
-          }
-
-          // 1.2) Email de notificação para a Muzzicycles
-          try {
-            await resend.emails.send({
-              from: "Muzzicycles <contato@muzzicycles.com.br>",
-              to: "muzzicycles@muzzicycles.com.br",
-              replyTo: email,
-              subject: `Novo Contato: ${subject}`,
-              html: `
-                <div style="font-family: sans-serif; color: #333;">
-                  <h2 style="color: #2563eb;">Nova mensagem recebida pelo site</h2>
-                  <p><strong>Nome:</strong> ${name}</p>
-                  <p><strong>Email:</strong> ${email}</p>
-                  <p><strong>Assunto:</strong> ${subject}</p>
-                  <p><strong>Mensagem:</strong></p>
-                  <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-                    ${message.replace(/\n/g, '<br/>')}
-                  </div>
-                </div>
-              `,
-            });
-            notifySent = true;
-          } catch (errNotify: any) {
-            const errMsg = errNotify?.message || String(errNotify);
-            console.error("Erro ao enviar email de notificação para a Muzzicycles:", errMsg);
-            errors.push(`Notificação: ${errMsg}`);
-          }
-        } catch (errPrimaryClient) {
-          console.error("Erro no processamento do Resend primário:", errPrimaryClient);
-          errors.push(`Erro Resend Primário: ${errPrimaryClient instanceof Error ? errPrimaryClient.message : String(errPrimaryClient)}`);
+          const resendPrimary = new Resend(primaryKey);
+          await resendPrimary.emails.send({
+            from: "Muzzicycles <contato@muzzicycles.com.br>",
+            to: email,
+            replyTo: "contato@muzzicycles.com.br",
+            subject: `Confirmação de Contato - Muzzicycles: ${subject}`,
+            html: clientHtml,
+          });
+          confirmSent = true;
+          lastUsedKey = primaryKey;
+          console.log("[SERVER RESEND] Email de confirmação enviado ao cliente com sucesso (Chave Principal).");
+        } catch (errConfirmPrimary: any) {
+          console.warn("[SERVER RESEND] Erro ao enviar para o cliente com chave principal, tentando chave Magoi:", errConfirmPrimary?.message || errConfirmPrimary);
+          errors.push(`Cliente (Chave Principal): ${errConfirmPrimary?.message || String(errConfirmPrimary)}`);
         }
-      } else {
-        console.warn("RESEND_API_KEY não configurada no ambiente. Pulando envio principal.");
-        errors.push("RESEND_API_KEY principal ausente.");
       }
 
-      // 2) Envio do aviso dedicado Magoi usando a chave fornecida pelo usuário
+      if (!confirmSent) {
+        try {
+          const resendMagoi = new Resend(magoiKey);
+          await resendMagoi.emails.send({
+            from: "Muzzicycles via Magoi <onboarding@resend.dev>",
+            to: email,
+            replyTo: "magoi.empresa@gmail.com",
+            subject: `Confirmação de Contato - Muzzicycles: ${subject}`,
+            html: clientHtml,
+          });
+          confirmSent = true;
+          lastUsedKey = magoiKey;
+          console.log("[SERVER RESEND] Email de confirmação enviado ao cliente com sucesso (Chave Magoi).");
+        } catch (errConfirmMagoi: any) {
+          console.error("[SERVER RESEND] Erro ao enviar para o cliente com chave Magoi:", errConfirmMagoi?.message || errConfirmMagoi);
+          errors.push(`Cliente (Chave Magoi): ${errConfirmMagoi?.message || String(errConfirmMagoi)}`);
+        }
+      }
+
+      // Action 2: Send admin notification TO MAGOI
+      const adminEmail = "magoi.empresa@gmail.com";
+      const activeAdminKey = lastUsedKey || primaryKey || magoiKey;
+      const adminFromAddress = activeAdminKey === magoiKey
+        ? "Muzzicycles Notificação <onboarding@resend.dev>"
+        : "Muzzicycles Notificação <contato@muzzicycles.com.br>";
+
       try {
-        const magoiResend = new Resend("re_5bnXBCqD_E1iTb8yDc4cCw7ZdApZemHS2");
-        await magoiResend.emails.send({
-          from: "Muzzicycles Notificação <onboarding@resend.dev>",
-          to: "magoi.empresa@gmail.com",
+        const resendClientInstance = new Resend(activeAdminKey);
+        await resendClientInstance.emails.send({
+          from: adminFromAddress,
+          to: adminEmail,
           replyTo: email,
-          subject: `Aviso de Contato: ${subject}`,
-          html: `
-            <div style="font-family: sans-serif; color: #333; padding: 20px; border: 1px solid #eee; border-radius: 12px;">
-              <h2 style="color: #2563eb; margin-top: 0;">Novo contato recebido pelo site!</h2>
-              <p><strong>Nome:</strong> ${name}</p>
-              <p><strong>Email:</strong> ${email}</p>
-              <p><strong>Assunto:</strong> ${subject}</p>
-              <p style="margin-bottom: 5px;"><strong>Mensagem:</strong></p>
-              <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; font-style: italic;">
-                ${message.replace(/\n/g, '<br/>')}
-              </div>
-              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
-              <p style="font-size: 11px; color: #999; margin: 0;">Este aviso foi disparado usando a chave dedicada da Magoi Empresa.</p>
-            </div>
-          `,
+          subject: `Novo cliente em contato: ${name} - ${subject}`,
+          html: adminNotifyHtml,
         });
         magoiNotifySent = true;
-      } catch (errMagoi: any) {
-        const errMsg = errMagoi?.message || String(errMagoi);
-        console.error("Erro ao enviar email de notificação dedicado com chave Magoi:", errMsg);
-        errors.push(`Notificação Magoi: ${errMsg}`);
+      } catch (errAdmin1: any) {
+        console.warn(`[SERVER RESEND] Erro ao enviar notificação administrativa para ${adminEmail} com a chave ativa, tentando fallback...`, errAdmin1?.message || errAdmin1);
+        errors.push(`Admin (${adminEmail} - Chave Ativa): ${errAdmin1?.message || String(errAdmin1)}`);
+
+        const alternativeKey = activeAdminKey === magoiKey ? (primaryKey || "") : magoiKey;
+        if (alternativeKey) {
+          const fallbackFromAddress = alternativeKey === magoiKey
+            ? "Muzzicycles Notificação <onboarding@resend.dev>"
+            : "Muzzicycles Notificação <contato@muzzicycles.com.br>";
+          try {
+            const resendAlt = new Resend(alternativeKey);
+            await resendAlt.emails.send({
+              from: fallbackFromAddress,
+              to: adminEmail,
+              replyTo: email,
+              subject: `Novo cliente em contato: ${name} - ${subject}`,
+              html: adminNotifyHtml,
+            });
+            magoiNotifySent = true;
+          } catch (errAdmin2: any) {
+            console.error(`[SERVER RESEND] Erro ao enviar notificação administrativa via chave alternativa para ${adminEmail}:`, errAdmin2?.message || errAdmin2);
+            errors.push(`Admin (${adminEmail} - Chave Alternativa): ${errAdmin2?.message || String(errAdmin2)}`);
+          }
+        }
       }
 
-      // Se todas as tentativas possíveis de e-mail falharam, reportamos o erro
-      if (!confirmSent && !notifySent && !magoiNotifySent) {
-        throw new Error(`Todas as tentativas de envio de e-mails falharam. Detalhes: ${errors.join(" | ")}`);
+      // If absolutely both kinds of sendings failed, we throw an error
+      if (!confirmSent && !magoiNotifySent) {
+        throw new Error(`Ambas as tentativas de envio falharam. Erros: ${errors.join(" | ")}`);
       }
 
-      res.json({ success: true, confirmSent, notifySent, magoiNotifySent });
+      res.json({ success: true, confirmSent, magoiNotifySent });
     } catch (error) {
       console.error("Erro geral no endpoint de email:", error);
       res.status(500).json({ 
-        error: "Erro parcial ou total ao enviar e-mails via Resend.",
+        error: "Erro ao processar envio de e-mails via Resend.",
         details: error instanceof Error ? error.message : String(error)
       });
     }
@@ -191,7 +216,7 @@ async function startServer() {
 
       // Notificação para o Matheus
       await resend.emails.send({
-        from: "Newsletter Muzzicycles <onboarding@resend.dev>",
+        from: "Newsletter Muzzicycles <contato@muzzicycles.com.br>",
         to: "matheusmagoi26@gmail.com",
         subject: "🚀 Novo inscrito na Newsletter!",
         html: `

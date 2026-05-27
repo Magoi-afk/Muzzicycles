@@ -53,11 +53,6 @@ export default function Contact() {
       setErrorMessage('A sua mensagem não pode ser vazia.');
       return;
     }
-    if (trimmedMessage.length < 10) {
-      setStatus('error');
-      setErrorMessage('A mensagem deve ter pelo menos 10 caracteres para que possamos entender o seu caso.');
-      return;
-    }
 
     try {
       let apiSuccess = false;
