@@ -45,14 +45,21 @@ export default function CustomerDashboard({ user, userProfile, onProductClick, f
       try {
         const q = query(
           collection(db, path), 
-          where('userId', '==', user.uid),
-          orderBy('createdAt', 'desc')
+          where('userId', '==', user.uid)
         );
         const querySnapshot = await getDocs(q);
         const fetchedOrders: Order[] = [];
         querySnapshot.forEach((doc) => {
           fetchedOrders.push({ id: doc.id, ...doc.data() } as Order);
         });
+        
+        // Sort in memory to avoid requiring a Firestore composite index
+        fetchedOrders.sort((a, b) => {
+          const dateA = a.createdAt && (a.createdAt as any).toDate ? (a.createdAt as any).toDate() : new Date(a.createdAt || 0);
+          const dateB = b.createdAt && (b.createdAt as any).toDate ? (b.createdAt as any).toDate() : new Date(b.createdAt || 0);
+          return dateB.getTime() - dateA.getTime();
+        });
+        
         setOrders(fetchedOrders);
       } catch (error) {
         console.error("Erro ao buscar pedidos:", error);

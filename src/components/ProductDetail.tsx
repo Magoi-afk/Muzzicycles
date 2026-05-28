@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Shield, Zap, ChevronRight, ArrowLeft, Plus, Minus, Info, Heart, History, Loader2 } from 'lucide-react';
 import { Product } from '../types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SplineScene from './SplineScene';
 
 interface ProductDetailProps {
@@ -26,9 +26,16 @@ export default function ProductDetail({
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedAro, setSelectedAro] = useState('29');
-  const [is3DActive, setIs3DActive] = useState(product.id === '10');
+  const [is3DActive, setIs3DActive] = useState(product.id === '3' || product.id === '1');
 
   const [selectedVersion, setSelectedVersion] = useState<'V3' | 'V5' | 'V8'>('V3');
+
+  useEffect(() => {
+    setSelectedImage(product.image);
+    setSelectedColor(product.colors[0]);
+    setIs3DActive(product.id === '3' || product.id === '1');
+    setSelectedVersion('V3');
+  }, [product]);
 
   const mississippiVersions = {
     V3: { price: 4300, transmission: 'Shimano Nexus 3v', weight: '13.1' },
@@ -42,7 +49,7 @@ export default function ProductDetail({
 
   const allImages = [product.image, ...(product.additionalImages || [])];
   const isBike = product.category !== 'Componentes';
-  const has3DModel = product.id === '10'; // QUADRO MONTAIN BIKE
+  const has3DModel = product.id === '3' || product.id === '1'; // MONTAIN BIKE (3) or NILO (1)
 
   const formatCurrency = (value: number) => {
     const locale = i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES';
@@ -79,7 +86,7 @@ export default function ProductDetail({
               {has3DModel && is3DActive ? (
                 <div className="w-full h-full relative bg-neutral-900">
                   <SplineScene 
-                    scene="https://prod.spline.design/SBiRzcE7RfxQgTif/scene.splinecode" 
+                    scene={product.id === '1' ? "https://prod.spline.design/B9R5OvnDSYh9n4Gb/scene.splinecode" : "https://prod.spline.design/RJOqiD51SRRziiSA/scene.splinecode"} 
                   />
                   <div className="absolute bottom-6 right-6 z-10 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] text-white/60 font-bold uppercase tracking-widest pointer-events-none">
                     {t('product_detail.interactive_3d')}

@@ -46,7 +46,8 @@
     "vite": "^6.2.0"
   },
   "overrides": {
-    "three": "^0.184.0"
+    "three": "^0.184.0",
+    "node-domexception": "file:./shims/node-domexception"
   },
   "devDependencies": {
     "shadcn": "^4.7.0",

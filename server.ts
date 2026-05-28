@@ -204,6 +204,201 @@ async function startServer() {
     }
   });
 
+  app.post("/api/purchase-notification", async (req, res) => {
+    const { orderId, payerName, payerEmail, items, total, trackingNumber } = req.body;
+
+    if (!orderId || !payerEmail || !items || !total) {
+      return res.status(400).json({ error: "Dados do pedido incompletos para envio de e-mail." });
+    }
+
+    try {
+      let confirmSent = false;
+      let adminNotifySent = false;
+      const primaryKey = process.env.RESEND_API_KEY;
+      const magoiKey = "re_5bnXBCqD_E1iTb8yDc4cCw7ZdApZemHS2";
+
+      const formattedTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total);
+
+      const itemsHtmlList = items.map((item: any) => `
+        <tr style="border-bottom: 1px solid #edf2f7;">
+          <td style="padding: 12px 0; font-size: 14px; font-weight: bold; color: #1a202c;">
+            ${item.name}
+          </td>
+          <td style="padding: 12px 0; font-size: 14px; text-align: center; color: #4a5568;">
+            ${item.quantity}x
+          </td>
+          <td style="padding: 12px 0; font-size: 14px; text-align: center; color: #4a5568;">
+            Aro ${item.selectedAro || 'Único'}
+          </td>
+          <td style="padding: 12px 0; font-size: 14px; text-align: right; font-weight: bold; color: #1a202c;">
+            ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price)}
+          </td>
+        </tr>
+      `).join('');
+
+      // Clean, premium design in deep brand blue and warm details
+      const clientHtml = `
+        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #2d3748; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; background-color: #ffffff;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #2563eb; margin: 0; font-size: 28px; font-weight: 800; tracking-tight: -0.025em;">Muzzicycles</h1>
+            <p style="font-size: 14px; color: #718096; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.05em;">Tecnologia & Sustentabilidade</p>
+          </div>
+          
+          <div style="border-top: 4px solid #2563eb; padding-top: 25px;">
+            <h2 style="color: #1a202c; font-size: 20px; font-weight: 700; margin-top: 0;">Oba! Compra Aprovada 🚲🎉</h2>
+            <p style="font-size: 15px; line-height: 1.6; color: #4a5568;">
+              Olá, <strong>${payerName || 'Amigo Ciclista'}</strong>!
+            </p>
+            <p style="font-size: 15px; line-height: 1.6; color: #4a5568;">
+              Seu pagamento foi confirmado com sucesso. Estamos muito felizes em ter você como parte do nosso ecossistema sustentável. Seu pedido já foi registrado e está sendo preparado com muito carinho!
+            </p>
+          </div>
+
+          <div style="background-color: #f7fafc; border-radius: 12px; padding: 20px; margin: 25px 0; border: 1px solid #edf2f7;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">
+              <span style="font-size: 13px; color: #718096;"><strong>Código do Pedido:</strong></span>
+              <span style="font-size: 13px; font-weight: bold; color: #1a202c;">#${orderId}</span>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="border-bottom: 2px solid #e2e8f0;">
+                  <th style="text-align: left; padding-bottom: 8px; font-size: 12px; text-transform: uppercase; color: #718096;">Produto</th>
+                  <th style="text-align: center; padding-bottom: 8px; font-size: 12px; text-transform: uppercase; color: #718096;">Qtd</th>
+                  <th style="text-align: center; padding-bottom: 8px; font-size: 12px; text-transform: uppercase; color: #718096;">Aro</th>
+                  <th style="text-align: right; padding-bottom: 8px; font-size: 12px; text-transform: uppercase; color: #718096;">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsHtmlList}
+              </tbody>
+            </table>
+
+            <div style="margin-top: 15px; text-align: right; font-size: 16px; font-weight: bold; color: #1a202c;">
+              Total Geral: <span style="color: #2563eb; font-size: 18px;">${formattedTotal}</span>
+            </div>
+          </div>
+
+          ${trackingNumber ? `
+          <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 12px; padding: 20px; border: 1px solid #bfdbfe; margin-bottom: 25px;">
+            <h4 style="margin: 0 0 10px 0; color: #1e40af; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">📦 Rastreio de Entrega</h4>
+            <p style="margin: 0 0 10px 0; font-size: 14px; color: #1e3a8a; line-height: 1.5;">
+              Sua entrega será processada pela transportadora Jadlog. Você pode acompanhar o status completo fazendo login no seu painel da Muzzicycles usando o código de rastreamento abaixo:
+            </p>
+            <div style="background: #ffffff; padding: 12px; border-radius: 8px; font-weight: bold; font-family: monospace; font-size: 16px; color: #2563eb; text-align: center; border: 1px dashed #3b82f6;">
+              ${trackingNumber}
+            </div>
+          </div>
+          ` : ''}
+
+          <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #718096; line-height: 1.5;">
+            <p>Se tiver qualquer dúvida, responda diretamente a este e-mail ou mande uma mensagem pelo formulário de contato.</p>
+            <p style="margin-top: 25px; font-size: 11px; color: #a0aec0; border-top: 1px solid #edf2f7; padding-top: 20px;">
+              Este é um e-mail de confirmação automática enviado para ${payerEmail}. Muzzicycles — Rodando o mundo com plástico reciclado.
+            </p>
+          </div>
+        </div>
+      `;
+
+      // HTML content for Matheus notify admin email
+      const adminNotifyHtml = `
+        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #2d3748; padding: 30px; border: 1px solid #e2e8f0; border-radius: 16px; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <h2 style="color: #10b981; margin-top: 0; border-bottom: 2px solid #10b981; padding-bottom: 15px; font-size: 24px; font-weight: 800;">💰 Nova Venda Aprovada!</h2>
+          <p style="font-size: 15px; line-height: 1.6;">Sensacional! O sistema acaba de aprovar uma nova compra no site Muzzicycles.</p>
+          
+          <div style="background-color: #f7fafc; border-radius: 12px; padding: 20px; border: 1px solid #edf2f7; margin: 20px 0;">
+            <p style="margin: 0 0 10px 0; font-size: 14.5px;"><strong>Cliente:</strong> ${payerName || 'Não informado'}</p>
+            <p style="margin: 0 0 10px 0; font-size: 14.5px;"><strong>E-mail:</strong> <a href="mailto:${payerEmail}" style="color: #2563eb; text-decoration: none;">${payerEmail}</a></p>
+            <p style="margin: 0 0 10px 0; font-size: 14.5px;"><strong>Pedido ID:</strong> #${orderId}</p>
+            <p style="margin: 0 0 10px 0; font-size: 14.5px;"><strong>Código de Rastreio:</strong> ${trackingNumber || 'Não gerado'}</p>
+            <p style="margin: 0 0 15px 0; font-size: 14.5px;"><strong>Total da Venda:</strong> <span style="color: #10b981; font-weight: bold; font-size: 16px;">${formattedTotal}</span></p>
+            
+            <h4 style="margin: 15px 0 10px 0; font-size: 13px; text-transform: uppercase; color: #718096; letter-spacing: 0.05em; border-top: 1px dashed #e2e8f0; padding-top: 15px;">Itens Vendidos:</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tbody>
+                ${items.map((item: any) => `
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13.5px; font-weight: bold; color: #1a202c;">${item.name} (Aro ${item.selectedAro || 'Único'})</td>
+                    <td style="padding: 6px 0; font-size: 13.5px; text-align: right; color: #4a5568;">${item.quantity}x de ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.price)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 13px; color: #718096; text-align: center; margin-top: 25px;">Prepare o pedido para entrega rápida via Jadlog!</p>
+        </div>
+      `;
+
+      // Try primary key domain first
+      let lastUsedKey = "";
+      if (primaryKey) {
+        try {
+          const resendPrimary = new Resend(primaryKey);
+          await resendPrimary.emails.send({
+            from: "Muzzicycles <contato@muzzicycles.com.br>",
+            to: payerEmail,
+            replyTo: "contato@muzzicycles.com.br",
+            subject: `Compra Confirmada! Pedido #${orderId} - Muzzicycles`,
+            html: clientHtml,
+          });
+          confirmSent = true;
+          lastUsedKey = primaryKey;
+          console.log("[SERVER PURCHASE RESEND] Email de confirmação enviado ao cliente (Chave Principal).");
+        } catch (errConfirmPrimary: any) {
+          console.warn("[SERVER PURCHASE RESEND] Erro com chave principal, tentando chave Magoi:", errConfirmPrimary?.message || errConfirmPrimary);
+        }
+      }
+
+      if (!confirmSent) {
+        try {
+          const resendMagoi = new Resend(magoiKey);
+          await resendMagoi.emails.send({
+            from: "Muzzicycles via Magoi <onboarding@resend.dev>",
+            to: payerEmail,
+            replyTo: "magoi.empresa@gmail.com",
+            subject: `Compra Confirmada! Pedido #${orderId} - Muzzicycles`,
+            html: clientHtml,
+          });
+          confirmSent = true;
+          lastUsedKey = magoiKey;
+          console.log("[SERVER PURCHASE RESEND] Email de confirmação enviado ao cliente (Chave Magoi).");
+        } catch (errConfirmMagoi: any) {
+          console.error("[SERVER PURCHASE RESEND] Erro com chave Magoi:", errConfirmMagoi?.message || errConfirmMagoi);
+        }
+      }
+
+      // Notify Matheus Admin
+      const adminEmail = "matheusmagoi26@gmail.com";
+      const activeAdminKey = lastUsedKey || primaryKey || magoiKey;
+      const adminFromAddress = activeAdminKey === magoiKey
+        ? "Muzzicycles Vendas <onboarding@resend.dev>"
+        : "Muzzicycles Vendas <contato@muzzicycles.com.br>";
+
+      try {
+        const resendClientInstance = new Resend(activeAdminKey);
+        await resendClientInstance.emails.send({
+          from: adminFromAddress,
+          to: adminEmail,
+          replyTo: payerEmail,
+          subject: `✨ Nova Venda Muzzicycles! #${orderId} - ${formattedTotal}`,
+          html: adminNotifyHtml,
+        });
+        adminNotifySent = true;
+        console.log("[SERVER PURCHASE RESEND] Notificação administrativa enviada para Matheus!");
+      } catch (errAdmin: any) {
+        console.warn("[SERVER PURCHASE RESEND] Erro ao enviar notificação para administrador:", errAdmin?.message || errAdmin);
+      }
+
+      res.json({ success: true, clientConfirmationSent: confirmSent, adminNotificationSent: adminNotifySent });
+    } catch (error) {
+      console.error("Erro no endpoint de notificação de compra:", error);
+      res.status(500).json({ 
+        error: "Erro geral ao enviar emails de compra.",
+        details: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
   app.post("/api/newsletter-notification", async (req, res) => {
     const { email } = req.body;
 
@@ -550,6 +745,10 @@ async function startServer() {
       });
     }
   });
+
+  // Servir arquivos estáticos das pastas public/images e public/pdfs de forma explícita para garantir resolução em qualquer ambiente
+  app.use('/images', express.static(path.join(process.cwd(), 'public/images')));
+  app.use('/pdfs', express.static(path.join(process.cwd(), 'public/pdfs')));
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

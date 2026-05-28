@@ -178,28 +178,20 @@ export default function LogoCloud() {
           href={item.pdfUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-shrink-0 transition-all duration-300 hover:scale-110 hover:opacity-100 opacity-60 grayscale hover:grayscale-0 flex items-center justify-center py-4 px-8 group min-w-[200px]"
+          className="flex-shrink-0 transition-all duration-300 hover:scale-105 opacity-90 hover:opacity-100 flex items-center justify-center py-4 px-8 group min-w-[200px]"
           title={item.name}
         >
           <div className="flex flex-col items-center justify-center gap-3">
-            <div className="h-10 lg:h-12 w-auto flex items-center justify-center">
+            <div className="h-12 lg:h-14 w-auto flex items-center justify-center animate-fade-in">
               <img
                 src={item.logoUrl}
                 alt={item.name}
                 loading="lazy"
                 referrerPolicy="no-referrer"
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = 'none';
-                  (e.currentTarget.parentElement?.querySelector('.fallback-icon') as HTMLElement)?.classList.remove('hidden');
-                }}
+                className="h-12 lg:h-14 w-auto object-contain max-w-[180px] select-none pointer-events-none"
               />
-              {/* If image fails, show a beautifully styled brand logo */}
-              <div className="fallback-icon hidden h-10 flex items-center justify-center">
-                <BrandLogoFallback name={item.name} />
-              </div>
             </div>
-            <span className="text-[11px] font-black text-black/40 uppercase tracking-[0.15em] text-center group-hover:text-brand-blue transition-colors whitespace-nowrap">
+            <span className="text-[11px] font-bold text-black/50 uppercase tracking-[0.15em] text-center group-hover:text-brand-blue transition-colors whitespace-nowrap">
               {item.name}
             </span>
           </div>

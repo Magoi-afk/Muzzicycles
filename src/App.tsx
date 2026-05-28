@@ -155,6 +155,9 @@ export default function App() {
         if (user && cartItems.length > 0) {
           try {
             const orderId = `MUZ-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+            const trackingNum = `BR${Math.floor(100000000 + Math.random() * 900000000)}JB`;
+            const totalSum = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            
             await setDoc(doc(db, 'orders', orderId), {
               userId: user.uid,
               items: cartItems.map(item => ({
@@ -165,12 +168,37 @@ export default function App() {
                 image: item.image,
                 selectedAro: item.selectedAro
               })),
-              total: cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0),
+              total: totalSum,
               status: 'processing',
-              trackingNumber: `BR${Math.floor(100000000 + Math.random() * 900000000)}JB`,
+              trackingNumber: trackingNum,
               createdAt: serverTimestamp()
             });
             console.log(t('app.order_saved'));
+
+            // Envia e-mail de agradecimento e confirmação via Resend
+            try {
+              await fetch('/api/purchase-notification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  orderId,
+                  payerName: user.displayName || user.email?.split('@')[0] || 'Cliente',
+                  payerEmail: user.email,
+                  items: cartItems.map(item => ({
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: item.price,
+                    selectedAro: item.selectedAro
+                  })),
+                  total: totalSum,
+                  trackingNumber: trackingNum
+                })
+              });
+              console.log("[EMAIL PURCHASE] Envio de notificação de compra processado pelo backend.");
+            } catch (emailErr) {
+              console.error("[EMAIL PURCHASE ERROR] Falha ao enviar notificação de compra:", emailErr);
+            }
+
           } catch (error) {
             console.error("Erro ao salvar pedido:", error);
             handleFirestoreError(error, OperationType.WRITE, 'orders');

@@ -8,8 +8,8 @@ export const PRODUCTS: Product[] = [
     id: '1',
     name: 'NILO',
     price: 1900,
-    image: '/images/nilo.png',
-    colors: ['bg-black', 'bg-gray-400', 'bg-brand-blue'],
+    image: '/images/Bikeamarela.jpg',
+    colors: ['bg-yellow-400', 'bg-black', 'bg-gray-400'],
     description: 'Urbana Simples — Monomarcha, freios V-brake, aros 24, 26, 29 e 32',
     rating: 4.8,
     reviews: 42,
@@ -17,9 +17,12 @@ export const PRODUCTS: Product[] = [
     tagColor: 'bg-brand-blue/10 text-brand-blue border-brand-blue/20',
     category: 'Urbana',
     additionalImages: [
-      '/images/nilo1.png',
-      '/images/nilo2.png',
-      '/images/nilo3.png'
+      '/images/BikeamarelaFrente.jpg',
+      '/images/FrenteBikeamarela.jpg',
+      '/images/BancoBikeamarela.jpg',
+      '/images/BancocorodatraseiraBikeamarela.jpg',
+      '/images/FreioBikeamarela.jpg',
+      '/images/PedalBikeamarela.jpg'
     ],
     specs: {
       frame: 'Polímero Reciclado Monobloco',
@@ -56,7 +59,7 @@ export const PRODUCTS: Product[] = [
     id: '3',
     name: 'MONTAIN BIKE',
     price: 3600,
-    image: '/images/reno4.png',
+    image: '/images/BikeAzul.jpg',
     colors: ['bg-brand-blue', 'bg-black'],
     description: 'Aventura Urbana — Câmbio Shimano 7 marchas, freios a disco, aros 24, 26, 29 e 32',
     rating: 4.7,
@@ -65,9 +68,12 @@ export const PRODUCTS: Product[] = [
     tagColor: 'bg-brand-blue/10 text-brand-blue border-brand-blue/20',
     category: 'Aventura',
     additionalImages: [
-      '/images/reno1.png',
-      '/images/reno2.png',
-      '/images/reno3.png'
+      '/images/BikeAzulLado.jpg',
+      '/images/FrenteBikeAzul.jpg',
+      '/images/ArosBikeAzul.jpg',
+      '/images/FreioBikeAzul.jpg',
+      '/images/PeneuBikeAzul.jpg',
+      '/images/RodaBikeAzul.jpg'
     ],
     specs: {
       frame: 'Polímero Reciclado Monobloco',
