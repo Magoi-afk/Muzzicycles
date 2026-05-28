@@ -443,7 +443,7 @@
     "back": "Volver al catálogo",
     "eco_badge": "Eco-Innovación",
     "exhibition_item": "Ítem de Exposición",
-    "dynamic_desc_suffix": "Desarrollada con polímeros reciclados de alto rendimiento, la {name} ofrece ligereza estructural y una absorción de impacto superior para el entorno urbano.",
+    "dynamic_desc_suffix": "Desarrollada con polímeros reciclados de alto rendimiento, la {{name}} ofrece ligereza estructural y una absorción de impacto superior para el entorno urbano.",
     "rim_size": "Tamaño del Aro",
     "buy_now": "Comprar Ahora",
     "add_to_cart": "Añadir al Carrito",

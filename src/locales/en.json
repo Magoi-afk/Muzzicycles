@@ -443,7 +443,7 @@
     "back": "Back to catalog",
     "eco_badge": "Eco-Innovation",
     "exhibition_item": "Exhibition Item",
-    "dynamic_desc_suffix": "Developed with high-performance recycled polymers, the {name} offers structural lightness and superior impact absorption for the urban environment.",
+    "dynamic_desc_suffix": "Developed with high-performance recycled polymers, the {{name}} offers structural lightness and superior impact absorption for the urban environment.",
     "rim_size": "Rim Size",
     "buy_now": "Buy Now",
     "add_to_cart": "Add to Cart",
