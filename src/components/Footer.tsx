@@ -29,29 +29,45 @@ export default function Footer({ onViewChange }: FooterProps) {
     setStatus('idle');
 
     try {
-      // Newsletter collection uses email as document ID
       const cleanedEmail = email.toLowerCase().trim();
-      await setDoc(doc(db, "newsletter", cleanedEmail), {
-        email: cleanedEmail,
-        status: 'active',
-        createdAt: serverTimestamp(),
-      });
-      
-      // Enviar notificação para o admin
+      let dbSaved = false;
+
+      // 1. Try writing directly to Firestore (may fail in dev if offline or missing keys)
       try {
-        await fetch('/api/newsletter-notification', {
+        await setDoc(doc(db, "newsletter", cleanedEmail), {
+          email: cleanedEmail,
+          status: 'active',
+          createdAt: serverTimestamp(),
+        });
+        dbSaved = true;
+      } catch (dbError) {
+        console.warn("Firestore direct write failed (fails non-blockingly in dev/local environment):", dbError);
+      }
+      
+      // 2. Always send notification to administrative backend API
+      let apiCalled = false;
+      try {
+        const response = await fetch('/api/newsletter-notification', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: cleanedEmail }),
         });
+        if (response.ok) {
+          apiCalled = true;
+        }
       } catch (notifyError) {
-        console.warn("Falha ao notificar admin:", notifyError);
+        console.warn("Falha ao notificar admin via API (non-blocking in dev):", notifyError);
       }
 
-      setStatus('success');
-      setEmail('');
-      // Reset success message after 5 seconds
-      setTimeout(() => setStatus('idle'), 5000);
+      // If either direct DB saved OR the backend was successfully notified, consider success
+      if (dbSaved || apiCalled) {
+        setStatus('success');
+        setEmail('');
+        // Reset success message after 5 seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        throw new Error("Não foi possível processar a assinatura. Tente novamente.");
+      }
     } catch (error) {
       console.error("Erro ao assinar newsletter:", error);
       setStatus('error');
