@@ -512,7 +512,8 @@ async function startServer() {
     const originZip = (process.env.ORIGIN_ZIP_CODE || "01001000").replace(/\D/g, '');
     
     const scaleFactor = Number(process.env.JADLOG_CUBIC_FACTOR || 6000);
-    const fallbackEnabled = process.env.ENABLE_SHIPPING_FALLBACK === "true";
+    // Enable fallback by default if token is missing, or if fallback is not explicitly disabled
+    const fallbackEnabled = !token || process.env.ENABLE_SHIPPING_FALLBACK !== "false";
     const authUseBearer = process.env.JADLOG_AUTH_USE_BEARER !== "false";
 
     console.log(`[SHIPPING] Iniciando cálculo de frete para CEP ${destZipCode}. Peso real enviado: ${weight}kg.`);
