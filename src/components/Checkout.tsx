@@ -18,6 +18,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
   const [shippingMethod, setShippingMethod] = useState('standard');
   const [shippingOptions, setShippingOptions] = useState<any[]>([]);
   const [isCalculatingShipping, setIsCalculatingShipping] = useState(false);
+  const [shippingError, setShippingError] = useState<string | null>(null);
 
   // Scroll to top on mount and when step changes
   useEffect(() => {
@@ -39,10 +40,30 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
 
   const [debouncedCep, setDebouncedCep] = useState('');
 
-  // Debounce CEP input
+  // Debounce CEP input and immediately clear states when incomplete
   useEffect(() => {
+    const cleanCep = formData.cep.replace(/\D/g, '');
+    if (cleanCep.length < 8) {
+      setShippingOptions([]);
+      setShippingMethod('');
+      setShippingError(null);
+      setIsCalculatingShipping(false);
+      setDebouncedCep('');
+      setFormData(prev => {
+        if (prev.address || prev.neighborhood || prev.city || prev.state) {
+          return {
+            ...prev,
+            address: '',
+            neighborhood: '',
+            city: '',
+            state: ''
+          };
+        }
+        return prev;
+      });
+    }
+
     const timer = setTimeout(() => {
-      const cleanCep = formData.cep.replace(/\D/g, '');
       if (cleanCep.length === 8) {
         setDebouncedCep(cleanCep);
       } else {
@@ -55,8 +76,13 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
 
   const calculateShipping = async (cep: string) => {
     const cleanCep = cep.replace(/\D/g, '');
+    
+    // Clear previous error, previous options and reset selection immediately
+    setShippingOptions([]);
+    setShippingMethod('');
+    setShippingError(null);
+
     if (cleanCep.length !== 8) {
-      setShippingOptions([]);
       return;
     }
     
@@ -85,13 +111,18 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
       if (response.ok && Array.isArray(data) && data.length > 0) {
         setShippingOptions(data);
         setShippingMethod(data[0].type);
+        setShippingError(null);
       } else {
         console.warn('Backend returned error or empty list:', data);
         setShippingOptions([]);
+        setShippingMethod('');
+        setShippingError(t('checkout.shipping.error') || "Não foi possível calcular o frete. Verifique o CEP e tente novamente.");
       }
     } catch (error) {
       console.error('Shipping connection error:', error);
       setShippingOptions([]);
+      setShippingMethod('');
+      setShippingError(t('checkout.shipping.error') || "Não foi possível calcular o frete. Verifique o CEP e tente novamente.");
     } finally {
       setIsCalculatingShipping(false);
     }
@@ -134,6 +165,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
   const isFormValid = formData.name && formData.email && formData.cpf && formData.phone && formData.address && formData.city && formData.state && formData.cep.replace(/\D/g, '').length === 8;
 
   const getShippingPrice = () => {
+    if (!shippingMethod || shippingOptions.length === 0) return 0;
     const option = shippingOptions.find(opt => opt.type === shippingMethod);
     return option ? Number(option.vlrFrete) : 0;
   };
@@ -323,7 +355,7 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                             {shippingMethod === option.type && <div className="h-2.5 w-2.5 rounded-full bg-brand-blue"></div>}
                           </div>
                           <div className="text-left">
-                            <span className="block font-medium font-geist">{option.type === 'express' ? 'Jadlog .Package' : 'Jadlog .Com'}</span>
+                            <span className="block font-medium font-geist">{option.name || (option.type === 'express' || option.type === 'package' ? 'Jadlog .Package' : 'Jadlog .Com')}</span>
                             <span className="text-xs text-black/40 font-geist">
                             {t('checkout.shipping.estimate')}: {typeof option.prazo === 'number' ? `${option.prazo} ${option.prazo === 1 ? t('checkout.shipping.business_day') : t('checkout.shipping.business_days')}` : option.prazo}
                             </span>
@@ -334,9 +366,11 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                         </span>
                       </button>
                     ))
-                  ) : formData.cep.replace(/\D/g, '').length === 8 ? (
+                  ) : shippingError || (formData.cep.replace(/\D/g, '').length === 8 && shippingOptions.length === 0) ? (
                     <div className="p-8 text-center bg-red-50 rounded-2xl border border-red-100">
-                      <p className="text-sm text-red-600 font-geist">{t('checkout.shipping.error')}</p>
+                      <p className="text-sm text-red-600 font-geist">
+                        {shippingError || t('checkout.shipping.error') || "Não foi possível calcular o frete. Verifique o CEP e tente novamente."}
+                      </p>
                     </div>
                   ) : (
                     <div className="p-8 text-center bg-gray-50 rounded-2xl border border-black/5">
@@ -430,7 +464,15 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                 </div>
                 <div className="flex justify-between text-sm text-black/60 font-geist">
                   <span>{t('checkout.summary.shipping')}</span>
-                  <span>{shippingMethod && shippingOptions.length > 0 ? new Intl.NumberFormat(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'BRL' }).format(getShippingPrice()) : t('checkout.shipping.calculating_cost')}</span>
+                  <span>
+                    {isCalculatingShipping ? (
+                      t('checkout.shipping.calculating_cost')
+                    ) : shippingMethod && shippingOptions.length > 0 ? (
+                      new Intl.NumberFormat(i18n.language === 'pt' ? 'pt-BR' : i18n.language === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'BRL' }).format(getShippingPrice())
+                    ) : (
+                      "--"
+                    )}
+                  </span>
                 </div>
                 <div className="pt-4 border-t border-black/10 flex justify-between text-lg font-bold text-black font-geist">
                   <span>{t('checkout.summary.total')}</span>
@@ -446,7 +488,13 @@ export default function Checkout({ items, onBack, onComplete }: CheckoutProps) {
                       if (isFormValid) setStep(2);
                       else alert(t('checkout.form.errors.required'));
                     }}
-                    disabled={isCalculatingShipping || shippingOptions.length === 0}
+                    disabled={
+                      isCalculatingShipping || 
+                      !!shippingError || 
+                      shippingOptions.length === 0 || 
+                      !shippingMethod || 
+                      !shippingOptions.some(opt => opt.type === shippingMethod)
+                    }
                     className="w-full h-14 rounded-2xl bg-brand-blue text-white font-bold font-geist text-lg hover:bg-brand-blue-dark transition shadow-lg shadow-brand-blue/20 mb-8 disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-3"
                   >
                     {t('checkout.summary.to_payment')}

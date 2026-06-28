@@ -560,228 +560,146 @@ async function startServer() {
   });
 
   app.post("/api/shipping/calculate", async (req, res) => {
-    // 1. Inputs, configuration & Sanitization
-    const { destZipCode, weight, value, width, height, length } = req.body;
-    
-    const token = (process.env.JADLOG_TOKEN || "").trim();
-    const cnpj = (process.env.JADLOG_CNPJ || process.env.JADLOG_CLIENT_CODE || "").trim();
-    const conta = (process.env.JADLOG_ACCOUNT || "").trim();
-    const contratoVal = (process.env.JADLOG_CONTRACT || "").trim();
-    const originZip = (process.env.ORIGIN_ZIP_CODE || "01001000").replace(/\D/g, '');
-    
-    const scaleFactor = Number(process.env.JADLOG_CUBIC_FACTOR || 6000);
-    const isDev = process.env.NODE_ENV !== "production";
-    const authUseBearer = process.env.JADLOG_AUTH_USE_BEARER !== "false";
-
-    console.log(`[SHIPPING] Iniciando cálculo de frete para CEP ${destZipCode}. Peso real enviado: ${weight}kg. Modo: ${isDev ? "DESENVOLVIMENTO (sempre fallback)" : "PRODUÇÃO"}`);
-
     try {
-      // 2. CEP and Dimensions Validations (Sempre validar formato primeiro)
-      if (!destZipCode || typeof destZipCode !== 'string') {
-        throw new Error("CEP de destino não informado ou inválido.");
-      }
-      
-      const cleanDestZip = destZipCode.replace(/\D/g, '');
-      if (cleanDestZip.length !== 8) {
-        throw new Error(`CEP de destino deve ter exatamente 8 dígitos numéricos. Recebido: "${cleanDestZip}"`);
+      const { destZipCode, weight, value, width, height, length } = req.body;
+
+      // 1. Get and sanitize inputs and environment variables
+      const rawOriginZip = process.env.ORIGIN_ZIP_CODE || "02521100";
+      const originZip = rawOriginZip.replace(/\D/g, '');
+      const destZip = (destZipCode || "").replace(/\D/g, '');
+
+      if (destZip.length !== 8) {
+        return res.status(400).json({ error: "CEP de destino inválido." });
       }
 
-      if (originZip.length !== 8) {
-        throw new Error(`CEP de origem configurado (${originZip}) é inválido.`);
-      }
+      const token = (process.env.JADLOG_TOKEN || "").trim();
+      const cnpj = (process.env.JADLOG_CNPJ || "43990100000115").trim().replace(/\D/g, '');
+      const conta = (process.env.JADLOG_CONTA || "034099").trim();
 
       const inputWeight = Math.max(0.1, Number(weight) || 1);
       const inputVal = Math.max(0, Number(value) || 100);
       const w = Math.max(1, Number(width) || 15);
       const h = Math.max(1, Number(height) || 15);
       const l = Math.max(1, Number(length) || 15);
+      const scaleFactor = Number(process.env.JADLOG_CUBIC_FACTOR || 6000);
 
-      // Calcular cubado
       const cubicWeight = (w * h * l) / scaleFactor;
-      const finalWeight = Math.max(inputWeight, cubicWeight);
+      const finalWeight = parseFloat(Math.max(inputWeight, cubicWeight).toFixed(3));
+      const declaredValue = parseFloat(inputVal.toFixed(2));
 
-      // A. Se estiver em desenvolvimento, SEMPRE use o fallback para dar velocidade e garantir estabilidade sem precisar de credenciais Jadlog locais
-      if (isDev) {
-        console.log("[SHIPPING DEV Fallback] Forçando fallback em ambiente de desenvolvimento como solicitado.");
-        const localFallbackData = getFallbackShipping(cleanDestZip, finalWeight);
-        return res.json(localFallbackData);
-      }
+      console.log(`[SHIPPING v2.3] Calculando frete de ${originZip} para ${destZip}. Peso: ${finalWeight}kg. Valor: R$${declaredValue}`);
 
-      // B. Se estiver em produção, vamos primeiramente tentar fazer o cálculo de frete real.
-      // Se não houver token configurado em produção, nem tentamos chamar a API para evitar erro de rede, vamos direto ao fallback registrando o aviso.
-      if (!token) {
-        console.warn("[SHIPPING PRODUCTION] Variável JADLOG_TOKEN de autenticação não está configurada em produção. Acionando fallback automático de segurança.");
-        const fallbackResults = getFallbackShipping(cleanDestZip, finalWeight);
-        return res.json(fallbackResults);
-      }
-
-      // 4. Modalidades setup (Read custom list from environment or use standard defaults)
-      let modalitiesToQuery: { id: number; type: "express" | "standard"; name: string }[] = [];
-      const envModalidadeStr = (process.env.JADLOG_MODALIDADE || "").trim();
-
-      if (envModalidadeStr) {
-        // Parse list of modalities, e.g. "40,3"
-        const parsedModalities = envModalidadeStr.split(',').map(m => parseInt(m.trim())).filter(m => !isNaN(m));
-        if (parsedModalities.length > 0) {
-          modalitiesToQuery = parsedModalities.map((m, idx) => ({
-            id: m,
-            type: idx === 0 ? "express" : "standard",
-            name: m === 40 ? "Jadlog .Package" : m === 3 ? "Jadlog .Com" : `Jadlog Modalidade ${m}`
-          }));
-        }
-      }
-
-      if (modalitiesToQuery.length === 0) {
-        const modalExp = parseInt(process.env.JADLOG_MODALIDADE_EXPRESS || "40");
-        const modalStd = parseInt(process.env.JADLOG_MODALIDADE_STANDARD || "3");
-        modalitiesToQuery = [
-          { id: isNaN(modalExp) ? 40 : modalExp, type: "express", name: "Jadlog .Package" },
-          { id: isNaN(modalStd) ? 3 : modalStd, type: "standard", name: "Jadlog .Com" }
-        ];
-      }
-
-      const parsedContract = contratoVal ? (isNaN(Number(contratoVal)) ? contratoVal : Number(contratoVal)) : null;
-
-      // 5. Build query wrapper
-      const queryJadlog = async (modalidade: number, serviceName: string) => {
-        const endpoint = "https://www.jadlog.com.br/embarcador/api/frete/valor";
-        const requestPayload = {
+      // Helper to query a single modality
+      const queryModality = async (modalityId: number) => {
+        const payload = {
           frete: [
             {
               cepori: originZip,
-              cepdes: cleanDestZip,
+              cepdes: destZip,
               frap: "N",
-              peso: parseFloat(finalWeight.toFixed(3)),
-              cnpj: cnpj || "",
-              conta: conta || "",
-              contrato: parsedContract,
-              modalidade: modalidade,
+              peso: finalWeight,
+              cnpj: cnpj,
+              conta: conta,
+              contrato: null,
+              modalidade: modalityId,
               tpentrega: "D",
               tpseguro: "N",
-              vldeclarado: parseFloat(inputVal.toFixed(2)),
+              vldeclarado: declaredValue,
               vlcoleta: 0
             }
           ]
         };
 
-        const sanitizedPayload = {
-          ...requestPayload,
-          frete: requestPayload.frete.map(f => ({
-            ...f,
-            cnpj: f.cnpj ? `${f.cnpj.substring(0, 4)}***` : "",
-            conta: f.conta ? `${f.conta.substring(0, 2)}***` : ""
-          }))
-        };
+        const authHeader = token.toLowerCase().startsWith("bearer ") ? token : `Bearer ${token}`;
 
-        console.log(`[JADLOG CALL - PROD] Endpoint: POST ${endpoint} (Mod: ${modalidade})`);
-        console.log(`[JADLOG CALL - PROD] Payload:`, JSON.stringify(sanitizedPayload, null, 2));
-
-        let authHeader = token;
-        if (authUseBearer && !authHeader.toLowerCase().startsWith("bearer ")) {
-          authHeader = `Bearer ${authHeader}`;
-        }
-
-        const response = await fetch(endpoint, {
+        const response = await fetch("https://www.jadlog.com.br/embarcador/api/frete/valor", {
           method: "POST",
           headers: {
-            "Authorization": authHeader,
             "Content-Type": "application/json",
+            "Authorization": authHeader,
             "Accept": "application/json"
           },
-          body: JSON.stringify(requestPayload)
+          body: JSON.stringify(payload)
         });
 
         if (!response.ok) {
           const rawErr = await response.text();
-          throw new Error(`Erro API Jadlog (Mod: ${modalidade}, HTTP ${response.status}): ${rawErr}`);
+          throw new Error(`HTTP ${response.status}: ${rawErr}`);
         }
 
-        const data = await response.json();
-        return data;
+        const responseData = await response.json();
+        
+        let freteObj: any = null;
+        if (responseData && responseData.frete) {
+          freteObj = Array.isArray(responseData.frete) ? responseData.frete[0] : responseData.frete;
+        } else if (Array.isArray(responseData)) {
+          freteObj = responseData[0];
+        } else {
+          freteObj = responseData;
+        }
+
+        if (!freteObj) {
+          throw new Error("Resposta da Jadlog inválida ou vazia.");
+        }
+
+        if (freteObj.error || freteObj.mensagem) {
+          throw new Error(freteObj.error || freteObj.mensagem || "Erro retornado pela Jadlog.");
+        }
+
+        return freteObj;
       };
 
-      // 6. Execute calling for selected modalities
-      const finalResults: any[] = [];
-      const errorLog: string[] = [];
+      // Call modalities 3 and 4 in parallel using Promise.all
+      const [resCom, resPackage] = await Promise.allSettled([
+        queryModality(3), // Jadlog .Com (modality 3)
+        queryModality(4)  // Jadlog .Package (modality 4)
+      ]);
 
-      for (const mod of modalitiesToQuery) {
-        try {
-          const responseData = await queryJadlog(mod.id, mod.name);
-          
-          let freteObj: any = null;
-          if (responseData && responseData.frete) {
-            freteObj = Array.isArray(responseData.frete) ? responseData.frete[0] : responseData.frete;
-          } else if (Array.isArray(responseData)) {
-            freteObj = responseData[0];
-          } else {
-            freteObj = responseData;
-          }
-
-          if (freteObj) {
-            if (freteObj.error || freteObj.mensagem) {
-              const errMsg = freteObj.error || freteObj.mensagem;
-              errorLog.push(`Modalidade ${mod.id} - ${errMsg}`);
-              continue;
-            }
-
-            const calculatedPrice = freteObj.vltotal !== undefined ? Number(freteObj.vltotal) : (freteObj.vlrFrete !== undefined ? Number(freteObj.vlrFrete) : null);
-            const rawPrazoValue = freteObj.prazo;
-            const calculatedPrazo = rawPrazoValue !== undefined ? Number(rawPrazoValue) : null;
-
-            if (calculatedPrice !== null) {
-              finalResults.push({
-                type: mod.type,
-                carrier: "Jadlog",
-                service: mod.id === 40 ? "Jadlog .Package" : mod.id === 3 ? "Jadlog .Com" : mod.name,
-                price: calculatedPrice,
-                vlrFrete: calculatedPrice,
-                deliveryDays: calculatedPrazo || 5,
-                prazo: calculatedPrazo || 5,
-                raw: freteObj
-              });
-            } else {
-              errorLog.push(`Modalidade ${mod.id} - preço não encontrado no JSON.`);
-            }
-          }
-        } catch (subErr: any) {
-          console.warn(`[JADLOG PROD CALL FAIL] Falha individual na modalidade ${mod.id}:`, subErr.message || subErr);
-          errorLog.push(`Modalidade ${mod.id} - ${subErr.message || String(subErr)}`);
-        }
+      // If either of the calls failed with error, log error and return HTTP 500
+      if (resCom.status === "rejected") {
+        console.error("[JADLOG ERROR COM]", resCom.reason);
+        return res.status(500).json({ error: "Não foi possível calcular o frete." });
+      }
+      if (resPackage.status === "rejected") {
+        console.error("[JADLOG ERROR PACKAGE]", resPackage.reason);
+        return res.status(500).json({ error: "Não foi possível calcular o frete." });
       }
 
-      // 7. Fallback de Produção SE a API falhar completamente (ou não retornar nenhum resultado real)
-      if (finalResults.length === 0) {
-        const errorContextMsg = errorLog.join("; ");
-        console.error(`[SHIPPING PRODUCTIVE RETRY] API real finalizou sem resultados bem-sucedidos em PRODUÇÃO. Ativando fallback de salvaguarda de forma transparente. Erro Jadlog: ${errorContextMsg}`);
-        const fallbackResults = getFallbackShipping(cleanDestZip, finalWeight);
-        return res.json(fallbackResults);
+      const results: any[] = [];
+
+      // Jadlog .Com (Modality 3)
+      const freteCom = resCom.value;
+      const vltotalCom = freteCom.vltotal !== undefined ? freteCom.vltotal : freteCom.vlrFrete;
+      if (vltotalCom !== null && vltotalCom !== undefined && Number(vltotalCom) > 0) {
+        const prazo = freteCom.prazo !== undefined ? Number(freteCom.prazo) : 2;
+        results.push({
+          type: "com",
+          name: "Jadlog .Com",
+          vlrFrete: Number(vltotalCom),
+          prazo: prazo,
+          description: `Estimativa: ${prazo} ${prazo === 1 ? 'dia útil' : 'dias úteis'}`
+        });
       }
 
-      // Envio de sucesso real de produção
-      return res.json(finalResults);
+      // Jadlog .Package (Modality 4)
+      const fretePackage = resPackage.value;
+      const vltotalPackage = fretePackage.vltotal !== undefined ? fretePackage.vltotal : fretePackage.vlrFrete;
+      if (vltotalPackage !== null && vltotalPackage !== undefined && Number(vltotalPackage) > 0) {
+        const prazo = fretePackage.prazo !== undefined ? Number(fretePackage.prazo) : 5;
+        results.push({
+          type: "package",
+          name: "Jadlog .Package",
+          vlrFrete: Number(vltotalPackage),
+          prazo: prazo,
+          description: `Estimativa: ${prazo} ${prazo === 1 ? 'dia útil' : 'dias úteis'}`
+        });
+      }
+
+      return res.json(results);
 
     } catch (error: any) {
-      // 8. Se houver um crash catastrófico inesperado antes do cálculo, não quebre a experiência do usuário, force o fallback!
-      console.error("[SHIPPING FATAL RETRY] Erro total em produção anterior ao cálculo do frete real:", error);
-      try {
-        const cleanDestZip = (destZipCode || "").replace(/\D/g, '') || "01001000";
-        const inputWeight = Math.max(0.1, Number(weight) || 1);
-        const fallbackResults = getFallbackShipping(cleanDestZip, inputWeight);
-        return res.json(fallbackResults);
-      } catch (innerErr) {
-        return res.status(200).json([
-          {
-            type: "standard",
-            carrier: "Jadlog",
-            service: "Jadlog .Com",
-            price: 95.00,
-            vlrFrete: 95.00,
-            deliveryDays: 7,
-            prazo: 7,
-            raw: { origin: "fallback-critical", info: "Simulação de escape definitivo devido a erro crítico estrutural" }
-          }
-        ]);
-      }
+      console.error("[SHIPPING ROUTE FATAL]", error);
+      return res.status(500).json({ error: "Não foi possível calcular o frete." });
     }
   });
 
