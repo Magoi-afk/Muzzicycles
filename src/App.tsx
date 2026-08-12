@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
 import Header from './components/Header';
@@ -17,20 +17,22 @@ import Sustainability from './components/Sustainability';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import CartDrawer from './components/CartDrawer';
-import FavoritesDrawer from './components/FavoritesDrawer';
-import ProductDetail from './components/ProductDetail';
-import NossaHistoria from './components/NossaHistoria';
-import Support from './components/Support';
-import Checkout from './components/Checkout';
 import ModelsIntro from './components/ModelsIntro';
-import PurchaseModal from './components/PurchaseModal';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import TermsOfService from './components/TermsOfService';
-import CustomerDashboard from './components/CustomerDashboard';
-import { LoginForm } from './components/LoginForm';
 import { auth, onAuthStateChanged, User, signOut, db, getDoc, doc, setDoc, serverTimestamp, handleFirestoreError, OperationType } from './firebase';
 import { Product, CartItem } from './types';
+
+// Lazy loaded secondary views & heavy components
+const CartDrawer = lazy(() => import('./components/CartDrawer'));
+const FavoritesDrawer = lazy(() => import('./components/FavoritesDrawer'));
+const ProductDetail = lazy(() => import('./components/ProductDetail'));
+const NossaHistoria = lazy(() => import('./components/NossaHistoria'));
+const Support = lazy(() => import('./components/Support'));
+const Checkout = lazy(() => import('./components/Checkout'));
+const PurchaseModal = lazy(() => import('./components/PurchaseModal'));
+const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./components/TermsOfService'));
+const CustomerDashboard = lazy(() => import('./components/CustomerDashboard'));
+const LoginForm = lazy(() => import('./components/LoginForm').then(m => ({ default: m.LoginForm })));
 
 type View = 'home' | 'detail' | 'checkout' | 'privacy' | 'terms' | 'bikes' | 'about' | 'support' | 'dashboard';
 
@@ -357,97 +359,127 @@ export default function App() {
         )}
 
         {view === 'about' && (
-          <NossaHistoria 
-            key={aboutTab}
-            onProductClick={handleProductClick} 
-            initialTab={aboutTab} 
-          />
+          <Suspense fallback={<div className="min-h-[300px] flex items-center justify-center"><Loader2 className="w-8 h-8 text-brand-blue animate-spin" /></div>}>
+            <NossaHistoria 
+              key={aboutTab}
+              onProductClick={handleProductClick} 
+              initialTab={aboutTab} 
+            />
+          </Suspense>
         )}
 
         {view === 'support' && (
-          <Support 
-            key={supportTab}
-            initialTab={supportTab} 
-          />
+          <Suspense fallback={<div className="min-h-[300px] flex items-center justify-center"><Loader2 className="w-8 h-8 text-brand-blue animate-spin" /></div>}>
+            <Support 
+              key={supportTab}
+              initialTab={supportTab} 
+            />
+          </Suspense>
         )}
         
         {view === 'dashboard' && user && (
-          <CustomerDashboard 
-            user={user} 
-            userProfile={userProfile}
-            onProductClick={handleProductClick}
-            favorites={favorites}
-            onToggleFavorite={toggleFavorite}
-          />
+          <Suspense fallback={<div className="min-h-[300px] flex items-center justify-center"><Loader2 className="w-8 h-8 text-brand-blue animate-spin" /></div>}>
+            <CustomerDashboard 
+              user={user} 
+              userProfile={userProfile}
+              onProductClick={handleProductClick}
+              favorites={favorites}
+              onToggleFavorite={toggleFavorite}
+            />
+          </Suspense>
         )}
 
         {view === 'detail' && selectedProduct && (
-          <ProductDetail 
-            product={selectedProduct} 
-            onBack={handleBackToHome} 
-            onAddToCart={addToCart}
-            onCheckout={handleCheckout}
-            isFavorite={favorites.some(f => f.id === selectedProduct.id)}
-            onToggleFavorite={() => toggleFavorite(selectedProduct)}
-          />
+          <Suspense fallback={<div className="min-h-[300px] flex items-center justify-center"><Loader2 className="w-8 h-8 text-brand-blue animate-spin" /></div>}>
+            <ProductDetail 
+              product={selectedProduct} 
+              onBack={handleBackToHome} 
+              onAddToCart={addToCart}
+              onCheckout={handleCheckout}
+              isFavorite={favorites.some(f => f.id === selectedProduct.id)}
+              onToggleFavorite={() => toggleFavorite(selectedProduct)}
+            />
+          </Suspense>
         )}
 
         {view === 'checkout' && (
-          <Checkout 
-            items={cartItems} 
-            onBack={() => setView('home')} 
-            onComplete={() => {
-              setCartItems([]);
-              handleBackToHome();
-            }}
-          />
+          <Suspense fallback={<div className="min-h-[300px] flex items-center justify-center"><Loader2 className="w-8 h-8 text-brand-blue animate-spin" /></div>}>
+            <Checkout 
+              items={cartItems} 
+              onBack={() => setView('home')} 
+              onComplete={() => {
+                setCartItems([]);
+                handleBackToHome();
+              }}
+            />
+          </Suspense>
         )}
 
         {view === 'privacy' && (
-          <PrivacyPolicy onBack={handleBackToHome} />
+          <Suspense fallback={<div className="min-h-[300px] flex items-center justify-center"><Loader2 className="w-8 h-8 text-brand-blue animate-spin" /></div>}>
+            <PrivacyPolicy onBack={handleBackToHome} />
+          </Suspense>
         )}
 
         {view === 'terms' && (
-          <TermsOfService onBack={handleBackToHome} />
+          <Suspense fallback={<div className="min-h-[300px] flex items-center justify-center"><Loader2 className="w-8 h-8 text-brand-blue animate-spin" /></div>}>
+            <TermsOfService onBack={handleBackToHome} />
+          </Suspense>
         )}
       </main>
 
       <Footer onViewChange={handleViewChange} />
 
-      <CartDrawer 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-        items={cartItems}
-        onUpdateQuantity={updateQuantity}
-        onRemove={removeFromCart}
-        onCheckout={() => {
-          if (cartItems.length > 0) {
-            setView('checkout');
-            setIsCartOpen(false);
-            window.scrollTo(0, 0);
-          }
-        }}
-      />
+      {isCartOpen && (
+        <Suspense fallback={null}>
+          <CartDrawer 
+            isOpen={isCartOpen} 
+            onClose={() => setIsCartOpen(false)} 
+            items={cartItems}
+            onUpdateQuantity={updateQuantity}
+            onRemove={removeFromCart}
+            onCheckout={() => {
+              if (cartItems.length > 0) {
+                setView('checkout');
+                setIsCartOpen(false);
+                window.scrollTo(0, 0);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
-      <FavoritesDrawer 
-        isOpen={isFavoritesOpen}
-        onClose={() => setIsFavoritesOpen(false)}
-        items={favorites}
-        onRemove={removeFromFavorites}
-        onAddToCart={addToCart}
-        onProductClick={handleProductClick}
-      />
+      {isFavoritesOpen && (
+        <Suspense fallback={null}>
+          <FavoritesDrawer 
+            isOpen={isFavoritesOpen}
+            onClose={() => setIsFavoritesOpen(false)}
+            items={favorites}
+            onRemove={removeFromFavorites}
+            onAddToCart={addToCart}
+            onProductClick={handleProductClick}
+          />
+        </Suspense>
+      )}
 
-      <PurchaseModal 
-        isOpen={isPurchaseModalOpen}
-        onClose={() => setIsPurchaseModalOpen(false)}
-        items={cartItems.length > 0 ? cartItems : (selectedProduct ? [{ ...selectedProduct, quantity: 1 }] : [])}
-      />
+      {isPurchaseModalOpen && (
+        <Suspense fallback={null}>
+          <PurchaseModal 
+            isOpen={isPurchaseModalOpen}
+            onClose={() => setIsPurchaseModalOpen(false)}
+            items={cartItems.length > 0 ? cartItems : (selectedProduct ? [{ ...selectedProduct, quantity: 1 }] : [])}
+          />
+        </Suspense>
+      )}
 
-      <LoginForm 
-        isOpen={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
-      />
+      {isLoginOpen && (
+        <Suspense fallback={null}>
+          <LoginForm 
+            isOpen={isLoginOpen}
+            onClose={() => setIsLoginOpen(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

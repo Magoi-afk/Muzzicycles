@@ -1,10 +1,21 @@
+import React, { useState, useEffect, Suspense } from 'react';
 import { motion } from 'motion/react';
-import Globe3DDemo from './3d-globe-demo';
 import { useTranslation } from 'react-i18next';
+import { Globe, Award, ShieldCheck } from 'lucide-react';
+
+const LazyGlobe3DDemo = React.lazy(() => import('./3d-globe-demo'));
 
 export default function History() {
   const { t } = useTranslation();
   const timeline = t('story.timeline', { returnObjects: true }) as any[];
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <section id="history" className="max-w-7xl mx-auto px-6 sm:px-8 py-20">
@@ -47,17 +58,44 @@ export default function History() {
           <p className="text-black/50 font-geist mt-4">{t('story.global.desc')}</p>
         </div>
         
-        <div className="relative h-[500px] lg:h-[600px] rounded-[3rem] bg-gray-50 border border-black/5 overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Globe3DDemo />
-          </div>
+        <div className="relative h-[380px] sm:h-[500px] lg:h-[600px] rounded-[2.5rem] sm:rounded-[3rem] bg-slate-900 border border-black/5 overflow-hidden text-white flex items-center justify-center">
+          {!isMobile ? (
+            <Suspense fallback={
+              <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-950 text-white">
+                <Globe className="w-12 h-12 text-brand-blue animate-pulse" />
+                <p className="text-xs font-geist uppercase tracking-widest text-slate-400">Carregando Mapa Global 3D...</p>
+              </div>
+            }>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <LazyGlobe3DDemo />
+              </div>
+            </Suspense>
+          ) : (
+            /* Lightweight Static Fallback for Mobile */
+            <div className="p-8 text-center flex flex-col items-center justify-center space-y-4">
+              <div className="w-16 h-16 rounded-2xl bg-brand-blue/20 border border-brand-blue/40 flex items-center justify-center text-brand-blue">
+                <Globe className="w-8 h-8" />
+              </div>
+              <h4 className="text-2xl font-medium font-geist text-white">Presença Global Muzzicycles</h4>
+              <p className="text-slate-400 text-sm max-w-sm font-geist">
+                Exportando tecnologia brasileira sustentável em polímero reciclado para a América Latina, Europa e Ásia.
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center pt-2">
+                <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-brand-blue">Brasil</span>
+                <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-slate-300">União Europeia</span>
+                <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-slate-300">América Latina</span>
+              </div>
+            </div>
+          )}
           
           {/* Legend Overlay */}
-          <div className="absolute bottom-8 left-8 right-8 flex flex-wrap gap-4 pointer-events-none">
-            <div className="px-4 py-2 bg-white/80 backdrop-blur-md rounded-xl border border-black/5 text-[10px] font-bold text-black/40 uppercase tracking-widest">
+          <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3 pointer-events-none">
+            <div className="px-4 py-2 bg-slate-900/80 backdrop-blur-md rounded-xl border border-white/10 text-[10px] font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
+              <ShieldCheck className="w-3.5 h-3.5 text-brand-blue" />
               {t('story.global.warranty')}
             </div>
-            <div className="px-4 py-2 bg-white/80 backdrop-blur-md rounded-xl border border-black/5 text-[10px] font-bold text-black/40 uppercase tracking-widest">
+            <div className="px-4 py-2 bg-slate-900/80 backdrop-blur-md rounded-xl border border-white/10 text-[10px] font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
+              <Award className="w-3.5 h-3.5 text-amber-400" />
               {t('story.global.certification')}
             </div>
           </div>

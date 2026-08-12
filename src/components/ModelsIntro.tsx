@@ -10,12 +10,12 @@ export default function ModelsIntro() {
   const techImagesData = t('models_intro.tech_images', { returnObjects: true }) as { title: string; desc: string }[];
   const techImages = [
     {
-      src: "/images/Geometria Quadro Muzzicycles.png",
+      src: "/images/geometria_quadro.webp",
       title: techImagesData[0].title,
       desc: techImagesData[0].desc
     },
     {
-      src: "/images/medidas muzzi aro 26.png",
+      src: "/images/medidas_muzzi_aro26.webp",
       title: techImagesData[1].title,
       desc: techImagesData[1].desc
     }
@@ -75,6 +75,10 @@ export default function ModelsIntro() {
                     src={image.src} 
                     alt={image.title} 
                     className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700 ease-out"
+                    width={800}
+                    height={600}
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                   />
                   

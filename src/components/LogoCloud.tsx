@@ -10,62 +10,62 @@ export interface PartnerMedia {
 const partnerMedia: PartnerMedia[] = [
   {
     name: "Plastic Industrial",
-    logoUrl: "/images/Plastico Industrial.png",
+    logoUrl: "/images/plastico_industrial.webp",
     pdfUrl: "/pdfs/plasticoindutrial.pdf"
   },
   {
     name: "VO2Bike",
-    logoUrl: "/images/vo2.png",
+    logoUrl: "/images/vo2.webp",
     pdfUrl: "/pdfs/VO2.pdf"
   },
   {
     name: "Você / Revista Guia",
-    logoUrl: "/images/voce.png",
+    logoUrl: "/images/voce.webp",
     pdfUrl: "/pdfs/RevistaGuia.pdf"
   },
   {
     name: "Brasil Almanaque",
-    logoUrl: "/images/Brasil almanaque.png",
+    logoUrl: "/images/brasil_almanaque.webp",
     pdfUrl: "/pdfs/Brasil Almanaque.pdf"
   },
   {
     name: "Ciclomagazine",
-    logoUrl: "/images/Ciclomagazine.png",
+    logoUrl: "/images/ciclomagazine.webp",
     pdfUrl: "/pdfs/Cyclomagazine.pdf"
   },
   {
     name: "DCI",
-    logoUrl: "/images/DCI.png",
+    logoUrl: "/images/dci.webp",
     pdfUrl: "/pdfs/DCI.pdf"
   },
   {
     name: "Docol",
-    logoUrl: "/images/Docol.png",
+    logoUrl: "/images/docol.webp",
     pdfUrl: "/pdfs/Docol.pdf"
   },
   {
     name: "Época",
-    logoUrl: "/images/Epoca.png",
+    logoUrl: "/images/epoca.webp",
     pdfUrl: "/pdfs/Epoca.pdf"
   },
   {
     name: "O Globo",
-    logoUrl: "/images/Globo.png",
+    logoUrl: "/images/globo.webp",
     pdfUrl: "/pdfs/globo.pdf"
   },
   {
     name: "Bons Fluidos",
-    logoUrl: "/images/Bons Fluidos.png",
+    logoUrl: "/images/bons_fluidos.webp",
     pdfUrl: "/pdfs/Bons Fluidos.pdf"
   },
   {
     name: "Inovação",
-    logoUrl: "/images/Inovacao.png",
+    logoUrl: "/images/inovacao.webp",
     pdfUrl: "/pdfs/Inovacao.pdf"
   },
   {
     name: "Jornal de Jundiaí",
-    logoUrl: "/images/Jornal de Jundiai.png",
+    logoUrl: "/images/jornal_jundiai.webp",
     pdfUrl: "/pdfs/JornaldeJundiai.pdf"
   }
 ];

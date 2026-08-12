@@ -85,9 +85,13 @@ export default function Footer({ onViewChange }: FooterProps) {
               <div className="flex flex-col sm:flex-row items-center gap-2 mb-4 justify-center sm:justify-start">
                 <BadgeCheck className="w-5 h-5 text-black/80" />
                 <img 
-                  src="/images/LogoMuzzi.png" 
+                  src="/images/LogoMuzzi.webp" 
                   alt="Muzzicycles" 
                   className="h-10 w-auto object-contain cursor-pointer"
+                  width={150}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
                   referrerPolicy="no-referrer"
                   onClick={() => handleViewChange('home')}
                 />

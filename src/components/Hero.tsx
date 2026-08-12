@@ -1,13 +1,13 @@
 import { ArrowRight, ArrowUpRight, Eye } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useState, Suspense } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import Spline from '@splinetool/react-spline';
 import WordRotate from './magicui/WordRotate';
 import { LightRays } from './magicui/LightRays';
 import FrameModal from './FrameModal';
 import arImage from '../assets/images/regenerated_image_1778029817416.jpg';
-import { cn } from '../lib/utils';
+
+const LazySpline = React.lazy(() => import('@splinetool/react-spline'));
 
 interface HeroProps {
   onHistoryClick?: () => void;
@@ -17,6 +17,24 @@ interface HeroProps {
 export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+  const [showSpline, setShowSpline] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setShowSpline(false);
+      } else {
+        const timer = setTimeout(() => setShowSpline(true), 1200);
+        return () => clearTimeout(timer);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <section className="max-w-7xl sm:px-8 mx-auto px-6 relative overflow-hidden">
@@ -75,27 +93,51 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
                 <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>
-
-            {/* Statistics grid removed per user request */}
           </motion.div>
 
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-6"
+            className="hidden md:block lg:col-span-6"
           >
             <div className="relative rounded-3xl overflow-hidden border border-black/5 bg-white/30 backdrop-blur h-[420px] sm:h-[520px]">
-              <Suspense fallback={
-                <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                  <div className="w-8 h-8 border-4 border-brand-blue border-t-transparent rounded-full animate-spin"></div>
-                </div>
-              }>
-                <Spline 
-                  scene="https://prod.spline.design/VFBlxkxYx5mKQ3L1/scene.splinecode"
-                  className="w-full h-full"
+              {/* On Mobile or before Spline loads, display high-performance LCP image */}
+              {!isMobile && showSpline ? (
+                <Suspense fallback={
+                  <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                    <img 
+                      src="/images/hero_bike.webp" 
+                      alt="Muzzicycles Bike Polymer"
+                      className="w-full h-full object-cover rounded-3xl"
+                      width={800}
+                      height={520}
+                      // @ts-ignore
+                      fetchPriority="high"
+                    />
+                  </div>
+                }>
+                  <LazySpline 
+                    scene="https://prod.spline.design/VFBlxkxYx5mKQ3L1/scene.splinecode"
+                    className="w-full h-full"
+                  />
+                </Suspense>
+              ) : (
+                <img 
+                  src="/images/nilo.webp" 
+                  alt="Muzzicycles Bike Polymer" 
+                  className="w-full h-full object-cover rounded-3xl"
+                  width={isMobile ? 400 : 800}
+                  height={520}
+                  // @ts-ignore
+                  fetchPriority="high"
+                  decoding="sync"
+                  onError={(e) => {
+                    // Fallback if image fails
+                    (e.target as HTMLImageElement).src = "/images/amazonas.png";
+                  }}
                 />
-              </Suspense>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent pointer-events-none"></div>
               
               {/* QR Code AR Section */}
@@ -111,9 +153,13 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
                       src={arImage} 
                       alt="AR Experience" 
                       className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-xl transition-all duration-300 group-hover:scale-105 border-none"
+                      width={96}
+                      height={96}
+                      loading="lazy"
+                      decoding="async"
                       referrerPolicy="no-referrer"
                     />
-                    {/* AR Center Overlay from user reference image */}
+                    {/* AR Center Overlay */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="w-5 h-5 sm:w-8 sm:h-8 bg-[#60a5fa] rounded-full border-2 border-white flex items-center justify-center shadow-sm">
                         <span className="text-[6px] sm:text-[10px] font-bold text-black tracking-tighter uppercase">AR</span>
@@ -130,13 +176,15 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
               </div>
 
               <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/40 backdrop-blur px-3 py-1.5 border border-black/5 pointer-events-auto">
-                  <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
-                  <span className="text-xs text-black/70 font-geist">{t('hero.interactive')}</span>
-                </div>
+                {!isMobile && (
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/40 backdrop-blur px-3 py-1.5 border border-black/5 pointer-events-auto">
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand-blue animate-pulse"></span>
+                    <span className="text-xs text-black/70 font-geist">{t('hero.interactive')}</span>
+                  </div>
+                )}
                 <button 
                   onClick={() => setIsModalOpen(true)}
-                  className="inline-flex items-center gap-2 text-xs rounded-lg bg-white/40 backdrop-blur px-3 h-8 border border-black/5 text-black/70 hover:bg-white/60 transition font-geist pointer-events-auto"
+                  className={`inline-flex items-center gap-2 text-xs rounded-lg bg-white/40 backdrop-blur px-3 h-8 border border-black/5 text-black/70 hover:bg-white/60 transition font-geist pointer-events-auto ${isMobile ? 'w-full justify-center bg-white/80' : 'ml-auto'}`}
                 >
                   {t('hero.specs_btn')}
                   <Eye className="w-3 h-3" />
@@ -147,7 +195,7 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
         </div>
       </div>
 
-      <FrameModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {isModalOpen && <FrameModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}
     </section>
   );
 }

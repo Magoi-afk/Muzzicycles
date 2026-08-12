@@ -23,19 +23,33 @@ export default function ProductDetail({
   onToggleFavorite
 }: ProductDetailProps) {
   const { t, i18n } = useTranslation();
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedAro, setSelectedAro] = useState('29');
-  const [is3DActive, setIs3DActive] = useState(product.id === '3' || product.id === '1');
+  const [is3DActive, setIs3DActive] = useState(() => !isMobile && (product.id === '3' || product.id === '1'));
 
   const [selectedVersion, setSelectedVersion] = useState<'V3' | 'V5' | 'V8'>('V3');
 
   useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setIs3DActive(false);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
     setSelectedImage(product.image);
     setSelectedColor(product.colors[0]);
-    setIs3DActive(product.id === '3' || product.id === '1');
+    setIs3DActive(!isMobile && (product.id === '3' || product.id === '1'));
     setSelectedVersion('V3');
-  }, [product]);
+  }, [product, isMobile]);
 
   const mississippiVersions = {
     V3: { price: 4300, transmission: 'Shimano Nexus 3v', weight: '13.1' },
@@ -83,7 +97,7 @@ export default function ProductDetail({
               animate={{ opacity: 1, scale: 1 }}
               className="aspect-square rounded-3xl overflow-hidden bg-gray-50 border border-black/5 relative group"
             >
-              {has3DModel && is3DActive ? (
+              {has3DModel && !isMobile && is3DActive ? (
                 <div className="w-full h-full relative bg-neutral-900">
                   <SplineScene 
                     scene={product.id === '1' ? "https://prod.spline.design/B9R5OvnDSYh9n4Gb/scene.splinecode" : "https://prod.spline.design/RJOqiD51SRRziiSA/scene.splinecode"} 
@@ -102,7 +116,7 @@ export default function ProductDetail({
               )}
             </motion.div>
             <div className="grid grid-cols-4 gap-4">
-              {has3DModel && (
+              {has3DModel && !isMobile && (
                 <button 
                   onClick={() => setIs3DActive(true)}
                   className={`aspect-square rounded-2xl overflow-hidden border-2 transition flex flex-col items-center justify-center bg-neutral-900 text-white/40 hover:text-white ${is3DActive ? 'border-brand-blue text-white' : 'border-transparent'}`}
@@ -290,17 +304,25 @@ export default function ProductDetail({
                 <div className="space-y-6">
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-white border border-black/5 p-4 group cursor-zoom-in">
                     <img 
-                      src="/images/Geometria Quadro Muzzicycles.png" 
+                      src="/images/geometria_quadro.webp" 
                       alt="Geometria Quadro Muzzicycles" 
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                      width={800}
+                      height={600}
+                      loading="lazy"
+                      decoding="async"
                       referrerPolicy="no-referrer"
                     />
                   </div>
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-white border border-black/5 p-4 group cursor-zoom-in">
                     <img 
-                      src="/images/medidas muzzi aro 26.png" 
+                      src="/images/medidas_muzzi_aro26.webp" 
                       alt="Medidas Aro 26" 
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                      width={800}
+                      height={600}
+                      loading="lazy"
+                      decoding="async"
                       referrerPolicy="no-referrer"
                     />
                   </div>

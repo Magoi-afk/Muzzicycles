@@ -142,8 +142,11 @@ export default function Header({
               <button onClick={() => handleNavClick('home')} className="transition-opacity hover:opacity-80">
                 <img 
                   className="h-10 w-auto" 
-                  src="/images/LogoMuzzi.png" 
+                  src="/images/LogoMuzzi.webp" 
                   alt="Muzzicycles" 
+                  width={150}
+                  height={40}
+                  decoding="async"
                   referrerPolicy="no-referrer"
                 />
               </button>
@@ -339,11 +342,14 @@ export default function Header({
           >
             <div className="max-w-7xl mx-auto w-full h-full flex flex-col px-4 sm:px-6 lg:px-8">
               {/* Menu Header */}
-              <div className="flex justify-between items-center h-20 shrink-0">
+              <div className="flex justify-between items-center py-6 border-b border-black/5">
                 <img 
                   className="h-10 w-auto" 
-                  src="/images/LogoMuzzi.png" 
+                  src="/images/LogoMuzzi.webp" 
                   alt="Muzzicycles" 
+                  width={150}
+                  height={40}
+                  decoding="async"
                   referrerPolicy="no-referrer"
                 />
                 <button
