@@ -9,63 +9,68 @@ export interface PartnerMedia {
 
 const partnerMedia: PartnerMedia[] = [
   {
-    name: "Plastic Industrial",
-    logoUrl: "/images/plastico_industrial.webp",
+    name: "Plástico Industrial",
+    logoUrl: "/images/plastico_industrial.png",
     pdfUrl: "/pdfs/plasticoindutrial.pdf"
   },
   {
     name: "VO2Bike",
-    logoUrl: "/images/vo2.webp",
+    logoUrl: "/images/vo2.png",
     pdfUrl: "/pdfs/VO2.pdf"
   },
   {
-    name: "Você / Revista Guia",
-    logoUrl: "/images/voce.webp",
+    name: "Guia com Você",
+    logoUrl: "/images/voce.png",
     pdfUrl: "/pdfs/RevistaGuia.pdf"
   },
   {
     name: "Brasil Almanaque",
-    logoUrl: "/images/brasil_almanaque.webp",
+    logoUrl: "/images/brasil_almanaque.png",
     pdfUrl: "/pdfs/Brasil Almanaque.pdf"
   },
   {
     name: "Ciclomagazine",
-    logoUrl: "/images/ciclomagazine.webp",
+    logoUrl: "/images/ciclomagazine.png",
     pdfUrl: "/pdfs/Cyclomagazine.pdf"
   },
   {
     name: "DCI",
-    logoUrl: "/images/dci.webp",
+    logoUrl: "/images/dci.png",
     pdfUrl: "/pdfs/DCI.pdf"
   },
   {
+    name: "Desafios do Design",
+    logoUrl: "/images/desafio.png",
+    pdfUrl: "/pdfs/Desafio.pdf"
+  },
+  {
     name: "Docol",
-    logoUrl: "/images/docol.webp",
+    logoUrl: "/images/docol.png",
     pdfUrl: "/pdfs/Docol.pdf"
   },
   {
     name: "Época",
-    logoUrl: "/images/epoca.webp",
+    logoUrl: "/images/epoca.png",
     pdfUrl: "/pdfs/Epoca.pdf"
   },
   {
     name: "O Globo",
-    logoUrl: "/images/globo.webp",
+    logoUrl: "/images/globo.png",
     pdfUrl: "/pdfs/globo.pdf"
   },
   {
     name: "Bons Fluidos",
-    logoUrl: "/images/bons_fluidos.webp",
+    logoUrl: "/images/bons_fluidos.png",
     pdfUrl: "/pdfs/Bons Fluidos.pdf"
   },
   {
     name: "Inovação",
-    logoUrl: "/images/inovacao.webp",
+    logoUrl: "/images/inovacao.png",
     pdfUrl: "/pdfs/Inovacao.pdf"
   },
   {
     name: "Jornal de Jundiaí",
-    logoUrl: "/images/jornal_jundiai.webp",
+    logoUrl: "/images/jornal_jundiai.png",
     pdfUrl: "/pdfs/JornaldeJundiai.pdf"
   }
 ];

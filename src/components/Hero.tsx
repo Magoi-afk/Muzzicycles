@@ -134,7 +134,7 @@ export default function Hero({ onHistoryClick, onExploreClick }: HeroProps) {
                   decoding="sync"
                   onError={(e) => {
                     // Fallback if image fails
-                    (e.target as HTMLImageElement).src = "/images/amazonas.webp";
+                    (e.target as HTMLImageElement).src = "/images/amazonas.png";
                   }}
                 />
               )}
